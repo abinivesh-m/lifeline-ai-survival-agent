@@ -313,6 +313,19 @@ python agent.py --yes --mode policy         # graph + A* + allocator + gate + re
 Then turn on airplane mode and run it again. Screenshot `nvidia-smi`, the airplane-mode icon, and the
 run - that is the offline artefact. No model is downloaded and no Open Weight claim is made here.
 
+Proof captures live in `artifacts/proof/`:
+
+| File | Status |
+| --- | --- |
+| `nvidia_smi.txt` / `gpu_6gb_nvidia_smi.png` | real output: `NVIDIA GeForce RTX 3050 6GB Laptop GPU, 6144 MiB` |
+| `credit_usage_live.json` | snapshot of the live $150 ledger |
+| `gpu_6gb_taskmgr.png` | **capture needed** - Task Manager, `0.0/6.0 GB` |
+| `offline_proof.mp4` | **capture needed** - airplane mode + `LIFELINE_OFFLINE=1 python agent.py --yes` |
+| `baseten_proof.mp4` | **capture needed** - `python openweight.py`, 2/3 valid, 5.41 s and 6.73 s |
+
+The pending three need the desktop session that owns the GPU. They are labelled pending rather than
+generated, because a fabricated screenshot is the one artefact a judge can disprove in a minute.
+
 ### Image generation note (India)
 
 Muse Image is **not available in India** (HTTP 403 by region). Nothing in this project calls it. Visuals
