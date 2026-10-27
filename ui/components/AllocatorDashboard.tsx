@@ -222,6 +222,11 @@ export default function AllocatorDashboard() {
               </span>
             )}
           </div>
+          <p className="mono mt-1 text-[8px] leading-relaxed text-muted/60">
+            {brainView === "openweight" && brain
+              ? `${brain.valid ? "re-validated locally ✓" : "validator rejected ✗"} · run ${brain.at?.slice(0, 19).replace("T", " ") ?? "?"} UTC · proof ${lifeline.openweight.latencies_s.map((value) => `${value.toFixed(2)} s`).join(" / ")} stored`
+              : "policy · same validator · $0 spent on model calls"}
+          </p>
           <p className="mt-1 min-h-[54px] text-[11.5px] leading-relaxed text-teal/90">
             {brainView === "openweight" ? typedOpenweight : typedPolicy}
             <span className="ml-0.5 inline-block h-3 w-1 animate-pulse bg-teal align-middle" />
@@ -316,6 +321,13 @@ export default function AllocatorDashboard() {
                 </span>
               </div>
             ))}
+            <div className="mt-1 flex justify-between border-t border-line/60 pt-1 mono text-[9px] text-ink">
+              <span>
+                {modelRows.reduce((sum, [, bucket]) => sum + bucket.calls, 0)} priced calls ·{" "}
+                {lifeline.credit.ledger_rows} ledger rows
+              </span>
+              <span>${spend.toFixed(4)} total</span>
+            </div>
           </div>
         </div>
 

@@ -295,6 +295,21 @@ Alerts fire at **80% ($120)** and **95% ($142.50)**; a **$20 reserve** is tracke
 week keeps contingency. `python credit_tracker.py simulate` replays the whole plan and proves it lands on
 $150.00 exactly, with `verify()` passing.
 
+The table above is the *plan*. Actual live spend at build time, read from the four append-only rows in
+`credit_usage.json` and shown on screen:
+
+| Bucket | Calls | Spent | Where it came from |
+| --- | --- | --- | --- |
+| Muse Wonder | 1 | $0.411765 | one allocation proposal, accepted by the validator |
+| SAM 3.1 | 15 | $0.037500 | six capture images + nine flood frames |
+| Muse Voice Transcribe | 1 | $0.000539 | one Tamil report |
+| Spark Open / Glimmer / Muse Code | 0 | $0 | partner inference at $0 |
+| **Total** | **17** | **$0.449804** | **$0.4498 of $150 - the badge on the page** |
+
+The SAM bucket aggregates two rows (6 + 9 calls), which is why the panel says 15 calls and the ledger
+still has four rows. Meta's free credits cover the spend; Open Weight calls on Baseten are not metered
+against this budget at all.
+
 > `credit_usage.json` is git-ignored because it is generated at runtime. The submission attaches the
 > ledger produced by the real capture runs; `python credit_tracker.py verify` proves it.
 

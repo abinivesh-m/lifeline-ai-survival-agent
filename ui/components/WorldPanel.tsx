@@ -68,6 +68,15 @@ export default function WorldPanel() {
 
   const distanceFromOrigin = haversine(ORIGIN.lat, ORIGIN.lon, selected.lat, selected.lon);
 
+  // The globe draws one arc from the surveyed town to the focus. When the focus
+  // *is* Kottur the arc would collapse to a dot, so preview the first tour hop
+  // instead - the caption and the geometry always name the same two towns.
+  const arcTarget = useMemo(() => {
+    if (selected.id !== ORIGIN.id) return selected;
+    const firstHop = TOWNS.find((town) => town.id === TOUR_IDS[1] && town.id !== ORIGIN.id);
+    return firstHop ?? TOWNS.find((town) => town.id !== ORIGIN.id) ?? selected;
+  }, [selected]);
+
   const query = () => {
     const la = Number(lat);
     const lo = Number(lon);
@@ -214,7 +223,8 @@ export default function WorldPanel() {
               BUILT IN KOTTUR · APPLIED ANYWHERE
             </div>
             <div className="mono mt-1 text-[9px] text-muted/70">
-              arc = {ORIGIN.name} → {selected.name}
+              arc = {ORIGIN.name} → {arcTarget.name}
+              {selected.id === ORIGIN.id ? " · first tour hop" : ""}
             </div>
           </div>
           <button
@@ -232,7 +242,12 @@ export default function WorldPanel() {
           </button>
         </div>
 
-        <WorldGlobe3D selected={selected} onSelect={setSelected} className="mt-2 h-[330px] w-full" />
+        <WorldGlobe3D
+          selected={selected}
+          arcTarget={arcTarget}
+          onSelect={setSelected}
+          className="mt-2 h-[330px] w-full"
+        />
 
         <div className="mt-1 flex flex-wrap gap-1">
           {TOUR_IDS.map((id) => {

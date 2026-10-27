@@ -120,9 +120,11 @@ function Pin({
 
 function Globe({
   focus,
+  arcTarget,
   onSelect,
 }: {
   focus: WorldTown;
+  arcTarget: WorldTown;
   onSelect: (town: WorldTown) => void;
 }) {
   const group = useRef<THREE.Group>(null);
@@ -130,7 +132,14 @@ function Globe({
 
   const originVec = useMemo(() => latLonToVec3(ORIGIN.lat, ORIGIN.lon, 1), []);
   const focusVec = useMemo(() => latLonToVec3(focus.lat, focus.lon, 1), [focus.lat, focus.lon]);
-  const arc = useArc(originVec, focusVec);
+  const arcVec = useMemo(
+    () => latLonToVec3(arcTarget.lat, arcTarget.lon, 1),
+    [arcTarget.lat, arcTarget.lon]
+  );
+  // If the target and the origin coincide, the slerp is the identity and the
+  // line collapses to a point. WorldPanel passes the first tour hop in that
+  // case; this guard only keeps the geometry valid for any other caller.
+  const arc = useArc(originVec, arcVec.equals(originVec) ? focusVec : arcVec);
 
   const target = useMemo(() => {
     const q = new THREE.Quaternion();
@@ -183,14 +192,17 @@ function Globe({
 
 export default function WorldGlobe3D({
   selected,
+  arcTarget,
   onSelect,
   className = "",
 }: {
   selected: WorldTown;
+  arcTarget?: WorldTown;
   onSelect: (town: WorldTown) => void;
   className?: string;
 }) {
   const { ref: frameRef, visible } = useVisible<HTMLDivElement>();
+  const target = arcTarget ?? selected;
 
   return (
     <div ref={frameRef} className={`relative ${className}`}>
@@ -203,7 +215,7 @@ export default function WorldGlobe3D({
         <ClampDelta />
         <ambientLight intensity={0.9} />
         <directionalLight position={[2.5, 2, 3]} intensity={1.4} />
-        <Globe focus={selected} onSelect={onSelect} />
+        <Globe focus={selected} arcTarget={target} onSelect={onSelect} />
         <OrbitControls
           enablePan={false}
           enableZoom

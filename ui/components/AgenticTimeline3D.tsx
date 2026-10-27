@@ -49,9 +49,9 @@ const DETAIL: Record<number, string[]> = {
         "every transition appended to a sha256 hash chain",
       ],
   8: [
-    "this run writes runs/latest.json — that write is the learning step",
-    "no new constraint applied: --scenario reserve-loss cuts the reserve to 80 L",
-    "same solver, same validator, no model call",
+    "--scenario reserve-loss: reserve cut from 100 L to 80 L",
+    "same solver, new constraint, heart still protected",
+    "pump runtime 6.0 h → 2.0 h, and the agent says so out loud",
   ],
 };
 

@@ -137,6 +137,7 @@ def build() -> dict:
             "level": credit["level"],
             "remaining_usd": credit["remaining_usd"],
             "reserve_usd": credit["reserve_buffer_usd"],
+            "ledger_rows": len(credit_tracker.CreditTracker().entries),
             "by_model": {
                 model: bucket for model, bucket in credit["by_model"].items()
                 if bucket["calls"] > 0
@@ -220,6 +221,8 @@ def _latest_run_brain() -> dict | None:
             "justification": step.get("justification"),
             "confidence": step.get("confidence"),
             "allocation": step.get("allocation"),
+            "valid": bool((step.get("validation") or {}).get("ok"))
+            and not bool(trace.get("rejected")),
             "rejected": trace.get("rejected"),
         }
     return None

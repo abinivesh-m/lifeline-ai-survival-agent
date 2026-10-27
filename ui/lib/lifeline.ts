@@ -170,6 +170,7 @@ export type LifeLineData = {
       justification: string | null;
       confidence: number | null;
       allocation: Record<string, number> | null;
+      valid: boolean;
       rejected: unknown;
     } | null;
   };
@@ -196,6 +197,7 @@ export type LifeLineData = {
     level: string;
     remaining_usd: number;
     reserve_usd: number;
+    ledger_rows: number;
     by_model: Record<string, { calls: number; spent_usd: number; budget_usd: number }>;
   };
   openweight: {
@@ -267,6 +269,6 @@ export const STEPS = [
   { n: 4, key: "ROUTE", tool: "A* heapq", detail: "4.2 km blocked, 7.8 km found" },
   { n: 5, key: "ALLOCATE", tool: "Open weight + validator", detail: "70 L / 30 L, then checked in code" },
   { n: 6, key: "BUDGET", tool: "$150 ledger", detail: "every call priced, alerts at 80 / 95%" },
-  { n: 7, key: "APPROVE", tool: "gate + 4-tier ladder", detail: "a person decides; silence climbs to SMS, WhatsApp, voice" },
+  { n: 7, key: "APPROVE", tool: "human gate", detail: "a person decides; silence climbs to SMS, WhatsApp, voice" },
   { n: 8, key: "REPLAN", tool: "new constraint", detail: "replans without a restart, writes runs/latest.json" },
 ] as const;
