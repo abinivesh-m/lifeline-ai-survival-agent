@@ -1,0 +1,27 @@
+# LIFELINE AI - dependencies
+#
+# The core agent (town.json, dependency_graph.py, a_star.py, allocator.py,
+# credit_tracker.py) runs on the Python standard library alone. Nothing below
+# is required to reproduce the demo:
+#
+#     python test_phase1.py
+#
+# heapq, json, math, urllib and dataclasses are part of Python itself and must
+# NOT be listed here - pip would try to download packages with those names and
+# fail. Ollama is a native binary (https://ollama.com/download), not a pip
+# package; only its optional Python client is installed below.
+
+# Optional: load .env automatically instead of exporting variables by hand.
+python-dotenv>=1.0
+
+# Optional: talk to the local Ollama daemon from Python in Phase 2.
+ollama>=0.4
+
+# Optional: Meta Model API over the OpenAI-compatible SDK (Phase 2/3 live calls).
+requests>=2.32
+openai>=1.40
+
+# Optional: partner infrastructure for the open-weight track (Phase 2).
+# Install these only when you actually run that step.
+# modal>=0.62
+# baseten>=0.9

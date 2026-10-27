@@ -1,0 +1,38 @@
+# --- secrets ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# --- credit ledger: generated at runtime, never committed ------------------
+credit_usage.json
+credit_usage.tmp
+credit_usage.archive.json
+
+# --- python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- models and local inference -------------------------------------------
+ollama/
+models/
+*.gguf
+.modal.toml
+
+# --- media and captures ----------------------------------------------------
+*.mp4
+*.mov
+*.wav
+*.mp3
+captures/
+artifacts/live/
+
+# --- os / editor -----------------------------------------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

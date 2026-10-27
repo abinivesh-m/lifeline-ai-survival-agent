@@ -1,0 +1,178 @@
+{
+  "schema": "lifeline.town/1.0",
+  "generated_for": "Meta AI Hackathon - Build for Your World - Kottur, Tamil Nadu",
+  "town": {
+    "name": "Kottur",
+    "full_name": "Kottur-Malayandipattinam (KM Pattinam)",
+    "taluk": "Pollachi",
+    "anaimalai_taluk": true,
+    "district": "Coimbatore",
+    "state": "Tamil Nadu",
+    "pincode": "642114",
+    "pincodes": ["642114", "642129"],
+    "country": "India",
+    "lat": 11.0168,
+    "lon": 76.9558,
+    "timezone": "Asia/Kolkata",
+    "people_at_risk": 200,
+    "description": "Largest panchayat town in the Pollachi-Anaimalai belt, 15 km west of Pollachi, at the foot of the Western Ghats on the Kerala border, beside the Parambikulam and Anamalai Tiger Reserve corridor. Flood prone, low infrastructure.",
+    "flood_history": "December 2023 flood - lived through it",
+    "context": "Monsoon flood + landslide on NH-544 km 42 (Pollachi-Valparai road). Fuel depot cut off, hospital on generator, water pump dead, 200 people in three shelters with no water.",
+    "scalable_to": ["Kerala", "Assam", "Philippines", "Indonesia", "Brazil", "Kenya", "Puerto Rico"],
+    "scope_note": "Kottur is the reference town, not a special case. The organ graph, the A* road search and the allocator are parameterised by town.json, so any low-infrastructure town with a fuel reserve, a hospital, a pump and shelters runs the same cascade."
+  },
+
+  "global": {
+    "tagline": "Built in Kottur, works anywhere",
+    "people_in_scope": "~3.5 billion people live in low-infrastructure, flood-exposed regions",
+    "pattern": "fuel depot = blood, hospital = heart, water pump = lungs, shelters = organs",
+    "why_it_transfers": "The organ graph is data. Any blocked road becomes a new edge weight; the same A* search, the same topological order, the same constrained allocation runs unchanged.",
+    "evidence_note": "3.5B is an order-of-magnitude figure for people in low- and middle-income countries exposed to flood risk; cite the source in the submission form."
+  },
+
+  "crisis": {
+    "id": "kottur-flood-nh544-km42",
+    "type": ["flood", "landslide", "road_closure"],
+    "started_local": "2026-10-26T18:40:00+05:30",
+    "blocked_corridor": "NH-544 km 42",
+    "blocked_at_km": 2.1,
+    "blocked_corridor_km": 4.2,
+    "expected_clear_hours": 6,
+    "water_outage_eta_hours": 6,
+    "summary": "Landslide at NH-544 km 42 closes the 4.2 km direct corridor for ~6 h. The depot holds 100 L diesel. Hospital generator has 4 h of runtime left. The water pump is fed from the hospital feeder and 200 people in shelters have no water."
+  },
+
+  "reserve": {
+    "resource": "diesel",
+    "unit": "L",
+    "total_litres": 100,
+    "stored_at": "fuel_depot",
+    "delivery_vehicle": {
+      "type": "loaded tanker",
+      "consumption_l_per_km": 0.35
+    }
+  },
+
+  "organs": {
+    "fuel_depot": {
+      "label": "Fuel depot, NH-544 km 42",
+      "role": "blood",
+      "priority": 4,
+      "depends_on": [],
+      "fuel_litres": 100,
+      "lat": 11.0168,
+      "lon": 76.9558
+    },
+    "hospital": {
+      "label": "Kottur Primary Health Centre",
+      "role": "heart",
+      "priority": 1,
+      "depends_on": ["fuel_depot"],
+      "fuel_demand_litres": 70,
+      "fuel_on_hand_litres": 0,
+      "runtime_hours_left": 4.0,
+      "generator_l_per_hour": 17.5,
+      "serves_people": 200,
+      "loads": ["ICU / ventilator", "vaccine cold chain", "water pump feeder"],
+      "lat": 11.035,
+      "lon": 76.972
+    },
+    "water_pump": {
+      "label": "Kottur water pump station",
+      "role": "lungs",
+      "priority": 2,
+      "depends_on": ["hospital"],
+      "fuel_demand_litres": 30,
+      "power_source": "hospital feeder (diesel generator)",
+      "powered_from": "hospital",
+      "fuel_l_per_hour": 5.0,
+      "delivers_litres_per_hour": 4000,
+      "lat": 11.029,
+      "lon": 76.986
+    },
+    "shelters": {
+      "label": "3 relief shelters, Kottur",
+      "role": "organs",
+      "priority": 3,
+      "depends_on": ["water_pump"],
+      "people": 200,
+      "water_litres_needed": 12000,
+      "status": "no water",
+      "lat": 11.031,
+      "lon": 76.992
+    }
+  },
+
+  "allocation_policy": {
+    "reserve_litres": 100,
+    "priority_order": ["hospital", "water_pump", "shelters"],
+    "rule": "Hospital first (lives at immediate risk), pump second (200 people's water), shelters follow the pump. Never allocate more than a node's stated demand. Total must equal the reserve exactly.",
+    "min_unit_litres": 5,
+    "human_approval_required": true,
+    "no_medical_advice": "This agent allocates diesel only. It never triages patients, doses medicine, or gives clinical advice."
+  },
+
+  "road_network": {
+    "nodes": {
+      "fuel_depot": {"lat": 11.0168, "lon": 76.9558, "kind": "origin"},
+      "slide_gate": {"lat": 11.023, "lon": 76.972, "kind": "waypoint"},
+      "hospital": {"lat": 11.035, "lon": 76.972, "kind": "goal"},
+      "village_jn": {"lat": 11.008, "lon": 76.974, "kind": "waypoint"},
+      "water_pump": {"lat": 11.029, "lon": 76.986, "kind": "waypoint"},
+      "shelters": {"lat": 11.031, "lon": 76.992, "kind": "waypoint"},
+      "south_jn": {"lat": 10.97, "lon": 76.9558, "kind": "waypoint"},
+      "bypass_jn": {"lat": 11.0136, "lon": 76.9667, "kind": "waypoint"}
+    },
+    "edges": [
+      {"from": "fuel_depot", "to": "slide_gate", "km": 2.1, "road": "NH-544", "status": "open"},
+      {"from": "slide_gate", "to": "hospital", "km": 2.1, "road": "NH-544 km 42", "status": "blocked", "reason": "landslide"},
+      {"from": "fuel_depot", "to": "village_jn", "km": 2.6, "road": "Kottur village road", "status": "open", "surface": "village"},
+      {"from": "village_jn", "to": "water_pump", "km": 3.4, "road": "Kottur village road", "status": "open", "surface": "village"},
+      {"from": "water_pump", "to": "hospital", "km": 1.8, "road": "pump feeder road", "status": "open"},
+      {"from": "fuel_depot", "to": "south_jn", "km": 5.4, "road": "Kottur south link", "status": "open"},
+      {"from": "south_jn", "to": "bypass_jn", "km": 5.1, "road": "Kottur bypass", "status": "open"},
+      {"from": "bypass_jn", "to": "hospital", "km": 2.5, "road": "Kottur bypass", "status": "open"},
+      {"from": "water_pump", "to": "shelters", "km": 1.2, "road": "shelter link", "status": "open"}
+    ],
+    "notes": "Road lengths are surveyed corridor lengths (km), coordinates are WGS84 waypoints used only for the A* heuristic. The signposted detour without an agent is the 13.0 km Kottur bypass (fuel_depot -> south_jn -> bypass_jn -> hospital)."
+  },
+
+  "baseline": {
+    "metric_definition": "Water-pump uptime measured during the first 4 h of the incident, and diesel burned per litre delivered.",
+    "without_agent": {
+      "route": "13.0 km Kottur bypass (signposted detour)",
+      "route_km": 13.0,
+      "trip_fuel_litres": 4.55,
+      "pump_uptime_minutes": 30,
+      "fuel_waste_percent": 40,
+      "water_delivered_after_hours": 6,
+      "allocated": {"hospital": 50, "water_pump": 50}
+    },
+    "with_agent": {
+      "route": "7.8 km village road (A* discovered)",
+      "route_km": 7.8,
+      "trip_fuel_litres": 2.73,
+      "pump_uptime_minutes": 90,
+      "fuel_saved_percent": 40,
+      "water_delivered_after_hours": 2,
+      "allocated": {"hospital": 70, "water_pump": 30}
+    },
+    "why_uptime_improves": "The naive split gives the pump 50 L but the hospital generator browns out and the feeder drops, so the pump only runs 30 min. Meeting the hospital's 70 L demand first keeps the feeder stable and the pump runs 90 min on its 30 L."
+  },
+
+  "models": {
+    "wonder_high": {"vendor": "Meta", "role": "allocation reasoning", "budget_usd": 70, "planned_calls": 170},
+    "sam_3_1": {"vendor": "Meta", "role": "flood extent perception", "budget_usd": 30, "planned_calls": 20},
+    "spark_voice": {"vendor": "Meta", "role": "Tamil field report transcription", "budget_usd": 30, "planned_calls": 50},
+    "spark": {"vendor": "Meta", "role": "coding + creative prompts", "budget_usd": 20},
+    "spark_open_1026": {"vendor": "Meta via Baseten", "role": "open-weight offline reasoning", "budget_usd": 0},
+    "llama32_3b": {"vendor": "Ollama (local RTX 3050)", "role": "offline fallback", "budget_usd": 0}
+  },
+
+  "credit_policy": {
+    "budget_usd": 150.0,
+    "reserve_buffer_usd": 20.0,
+    "alert_percent": 80.0,
+    "critical_percent": 95.0
+  }
+}

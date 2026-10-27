@@ -1,0 +1,276 @@
+{
+  "schema": "lifeline.run/1.0",
+  "generated_utc": "2026-10-27T07:34:52+00:00",
+  "town": {
+    "name": "Kottur",
+    "lat": 11.0168,
+    "lon": 76.9558
+  },
+  "scenario": "pump-critical",
+  "duration_s": 0.0,
+  "executed": true,
+  "steps": [
+    {
+      "step": 1,
+      "name": "PERCEIVE",
+      "model": "sam-3.1",
+      "status": "pending_capture",
+      "detail": "artifacts/sam_flood_segments.json not captured yet (Day 2)"
+    },
+    {
+      "step": 2,
+      "name": "LISTEN",
+      "model": "muse-voice-transcribe-1.0",
+      "status": "pending_capture",
+      "detail": "artifacts/voice_reports.json not captured yet (Day 2)"
+    },
+    {
+      "step": 3,
+      "name": "GRAPH",
+      "status": "ok",
+      "order": [
+        "fuel_depot",
+        "hospital",
+        "water_pump",
+        "shelters"
+      ],
+      "critical_path": [
+        "fuel_depot",
+        "hospital",
+        "water_pump",
+        "shelters"
+      ],
+      "if_hospital_fails": [
+        "water_pump",
+        "shelters"
+      ],
+      "people_affected": 200,
+      "evidence": "Kahn topological sort over town.json depends_on edges"
+    },
+    {
+      "step": 4,
+      "name": "ROUTE",
+      "status": "ok",
+      "start": "fuel_depot",
+      "goal": "hospital",
+      "path": [
+        "fuel_depot",
+        "village_jn",
+        "water_pump",
+        "hospital"
+      ],
+      "roads": [
+        "Kottur village road",
+        "Kottur village road",
+        "pump feeder road"
+      ],
+      "distance_km": 7.8,
+      "fuel_litres": 2.73,
+      "nodes_expanded": 5,
+      "blocked_corridors": [
+        "NH-544 km 42 (slide_gate -> hospital, 2.1 km)"
+      ],
+      "heuristic": "haversine to goal (admissible, audited)",
+      "baseline": {
+        "signposted_detour_km": 13.0,
+        "direct_corridor_km": 4.2,
+        "direct_corridor_status": "blocked",
+        "fuel_litres": 4.55
+      },
+      "saving": {
+        "km": 5.2,
+        "fuel_litres": 1.82,
+        "percent": 40.0,
+        "generator_minutes_bought": 6.2
+      },
+      "detour_vs_direct_km": 3.6,
+      "evidence": "road lengths and blocked status are surveyed fields in town.json; the path is computed, not generated"
+    },
+    {
+      "step": 5,
+      "name": "ALLOCATE",
+      "status": "ok",
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "total": 100,
+      "evidence": [
+        {
+          "id": "E1",
+          "claim": "hospital generator has 4 h of runtime left",
+          "value": 4.0,
+          "unit": "h",
+          "source": "town.json#organs.hospital.runtime_hours_left"
+        },
+        {
+          "id": "E2",
+          "claim": "hospital needs 70 L of diesel to cover the 6 h road closure",
+          "value": 70,
+          "unit": "L",
+          "source": "town.json#organs.hospital.fuel_demand_litres"
+        },
+        {
+          "id": "E3",
+          "claim": "water pump needs 30 L to keep pumping through the closure",
+          "value": 30,
+          "unit": "L",
+          "source": "town.json#organs.water_pump.fuel_demand_litres"
+        },
+        {
+          "id": "E4",
+          "claim": "200 people depend on the hospital feeder",
+          "value": 200,
+          "unit": "people",
+          "source": "town.json#organs.hospital.serves_people"
+        },
+        {
+          "id": "E5",
+          "claim": "200 people in shelters have no water until the pump runs",
+          "value": 200,
+          "unit": "people",
+          "source": "town.json#organs.shelters.people"
+        },
+        {
+          "id": "E6",
+          "claim": "the pump draws power from the hospital feeder, so the heart must be stable first",
+          "value": "hospital",
+          "unit": "organ",
+          "source": "town.json#organs.water_pump.powered_from"
+        },
+        {
+          "id": "E7",
+          "claim": "total diesel reserve at the depot",
+          "value": 100,
+          "unit": "L",
+          "source": "town.json#reserve.total_litres"
+        },
+        {
+          "id": "E8",
+          "claim": "NH-544 km 42 is blocked for ~6 h",
+          "value": 6,
+          "unit": "h",
+          "source": "town.json#crisis.expected_clear_hours"
+        }
+      ],
+      "inference": [
+        {
+          "claim": "fund the hospital first",
+          "litres": 70,
+          "because": [
+            "E1",
+            "E2",
+            "E4"
+          ],
+          "confidence": 0.99
+        },
+        {
+          "claim": "fund the pump second, inside the hospital feeder budget",
+          "litres": 30,
+          "because": [
+            "E3",
+            "E5",
+            "E6"
+          ],
+          "confidence": 0.95
+        },
+        {
+          "claim": "no diesel left over, no organ over-funded",
+          "litres": 0,
+          "because": [
+            "E7",
+            "E8"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "justification": "Heart first, lungs next: the hospital's 4 h of runtime is the nearest failure, and the pump is fed from the hospital feeder, so 70 L hospital + 30 L pump is the only split that keeps both alive for the 6 h closure.",
+      "confidence": 0.99,
+      "constraints": {
+        "reserve_litres": 100,
+        "caps_litres": {
+          "hospital": 70,
+          "water_pump": 30
+        },
+        "priority_order": [
+          "hospital",
+          "water_pump",
+          "shelters"
+        ],
+        "min_unit_litres": 5,
+        "fill_reserve_exactly": true
+      },
+      "validation": {
+        "ok": true,
+        "checks": [
+          "total 100 L == reserve 100 L",
+          "hospital 70 L <= cap 70 L",
+          "pump 30 L <= cap 30 L",
+          "priority order respected (hospital before water_pump)",
+          "units are multiples of 5 L",
+          "nothing executed - awaiting human approval"
+        ]
+      },
+      "source": "policy",
+      "trace": {
+        "requested_mode": "policy"
+      },
+      "human_approval_required": true,
+      "executed": false,
+      "safety": "diesel allocation only - no medical triage, no dosing, no clinical advice"
+    },
+    {
+      "step": 6,
+      "name": "BUDGET",
+      "status": "ok",
+      "spent_usd": 0,
+      "remaining_usd": 150.0,
+      "percent_used": 0.0,
+      "level": "ok",
+      "alerts": [],
+      "plan_usd": 150.0,
+      "evidence": "credit_usage.json, append-only, one row per model call"
+    },
+    {
+      "step": 7,
+      "name": "APPROVE",
+      "status": "approved",
+      "mode": "pre-approved"
+    },
+    {
+      "step": 8,
+      "name": "REPLAN",
+      "status": "guardrail_held",
+      "instruction": {
+        "hospital": 60,
+        "water_pump": 40
+      },
+      "validator_rejected_because": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (60/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "note": "the agent will not starve the heart because a human shouted louder"
+    }
+  ],
+  "measured_outcome": {
+    "pump_uptime_minutes": {
+      "without_agent": 30,
+      "with_agent": 90
+    },
+    "fuel_saved_percent": 40,
+    "water_delivered_after_hours": {
+      "without_agent": 6,
+      "with_agent": 2
+    },
+    "metric_definition": "Water-pump uptime measured during the first 4 h of the incident, and diesel burned per litre delivered."
+  },
+  "autonomy": {
+    "steps_without_human": 6,
+    "human_touchpoints": 1,
+    "model_calls_required_for_deterministic_steps": 0
+  }
+}
