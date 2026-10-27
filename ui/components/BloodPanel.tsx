@@ -125,12 +125,15 @@ export default function BloodPanel() {
             <span className="rounded border border-line px-1.5 py-0.5 mono text-[9px] text-muted">
               range {B.sweat.deficit_range_litres[0]}–{B.sweat.deficit_range_litres[1]} L
             </span>
+            <span className="rounded border border-amber/40 bg-amber/5 px-1.5 py-0.5 mono text-[9px] text-amber">
+              diesel {B.sweat.beta_per_c}/°C
+            </span>
           </div>
           <p className="mt-2 text-[10px] leading-relaxed text-muted">
             The number going around is{" "}
             <span className="text-blood">−{B.sweat.folklore_litres.toFixed(0)} L</span>. The
-            coefficient at 0.00084/°C says {B.sweat.deficit_litres.toFixed(2)} L. We publish
-            the physics, not the folklore.
+            diesel expansion coefficient, {B.sweat.beta_per_c}/°C, says{" "}
+            {B.sweat.deficit_litres.toFixed(2)} L. We publish the physics, not the folklore.
           </p>
         </Card>
 
@@ -176,7 +179,7 @@ export default function BloodPanel() {
         <Card
           index="03 · DEATH CLOCK"
           title="When the heart stops"
-          verdict="arithmetic"
+          verdict="fuel-limited runtime"
           colour={COLORS.blood}
           footer={B.clock.note}
         >
@@ -225,7 +228,7 @@ export default function BloodPanel() {
 
         {/* ---------------------------------------------------------- inverse */}
         <Card
-          index="04 · INVERSE"
+          index="04 · INVERSE UPTIME GUARANTEE"
           title="Allocate hours, not litres"
           verdict="same plan, human units"
           colour={COLORS.lung}

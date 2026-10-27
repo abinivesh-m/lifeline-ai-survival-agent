@@ -1,0 +1,9 @@
+﻿LIFELINE AI - GPU proof
+Captured (UTC): 2026-10-27T10:38:50Z
+Host: ABINIVESH-M
+
+$ nvidia-smi --query-gpu=name,memory.total,memory.used,driver_version --format=csv,noheader
+NVIDIA GeForce RTX 3050 6GB Laptop GPU, 6144 MiB, 0 MiB, 592.82
+
+Note: this is real nvidia-smi output. The Task Manager screenshot must be captured on the demo machine; it is not fabricated here.
+

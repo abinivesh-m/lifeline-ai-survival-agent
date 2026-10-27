@@ -33,21 +33,16 @@ async function sha256(text: string) {
 
 export default function AllocatorDashboard() {
   const { t } = useLocale();
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [decision, setDecision] = useState<null | "approve" | "deny">(null);
   const [chain, setChain] = useState<{ seq: number; action: string; hash: string }[]>([]);
   const [busy, setBusy] = useState(false);
   const head = chain.length ? chain[chain.length - 1].hash : "0".repeat(64);
 
-  const frame = frames[index];
+  // One frame, one number. The featured mask is the 35.3% Kerala frame; the
+  // other eight stay in the artefact, not on the page.
+  const frame =
+    frames.find((item) => item.file === "Flood_kerala_2018_3.jpg") ?? frames[0];
   const justification = useTypewriter(lifeline.allocation.justification);
-
-  useEffect(() => {
-    if (paused || decision) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % frames.length), 4600);
-    return () => clearInterval(id);
-  }, [paused, decision]);
 
   const allocation = lifeline.allocation.policy;
   const hospital = allocation.hospital ?? 0;
@@ -90,30 +85,20 @@ export default function AllocatorDashboard() {
   return (
     <div className="grid gap-4 lg:grid-cols-3">
       {/* ---------------- SAM evidence ---------------- */}
-      <div
-        className="glass rounded-xl p-4"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className="glass rounded-xl p-4">
         <div className="flex items-baseline justify-between">
           <div className="mono text-[10px] tracking-[0.18em] text-muted">01 · PERCEIVE</div>
           <div className="mono text-[9px] text-teal">{lifeline.sam.model}</div>
         </div>
 
         <div className="relative mt-2 overflow-hidden rounded-lg border border-line bg-black">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={frame?.stem}
-              src={frame?.overlay ?? frame?.photo ?? ""}
-              alt={`SAM mask over ${frame?.file}`}
-              initial={{ opacity: 0, scale: 1.03 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="h-[190px] w-full object-cover"
-              draggable={false}
-            />
-          </AnimatePresence>
+          <img
+            key={frame?.stem}
+            src={frame?.overlay ?? frame?.photo ?? ""}
+            alt={`SAM mask over ${frame?.file}`}
+            className="h-[190px] w-full object-cover"
+            draggable={false}
+          />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/90 to-transparent p-2.5">
             <div>
               <div className="mono text-[9px] text-muted">water extent</div>
@@ -122,48 +107,20 @@ export default function AllocatorDashboard() {
             <div className="mono text-right text-[9px] text-muted">
               {frame?.objects} mask{frame?.objects === 1 ? "" : "s"}
               <br />
-              {frame?.stem.slice(0, 22)}
+              {frame?.file}
             </div>
           </div>
-        </div>
-
-        <div className="mt-2 flex items-center gap-1.5">
-          <button
-            onClick={() => setIndex((i) => (i - 1 + frames.length) % frames.length)}
-            className="rounded border border-line px-2 py-1 text-[11px] text-muted hover:border-teal/60 hover:text-teal"
-            aria-label="previous frame"
-          >
-            ‹
-          </button>
-          <div className="flex flex-1 gap-1">
-            {frames.map((f, i) => (
-              <button
-                key={f.stem}
-                onClick={() => setIndex(i)}
-                title={`${f.severity}%`}
-                className="h-1.5 flex-1 rounded-full transition"
-                style={{
-                  background: i === index ? COLORS.teal : "#1f3540",
-                  opacity: i === index ? 1 : 0.7,
-                }}
-              />
-            ))}
+          <div className="absolute left-2 top-2 rounded border border-teal/40 bg-black/70 px-1.5 py-0.5 mono text-[8px] text-teal">
+            FEATURED FRAME · ONE MASK
           </div>
-          <button
-            onClick={() => setIndex((i) => (i + 1) % frames.length)}
-            className="rounded border border-line px-2 py-1 text-[11px] text-muted hover:border-teal/60 hover:text-teal"
-            aria-label="next frame"
-          >
-            ›
-          </button>
         </div>
 
         <p className="mt-2 text-[10.5px] leading-relaxed text-muted">
-          Noun-phrase prompt <span className="mono text-ink">"{lifeline.sam.prompt}"</span>,
-          masks decoded from the model response. Measured severity spans {frames[frames.length - 1]?.severity.toFixed(1)}% to{" "}
-          {frames[0]?.severity.toFixed(1)}%. Two aerial frames returned under 1% — SAM's
-          concept is literal, and muddy floodwater from above does not match it. That is
-          reported, not hidden.
+          Noun-phrase prompt <span className="mono text-ink">&quot;{lifeline.sam.prompt}&quot;</span>,
+          mask decoded from the model response. One frame, one measured number:{" "}
+          <span className="text-teal">{frame?.severity.toFixed(1)}% water extent from{" "}
+          {frame?.objects} mask</span>. The other eight frames and the two sub-1% aerial
+          misses stay in the artefact rather than propping up this panel.
         </p>
       </div>
 
@@ -196,13 +153,14 @@ export default function AllocatorDashboard() {
             <span className="mono text-[9px] text-teal">TA · {lifeline.voice.seconds}s · push to talk</span>
             {lifeline.voice.synthetic && (
               <span className="rounded border border-amber/50 bg-amber/10 px-1.5 py-0.5 mono text-[8px] text-amber">
-                SYNTHETIC PLACEHOLDER
+                SYNTHETIC PLACEHOLDER · LABELLED
               </span>
             )}
           </div>
           <p className="ta mt-1.5 text-[12.5px] leading-relaxed text-ink">{lifeline.voice.transcript}</p>
-          <p className="mono mt-1.5 text-[9px] text-muted">
-            real transcript from the API · Tamil bias + keywords
+          <p className="mono mt-1.5 text-[9px] leading-relaxed text-muted">
+            real pipeline · {lifeline.voice.model} · Tamil bias + keywords · stored run
+            artifacts/audio/report_01.wav
           </p>
         </div>
 
@@ -227,7 +185,8 @@ export default function AllocatorDashboard() {
               </span>
             ))}
             <span className="rounded border border-teal/40 px-1.5 py-0.5 mono text-[8.5px] text-teal">
-              validator · {lifeline.allocation.validation?.ok ? "pass" : "fail"}
+              validator · {lifeline.allocation.validation?.ok ? "pass" : "fail"} 70L/30L ·{" "}
+              {Math.round(lifeline.allocation.confidence * 100)}% conf
             </span>
           </div>
         </div>
@@ -271,7 +230,9 @@ export default function AllocatorDashboard() {
         <div className="mt-3">
           <div className="flex items-baseline justify-between">
             <span className="mono text-[10px] tracking-[0.16em] text-muted">{t("credit.title")}</span>
-            <span className="mono text-[10px] text-ink">${spend.toFixed(4)}</span>
+            <span className="mono text-[10px] text-ink">
+              ${spend.toFixed(4)} <span className="text-muted">/ ${budget.toFixed(0)}</span>
+            </span>
           </div>
           <div className="relative mt-1.5 h-2 overflow-hidden rounded-full bg-[#16262f]">
             <motion.div

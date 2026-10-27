@@ -117,7 +117,7 @@ export default function Page() {
             >
               <div className="mono inline-flex items-center gap-2 rounded-full border border-teal/30 bg-teal/5 px-3 py-1 text-[10px] tracking-[0.18em] text-teal">
                 <span className="h-1.5 w-1.5 rounded-full bg-teal" />
-                {t("app.tagline").toUpperCase()}
+                runs offline · 6GB laptop GPU
               </div>
 
               <h1 className="mt-5 text-[40px] font-bold leading-[1.04] tracking-tight md:text-[62px]">
@@ -136,9 +136,11 @@ export default function Page() {
               <div className="mt-5 flex flex-wrap gap-2">
                 {[
                   "fuel allocation only · no medical advice",
-                  `${lifeline.locales.length} world languages`,
-                  "real model calls, real ledger",
-                  "runs offline on a 6 GB laptop",
+                  `${lifeline.locales.length} world languages [${lifeline.locales
+                    .map((locale) => locale.code.toUpperCase())
+                    .join(" ")}]`,
+                  `ledger $${lifeline.credit.spent_usd.toFixed(4)}/$${lifeline.credit.budget_usd.toFixed(0)} live`,
+                  "78/78 pytest",
                 ].map((chip) => (
                   <span
                     key={chip}
@@ -255,7 +257,7 @@ export default function Page() {
       {/* ------------------------------------------------------------- cascade */}
       <Section
         meta={SECTIONS[0]}
-        lede="Four organs, one directed graph. Kahn's algorithm decides the order, and the order is the whole argument: fund anything below the heart first and the money is wasted."
+        lede="Four organs, one DAG: fuel_depot → hospital → water_pump → shelters. Kahn's algorithm decides the order, and the order is the whole argument: fund anything below the heart first and the money is wasted."
       >
         <DependencyGraph3D />
       </Section>
@@ -263,7 +265,7 @@ export default function Page() {
       {/* --------------------------------------------------------------- route */}
       <Section
         meta={SECTIONS[1]}
-        lede="A* with a binary heap over the real road graph. The blocked corridor is not a saving — it is an impossibility. Every percentage is measured against the 13.0 km detour an operator would actually take."
+        lede="A* with a binary heap over the real road graph. The blocked corridor is not a saving — it is an impossibility. Every percentage is measured against the 13.0 km detour an operator would actually take. Rain is a scenario input; no weather API is called."
       >
         <AStarMap3D />
       </Section>
@@ -287,7 +289,7 @@ export default function Page() {
       {/* ---------------------------------------------------------- escalation */}
       <Section
         meta={SECTIONS[4]}
-        lede="A single approval button is a single point of failure. Four tiers, each one logged to a sha256 hash chain so the record cannot be quietly rewritten."
+        lede="A single approval button is a single point of failure. Four tiers, each one logged to a sha256 hash chain so the record cannot be quietly rewritten. PAPER QR + TEMPLE BELL PROTOCOL: 0 phone needed to Tier 4."
       >
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {lifeline.escalation.tiers.map((tier) => {
@@ -362,6 +364,47 @@ export default function Page() {
             </p>
           </div>
         </div>
+
+        <div className="mt-3 rounded-xl border border-amber/30 bg-amber/[0.04] p-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div className="mono text-[10px] tracking-[0.18em] text-amber">
+              PAPER QR + TEMPLE BELL PROTOCOL
+            </div>
+            <div className="mono text-[9px] text-muted">0 phone needed to Tier 4</div>
+          </div>
+          <div className="mt-2 grid gap-2 md:grid-cols-3">
+            {[
+              {
+                n: "01",
+                title: "PAPER QR",
+                detail:
+                  "Each shelter holds a printed card with three signed codes. No app, no battery, no signal.",
+              },
+              {
+                n: "02",
+                title: "TEMPLE BELL",
+                detail:
+                  "The one speaker the whole town can hear. Two strikes means tier 3 is live; three means tier 4.",
+              },
+              {
+                n: "03",
+                title: "SHELTER CONSENSUS",
+                detail:
+                  "Three leaders, two of three agree, the decision is written by hand and hashed at the desk.",
+              },
+            ].map((step) => (
+              <div key={step.n} className="rounded border border-line/70 bg-black/25 p-2.5">
+                <div className="mono text-[8.5px] tracking-[0.16em] text-amber/80">
+                  {step.n} · {step.title}
+                </div>
+                <p className="mt-1 text-[10.5px] leading-relaxed text-muted">{step.detail}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-[10px] leading-relaxed text-muted/70">
+            Protocol design, not a deployed gateway. Nothing here claims a message was sent.
+          </p>
+        </div>
       </Section>
 
       {/* -------------------------------------------------------------- offline */}
@@ -375,7 +418,7 @@ export default function Page() {
       {/* ------------------------------------------------------------- timeline */}
       <Section
         meta={SECTIONS[6]}
-        lede="The same sequence the CLI runs: perceive, listen, order, route, allocate, budget, approve, replan."
+        lede="The same sequence the CLI runs: perceive, listen, order, route, allocate, budget, approve, replan. The 90 min baseline is a documented assumption in the README, not a field trial; the 30 min agent figure times the eight steps."
       >
         <AgenticTimeline3D />
       </Section>
@@ -416,7 +459,7 @@ export default function Page() {
               <li>Photos: Wikimedia, credited in CREDITS.json</li>
               <li>Voice: synthetic placeholder, labelled</li>
               <li>Masks &amp; transcripts: real API output</li>
-              <li>Baseline: documented assumption</li>
+              <li>Baseline: documented assumption, not field trial</li>
             </ul>
           </div>
           <div>
@@ -426,7 +469,7 @@ export default function Page() {
               advice. A human approves before anything is dispatched.
             </p>
             <p className="mt-2 mono text-[9px] text-muted/70">
-              ledger ${lifeline.credit.spent_usd.toFixed(6)} / ${lifeline.credit.budget_usd}
+              ledger ${lifeline.credit.spent_usd.toFixed(4)} / ${lifeline.credit.budget_usd}
             </p>
           </div>
         </div>

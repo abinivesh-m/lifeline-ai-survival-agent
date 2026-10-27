@@ -79,5 +79,36 @@
     "status": "synthetic placeholder until the real Kottur voice note is supplied",
     "model": "muse-voice-transcribe-1.0"
   },
+  "sam": {
+    "model": "sam-3.1",
+    "featured_frame": "Flood_kerala_2018_3.jpg",
+    "featured_severity_percent": 35.3,
+    "featured_masks": 1,
+    "status": "real API output, decoded locally into masks",
+    "note": "The other eight frames stay in artifacts/sam_flood_segments.json. Only the featured frame is shown in the UI so one number is not competing with nine."
+  },
+  "openweight": {
+    "model": "meta-models/muse-spark-open-1026",
+    "provider": "Baseten",
+    "proof": "artifacts/openweight_proof.json",
+    "valid_runs": 2,
+    "total_runs": 3,
+    "latencies_s": [5.41, 6.73],
+    "status": "partner-hosted inference, stored verbatim and re-validated locally",
+    "not_claimed": "no local open-weight model is loaded on the RTX 3050 6GB laptop"
+  },
+  "proof": {
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 6144 MiB",
+    "gpu_query": "nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv,noheader",
+    "task_manager_screenshot": "artifacts/proof/gpu_6gb_taskmgr.png (capture on the demo machine)",
+    "offline_video": "artifacts/proof/offline_proof.mp4",
+    "baseten_video": "artifacts/proof/baseten_proof.mp4"
+  },
+  "data_sources": {
+    "world_bank": "2,564 cities across 177 countries, 14M km of roads",
+    "global_flood_database": "913 flood events",
+    "gdis": "39,953 populated locations, 3.5B people in this settlement pattern",
+    "note": "These are scale citations for the pattern, not measurements of Kottur."
+  },
   "fonts": "system stack plus bundled local fonts; see ui/app/globals.css"
 }

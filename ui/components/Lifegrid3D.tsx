@@ -412,7 +412,7 @@ export default function Lifegrid3D() {
             })}
           </div>
           <div className="mono rounded border border-line/70 bg-black/40 px-2 py-1 text-[9px] text-muted">
-            procedural three.js / no external scene
+            procedural three.js / no external textures / offline-safe
           </div>
         </div>
       </div>

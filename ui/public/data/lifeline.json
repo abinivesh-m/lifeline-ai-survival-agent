@@ -437,6 +437,101 @@
     "detour_vs_direct_km": 3.6,
     "evidence": "road lengths and blocked status are surveyed fields in town.json; the path is computed, not generated"
   },
+  "protocols": {
+    "snake_boat_relay": {
+      "mode": "road",
+      "switched": false,
+      "armed": true,
+      "water_edges": 0,
+      "road_km": 7.8,
+      "km": 7.8,
+      "path": [
+        "fuel_depot",
+        "village_jn",
+        "water_pump",
+        "hospital"
+      ],
+      "note": "road A* won at 7.8 km; the water leg stayed armed and unused"
+    },
+    "ant_pheromone": {
+      "seed": 7,
+      "ants": 12,
+      "iterations": 12,
+      "runs": 144,
+      "best_km": 7.8,
+      "best_path": [
+        "fuel_depot",
+        "village_jn",
+        "water_pump",
+        "hospital"
+      ],
+      "learned_after": 8,
+      "blocked_share_final": 0.0006,
+      "history": [
+        {
+          "iteration": 1,
+          "blocked_share": 0.47906,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 2,
+          "blocked_share": 0.45813,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 3,
+          "blocked_share": 0.25533,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 4,
+          "blocked_share": 0.12316,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 5,
+          "blocked_share": 0.05368,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 6,
+          "blocked_share": 0.0265,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 7,
+          "blocked_share": 0.01322,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 8,
+          "blocked_share": 0.00692,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 9,
+          "blocked_share": 0.00371,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 10,
+          "blocked_share": 0.00201,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 11,
+          "blocked_share": 0.0011,
+          "best_km": 7.8
+        },
+        {
+          "iteration": 12,
+          "blocked_share": 0.0006,
+          "best_km": 7.8
+        }
+      ],
+      "note": "Seeded ACO on the road graph. The blocked corridor cannot be reinforced, so its trail evaporates while the open path hardens. No randomness escapes: seed 7 reproduces every number."
+    }
+  },
   "blood": {
     "sweat": {
       "litres_measured": 100.0,
@@ -604,8 +699,8 @@
       "burn_l_per_hour": 17.5,
       "hours": 4.0,
       "minutes": 240,
-      "dies_at": "2026-10-27T14:11:04+00:00",
-      "started_at": "2026-10-27T10:11:04+00:00",
+      "dies_at": "2026-10-27T14:34:37+00:00",
+      "started_at": "2026-10-27T10:34:37+00:00",
       "label": "4 h 00 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -616,8 +711,8 @@
       "burn_l_per_hour": 21.0,
       "hours": 3.33,
       "minutes": 200,
-      "dies_at": "2026-10-27T13:31:04+00:00",
-      "started_at": "2026-10-27T10:11:04+00:00",
+      "dies_at": "2026-10-27T13:54:37+00:00",
+      "started_at": "2026-10-27T10:34:37+00:00",
       "label": "3 h 20 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."

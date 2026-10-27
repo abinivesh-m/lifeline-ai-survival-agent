@@ -74,7 +74,7 @@ export default function AgenticTimeline3D() {
           </span>
         </div>
         <div className="flex items-center gap-3 rounded-md border border-line bg-panel/70 px-3 py-1.5">
-          <span className="mono text-[9px] text-muted">baseline</span>
+          <span className="mono text-[9px] text-muted">baseline · documented assumption</span>
           <div className="flex items-center gap-2">
             <span className="mono text-[11px] text-blood line-through decoration-1">
               {lifeline.baseline.manual_minutes} min

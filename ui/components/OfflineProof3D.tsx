@@ -11,7 +11,7 @@ type Mode = "offline" | "online";
 const LINES: Record<Mode, [string, string][]> = {
   offline: [
     ["$ ipconfig /all  |  findstr Media", "Media State . . . . . . : Media disconnected"],
-    ["$ nvidia-smi --query-gpu=name,memory.total", "NVIDIA GeForce RTX 3050 Laptop GPU, 6144 MiB"],
+    ["$ nvidia-smi --query-gpu=name,memory.total", "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 6144 MiB"],
     ["$ python agent.py --offline --yes", "8 steps, 0 network calls, 0 API keys read"],
     ["$ python a_star.py", "A* 4.2 km blocked -> 7.8 km found (40.0% saved)"],
     ["$ python allocator.py --mode policy", "70 L heart + 30 L lungs = 100 L, validator pass"],
@@ -122,9 +122,9 @@ function Holograms({ mode }: { mode: Mode }) {
   return (
     <group>
       {[
-        { pos: [-2.7, 1.9, -1] as [number, number, number], label: "BASETEN", detail: "muse-spark-open-1026 · qualifying", colour: COLORS.teal },
-        { pos: [2.8, 1.5, -1.2] as [number, number, number], label: "MODAL", detail: "glimmer · 18 GB · not deployed", colour: COLORS.amber },
-        { pos: [2.6, -0.6, 0.6] as [number, number, number], label: "THIS LAPTOP", detail: "deterministic core · no network", colour: COLORS.lung },
+        { pos: [-3.1, 1.05, -0.7] as [number, number, number], label: "BASETEN", detail: "muse-spark-open-1026 · qualifying", colour: COLORS.teal },
+        { pos: [3.0, 0.75, -0.9] as [number, number, number], label: "MODAL", detail: "glimmer · 18 GB · not deployed", colour: COLORS.amber },
+        { pos: [2.6, -0.6, 0.6] as [number, number, number], label: "THIS LAPTOP", detail: "RTX 3050 6GB · core <1.2 GB", colour: COLORS.lung },
       ].map((holo) => {
         const active = mode === "online" ? holo.label !== "THIS LAPTOP" : holo.label === "THIS LAPTOP";
         return (
@@ -176,8 +176,8 @@ export default function OfflineProof3D() {
           <OrbitControls enablePan={false} minDistance={5} maxDistance={9} maxPolarAngle={Math.PI * 0.62} />
         </Canvas>
 
-        <div className="absolute left-4 top-4 mono text-[9px] tracking-[0.18em] text-muted">
-          SAME CODE · NO NETWORK · RTX 3050 6 GB
+        <div className="absolute left-4 top-4 rounded border border-line/70 bg-black/70 px-2 py-1 mono text-[9px] tracking-[0.18em] text-muted">
+          RTX 3050 6GB LAPTOP GPU · CORE &lt;1.2 GB · AIRPLANE MODE · NO API KEY
         </div>
         <div
           className={`absolute right-4 top-4 rounded border px-2 py-1 mono text-[9px] ${
@@ -187,6 +187,10 @@ export default function OfflineProof3D() {
           }`}
         >
           {mode === "offline" ? "AIRPLANE MODE ON" : "NETWORK UP"}
+        </div>
+        <div className="absolute inset-x-4 bottom-4 rounded border border-line/70 bg-black/70 px-2 py-1 mono text-[8.5px] leading-relaxed text-muted">
+          RTX 3050 6GB Laptop GPU · deterministic core &lt;1.2GB · LIFELINE_OFFLINE=1
+          airplane mode · no API key
         </div>
       </div>
 
@@ -212,7 +216,7 @@ export default function OfflineProof3D() {
           </div>
           <p className="mt-3 text-[11.5px] leading-relaxed text-muted">
             {mode === "offline"
-              ? "Wi-Fi off. The deterministic core - A*, Kahn sort, the 70/30 validator, the ledger - runs entirely on this laptop. No API key is touched."
+              ? "Wi-Fi off. LIFELINE_OFFLINE=1. The deterministic core — A*, Kahn sort, the 70/30 validator, the ledger — runs entirely in under 1.2 GB on this laptop. No API key is read."
               : "Partner inference is the qualifying path for Open Weight: muse-spark-open-1026 on Baseten, with the stored proof below. Muse Glimmer needs 18 GB of VRAM, so it is not claimed on this laptop."}
           </p>
         </div>
@@ -258,7 +262,7 @@ export default function OfflineProof3D() {
           </div>
           <p className="mt-1 text-[10.5px] leading-relaxed text-muted">
             {lifeline.openweight.available
-              ? `Returned ${lifeline.openweight.allocation?.hospital} L / ${lifeline.openweight.allocation?.water_pump} L in ${lifeline.openweight.latencies_s.join(" s and ")} s. Stored verbatim in artifacts/openweight_proof.json and re-validated locally, not trusted from the model.`
+              ? `${lifeline.openweight.valid_runs}/${lifeline.openweight.runs} runs valid · ${lifeline.openweight.latencies_s.join(" s and ")} s · ${lifeline.openweight.allocation?.hospital} L / ${lifeline.openweight.allocation?.water_pump} L. Stored verbatim in artifacts/openweight_proof.json and re-validated locally, not trusted from the model.`
               : "No valid run on file yet. Run python openweight.py before recording the demo."}
           </p>
           <div className="mt-1.5 flex gap-1.5">

@@ -31,6 +31,10 @@ captures/
 artifacts/live/
 artifacts/shots/
 
+# proof clips and the labelled synthetic voice note are deliverables
+!artifacts/proof/*.mp4
+!artifacts/audio/report_01.wav
+
 # --- node / next.js --------------------------------------------------------
 node_modules/
 ui/node_modules/

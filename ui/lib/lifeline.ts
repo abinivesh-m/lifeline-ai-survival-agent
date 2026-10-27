@@ -127,6 +127,29 @@ export type LifeLineData = {
     distance_km: number;
     saving: { km: number; percent: number; fuel_litres: number };
   };
+  protocols: {
+    snake_boat_relay: {
+      mode: "road" | "water" | "none";
+      switched: boolean;
+      armed: boolean;
+      water_edges: number;
+      road_km: number | null;
+      km: number | null;
+      path: string[];
+      note: string;
+    };
+    ant_pheromone: {
+      seed: number;
+      ants: number;
+      iterations: number;
+      runs: number;
+      best_km: number | null;
+      best_path: string[];
+      learned_after: number | null;
+      blocked_share_final: number;
+      note: string;
+    };
+  };
   blood: Blood;
   allocation: {
     policy: Record<string, number>;

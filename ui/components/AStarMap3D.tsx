@@ -210,6 +210,8 @@ export default function AStarMap3D() {
 
   const km = lifeline.route.distance_km;
   const saved = lifeline.route.saving;
+  const relay = lifeline.protocols.snake_boat_relay;
+  const ants = lifeline.protocols.ant_pheromone;
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
@@ -273,7 +275,7 @@ export default function AStarMap3D() {
         </div>
 
         <div className="absolute bottom-3 left-3 rounded border border-line bg-black/60 px-2 py-1 mono text-[9px] text-muted">
-          terrain is schematic · distances are from the repo graph
+          terrain schematic · distances from repo graph · no weather API
         </div>
       </div>
 
@@ -354,6 +356,44 @@ export default function AStarMap3D() {
             >
               CLEAR RAIN
             </button>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-line bg-panel/80 p-4">
+          <div className="mono text-[10px] tracking-[0.18em] text-muted">SURVIVOR PROTOCOLS</div>
+          <div className="mt-2 space-y-2">
+            <div className="rounded border border-teal/30 bg-teal/[0.04] p-2.5">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="mono text-[9px] tracking-[0.14em] text-teal">
+                  SNAKE BOAT RELAY
+                </span>
+                <span className="mono text-[8px] text-muted">
+                  {relay.mode} · {relay.water_edges} water edges
+                </span>
+              </div>
+              <p className="mt-1 text-[10.5px] leading-relaxed text-muted">
+                Road A* runs first. If the last road closes, the same solver re-runs on
+                water edges.
+                <span className="mt-0.5 block text-teal/90">Result: {relay.note}.</span>
+              </p>
+            </div>
+
+            <div className="rounded border border-amber/30 bg-amber/[0.04] p-2.5">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="mono text-[9px] tracking-[0.14em] text-amber">
+                  ANT PHEROMONE
+                </span>
+                <span className="mono text-[8px] text-muted">
+                  {ants.runs} runs · seed {ants.seed}
+                </span>
+              </div>
+              <p className="mt-1 text-[10.5px] leading-relaxed text-muted">
+                A seeded colony walks the graph. The blocked corridor cannot be
+                reinforced, so its trail falls below 1% after{" "}
+                <span className="text-amber">{ants.learned_after ?? "—"} iterations</span>{" "}
+                while the {ants.best_km} km bypass hardens.
+              </p>
+            </div>
           </div>
         </div>
       </div>

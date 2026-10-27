@@ -11,6 +11,12 @@ const ORIGIN = TOWNS.find((town) => town.data_class === "surveyed") ?? TOWNS[0];
 /** The 30-second demo path: origin, then three continents. */
 const TOUR_IDS = ["kottur", "manila", "jakarta", "rio_favela", "kibera"];
 
+/** Two presets the judge can hit in one click. Lahore is a labelled template. */
+const PRESETS = [
+  { id: "kottur", label: "KOTTUR", lat: "11.0168", lon: "76.9558" },
+  { id: "lahore", label: "LAHORE", lat: "31.5204", lon: "74.3587" },
+];
+
 function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371.0088;
   const toRad = (v: number) => (v * Math.PI) / 180;
@@ -64,6 +70,16 @@ export default function WorldPanel() {
     setSelected(ranked[0].town);
   };
 
+  const applyPreset = (preset: (typeof PRESETS)[number]) => {
+    setLat(preset.lat);
+    setLon(preset.lon);
+    const town = TOWNS.find((candidate) => candidate.id === preset.id);
+    if (town) {
+      setTouring(false);
+      setSelected(town);
+    }
+  };
+
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_1.15fr]">
       <div className="space-y-3">
@@ -90,6 +106,22 @@ export default function WorldPanel() {
                 className="mt-1 w-full rounded border border-line bg-black/40 px-2 py-1.5 mono text-[12px] text-ink outline-none focus:border-teal/60"
               />
             </label>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <span className="mono text-[8.5px] tracking-[0.14em] text-muted/70">PRESET</span>
+            {PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => applyPreset(preset)}
+                className={`rounded border px-1.5 py-0.5 mono text-[8.5px] transition ${
+                  selected.id === preset.id
+                    ? "border-teal/60 bg-teal/10 text-teal"
+                    : "border-line/70 bg-black/20 text-muted hover:border-muted/50"
+                }`}
+              >
+                {preset.label} {preset.lat}, {preset.lon}
+              </button>
+            ))}
           </div>
           <button
             onClick={query}
@@ -153,6 +185,11 @@ export default function WorldPanel() {
               <div className="text-lg font-bold text-lung">3.5B</div>
               <div className="mono text-[8px] text-muted">people in this pattern</div>
             </div>
+          </div>
+          <div className="mt-2 space-y-1 border-t border-line/60 pt-2 mono text-[8.5px] leading-relaxed text-muted/80">
+            <div>World Bank · 2,564 cities · 177 countries · 14M km roads</div>
+            <div>Global Flood Database · 913 flood events</div>
+            <div>GDIS · 39,953 locations = 3.5B people in this pattern</div>
           </div>
         </div>
       </div>

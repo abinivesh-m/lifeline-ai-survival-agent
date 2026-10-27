@@ -33,6 +33,7 @@ import credit_tracker
 import dependency_graph
 import escalation
 import i18n
+import protocols
 
 ROOT = Path(__file__).parent
 UI = ROOT / "ui"
@@ -100,6 +101,7 @@ def build() -> dict:
             "cascade": {"if_failed": "hospital", **blast},
         },
         "route": route,
+        "protocols": protocols.build(nodes, edges),
         "blood": blood.build(town),
         "allocation": {
             "policy": allocation["allocation"],

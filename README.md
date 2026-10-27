@@ -205,6 +205,17 @@ simple path.
 The honest framing: 4.2 km is impassable, so no agent "saves 5.2 km against the direct road". The agent
 saves 40% against the **detour a human would actually drive**, and the tool prints exactly that.
 
+**Two survivor protocols, both runnable.** `protocols.py` adds a mode switch and a learner on the same
+graph, with no network and no invented geography.
+
+| Protocol | What it does | Result in Kottur |
+| --- | --- | --- |
+| Snake boat relay | road A* first; if the last road closes, re-run the solver on surveyed water edges | road wins at 7.8 km; **0 water edges on file**, so the relay reports `ARMED` and refuses to invent a river |
+| Ant pheromone | seeded colony (12 ants x 12 iterations) over the real edges; impassable corridors cannot be reinforced | 7.8 km found every run; blocked trail falls below 1% after **8 iterations**; seed 7 reproduces it |
+
+The relay is deliberately not dressed up: a synthetic canal would make a better screenshot and a worse
+submission. `test_protocols.py` pins both behaviours, including the refusal path.
+
 **Topological sort is real.** Kahn's algorithm with a priority-ordered ready queue, cycle detection that
 raises `CycleError` with the stuck nodes, dangling-dependency validation, and cascade propagation with a
 measured blast radius.
@@ -272,10 +283,11 @@ Core has **zero third-party dependencies** - Python 3.11+ standard library only.
 git clone https://github.com/abinivesh-m/lifeline-ai-survival-agent
 cd lifeline-ai-survival-agent
 
-python test_phase1.py                 # 37 acceptance tests
+python -m pytest -q                   # 78 acceptance tests
 python dependency_graph.py            # LIFEGRID + topological order + cascade
 python a_star.py                      # 4.2 blocked -> 7.8 km -> 40% fuel saved
 python a_star.py --audit              # prove the heuristic is admissible
+python protocols.py                   # snake-boat relay + ant-pheromone learner
 python allocator.py --mode policy     # 70 L / 30 L, evidence vs inference
 python credit_tracker.py simulate     # replay the $150 plan
 python agent.py --yes --mode policy   # the eight steps, start to finish
@@ -313,12 +325,14 @@ substitution, not a missing feature.
 town.json               the whole town as data: organs, roads, reserve, baseline
 dependency_graph.py     Kahn topological sort, cascade blast radius, funding order
 a_star.py               heapq A*, haversine heuristic, admissibility audit, fuel maths
+protocols.py            snake-boat mode switch + seeded ant-pheromone learner
 allocator.py            70/30 solver, evidence vs inference, Wonder client, validator
 credit_tracker.py       $150 ledger, 80%/95% alerts, verify()
 agent.py                the eight-step workflow, approval gate, replanning
-test_phase1.py          37 tests pinning every claim in this README
+test_phase1.py          acceptance tests pinning every claim in this README
+test_protocols.py       proof the relay refuses to invent a river, and the colony learns
 runs/latest.json        last agent run, as evidence
-artifacts/              captured model output (SAM frames, voice reports)
+artifacts/              captured model output (SAM frames, voice reports, proof)
 ```
 
 ## Build log and provenance
@@ -328,7 +342,7 @@ solo entrant. No pre-existing product, no borrowed codebase.
 
 | Phase | Status | What exists |
 | --- | --- | --- |
-| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 37 tests |
+| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 78 tests |
 | Phase 2 - model capture | pending | SAM frames, Tamil transcripts, Wonder live calls, Baseten + Modal runs |
 | Phase 3 - demo | pending | 3-minute video, LIFEGRID visuals, X post |
 

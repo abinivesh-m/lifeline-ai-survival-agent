@@ -1,6 +1,6 @@
 {
   "schema": "lifeline.run/1.0",
-  "generated_utc": "2026-10-27T09:51:47+00:00",
+  "generated_utc": "2026-10-27T10:40:15+00:00",
   "town": {
     "name": "Kottur",
     "lat": 11.0168,
@@ -263,16 +263,7 @@
       },
       "source": "policy",
       "trace": {
-        "requested_mode": "auto",
-        "wonder": {
-          "model": "muse-wonder-1.0",
-          "endpoint": "https://api.meta.ai/v1",
-          "reasoning_effort": "high",
-          "status": "unconfigured",
-          "latency_s": null,
-          "raw_preview": null,
-          "detail": "LIFELINE_OFFLINE=1 - no network calls, deterministic solver only"
-        }
+        "requested_mode": "policy"
       },
       "human_approval_required": true,
       "executed": false,
