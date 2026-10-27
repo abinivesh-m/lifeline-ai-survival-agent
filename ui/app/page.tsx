@@ -11,6 +11,7 @@ import AgenticTimeline3D from "@/components/AgenticTimeline3D";
 import WorldPanel from "@/components/WorldPanel";
 import LanguageBar from "@/components/LanguageBar";
 import SectionNav from "@/components/SectionNav";
+import RunningGridBackground from "@/components/RunningGridBackground";
 import { useLocale } from "@/components/LocaleProvider";
 import { COLORS, lifeline } from "@/lib/lifeline";
 import { SECTIONS, type SectionMeta } from "@/lib/sections";
@@ -86,7 +87,11 @@ export default function Page() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#060d11] pb-10">
+    <main className="relative min-h-screen pb-10">
+      <div className="fixed inset-0 -z-10">
+        <RunningGridBackground />
+      </div>
+
       <LanguageBar />
 
       {/* ---------------------------------------------------------------- hero */}
@@ -100,7 +105,7 @@ export default function Page() {
           playsInline
           aria-hidden
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#060d11]/60 via-[#060d11]/80 to-[#060d11]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#060d11]/75 via-[#060d11]/85 to-[#060d11]/40" />
         <div className="scan absolute inset-0 opacity-40" />
 
         <div className="relative mx-auto grid w-full max-w-[1800px] items-center gap-6 px-5 py-8 lg:grid-cols-[1.05fr_1fr]">
@@ -227,7 +232,7 @@ export default function Page() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: position * 0.03 }}
-              className="group rounded-xl border border-line/80 bg-panel/50 p-3.5 transition hover:border-teal/50 hover:bg-panel"
+              className="group rounded-xl border border-line/80 bg-[#0b1720]/75 p-3.5 transition hover:border-teal/50 hover:bg-[#0d1a24]"
             >
               <div className="flex items-baseline justify-between">
                 <span className="mono text-[10px] text-teal/70">{section.n}</span>
