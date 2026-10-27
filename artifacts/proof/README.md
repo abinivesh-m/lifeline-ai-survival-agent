@@ -8,6 +8,8 @@ something it is not.
 | `nvidia_smi.txt` | Raw `nvidia-smi` output from the demo laptop | real |
 | `gpu_6gb_nvidia_smi.png` | The same output rendered, titled as *not* Task Manager | real |
 | `credit_usage_live.json` | Snapshot of the live $150 ledger at capture time | real |
+| `offline_run.txt` | Full 8-step `LIFELINE_OFFLINE=1 python agent.py --yes` transcript | real |
+| `protocols.txt` | Snake-boat relay + ant-pheromone output | real |
 | `gpu_6gb_taskmgr.png` | Task Manager showing `RTX 3050 6GB` and `0.0/6.0 GB` | **capture needed** |
 | `offline_proof.mp4` | Task Manager + `nvidia-smi` + airplane mode + `LIFELINE_OFFLINE=1 python agent.py --yes` | **capture needed** |
 | `baseten_proof.mp4` | `python openweight.py` returning 70 L / 30 L from `muse-spark-open-1026` | **capture needed** |

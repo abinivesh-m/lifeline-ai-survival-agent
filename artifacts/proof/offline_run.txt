@@ -1,0 +1,74 @@
+﻿LIFELINE AI - offline agent run
+Captured (UTC): 2026-10-27T13:34:54Z
+Mode: LIFELINE_OFFLINE=1, --mode policy, --yes (recorded operator approval)
+Host: ABINIVESH-M
+
+  LIFEGRID :: Kottur (11.0168 N, 76.9558 E)
+
+   fuel_depot [BLOOD 100L]
+        |
+        v
+   hospital   [HEART 70L  4h left]
+        |
+        v
+   water_pump [LUNGS 30L]
+        |
+        v
+   shelters   [ORGANS 200 people, no water]
+
+--------------------------------------------------------------------
+STEP 1 - PERCEIVE  [ok]
+--------------------------------------------------------------------
+  frames: 9  water severity %: [0.3, 0.0, 34.1, 59.4, 35.3, 33.7, 51.1, 46.4, 51.4]
+
+--------------------------------------------------------------------
+STEP 2 - LISTEN  [ok]
+--------------------------------------------------------------------
+  reports: 1  blocked-road mentions: 0
+  first: α«Åα«⌐α»êα«Üα»ì α«Üα»åα«»α»ìα«ñ α«¿α«╛α«⌐α»ìα«òα»ü α«¿α«╛α«⌐α»ìα«òα»ü km 42 α««α»êα«⌐α«╕α»ì α«¿α«┐α«▓α«Üα»ìα«Üα«░α«┐α«╡α»ü. α«Üα«╛α«▓α»ê α«åα«▒α»ü α«åα«▒α»ü α««α«úα«┐ α«¿α»çα«░α«ñα»ìα«ñα«┐α«▒α»ìα«òα»üα««α»ì α««α»éα«ƒα«¬α»ìα«¬α«ƒα»ìα«ƒα»üα«│α»ìα«│α«ñα»ü. α««α«░α»üα«ñα»ìα«ñα»üα«╡α««α«⌐α»êα«òα»ìα«òα»ü diesel α«ñα»çα«╡α»ê..
+
+--------------------------------------------------------------------
+STEP 3 - GRAPH  [ok]
+--------------------------------------------------------------------
+  fuel -> heart -> lungs -> organs
+  order: fuel_depot -> hospital -> water_pump -> shelters
+  if the heart dies: water_pump, shelters (200 people lose service)
+
+--------------------------------------------------------------------
+STEP 4 - ROUTE  [ok]
+--------------------------------------------------------------------
+  path: fuel_depot -> village_jn -> water_pump -> hospital
+  4.2 km direct is blocked; 7.8 km found by A*
+  saved 5.2 km = 40.0% of the run, 1.82 L diesel
+
+--------------------------------------------------------------------
+STEP 5 - ALLOCATE  [ok]
+--------------------------------------------------------------------
+   70 L  hospital     heart
+   30 L  water_pump   lungs
+  100 L  total  (source: policy)
+  justification: Heart first, lungs next: the hospital's 4 h of runtime is the nearest failure, and the pump is fed from the hospital feeder, so 70 L hospital + 30 L pump is the only split that keeps both alive for the 6 h closure.
+
+--------------------------------------------------------------------
+STEP 6 - BUDGET  [ok]
+--------------------------------------------------------------------
+  $0.45 spent of $150 plan (0.3%), level OK
+
+--------------------------------------------------------------------
+STEP 7 - HUMAN APPROVAL GATE
+--------------------------------------------------------------------
+
+  Proposed plan:
+     70 L -> Kottur Primary Health Centre
+     30 L -> Kottur water pump station
+    100 L total, nothing executed yet
+
+  APPROVED via --yes (recording mode, logged as operator approval)
+
+--------------------------------------------------------------------
+STEP 8 - REPLAN  [no_change]
+--------------------------------------------------------------------
+  no new constraint
+
+  run saved to runs\latest.json
+=== exit: 0 ===

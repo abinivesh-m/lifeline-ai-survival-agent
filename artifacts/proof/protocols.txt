@@ -1,0 +1,11 @@
+﻿SNAKE BOAT RELAY
+  mode      : road (switched=False)
+  km        : 7.8
+  water     : 0 surveyed edges
+  note      : road A* won at 7.8 km; the water leg stayed armed and unused
+
+ANT PHEROMONE
+  best      : 7.8 km via fuel_depot -> village_jn -> water_pump -> hospital
+  runs      : 144 (12 ants x 12 iterations)
+  learned   : blocked trail below 1% after 8 iterations
+  final     : blocked share 0.0600%
