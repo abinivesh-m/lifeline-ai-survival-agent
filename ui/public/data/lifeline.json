@@ -304,12 +304,12 @@
       },
       "spark_open_1026": {
         "vendor": "Meta via Baseten",
-        "role": "open-weight offline reasoning",
+        "role": "open-weight qualifying path (partner-hosted)",
         "budget_usd": 0
       },
       "llama32_3b": {
         "vendor": "Ollama (local RTX 3050)",
-        "role": "offline fallback",
+        "role": "development-only sanity check, not an entry",
         "budget_usd": 0
       }
     },
@@ -604,8 +604,8 @@
       "burn_l_per_hour": 17.5,
       "hours": 4.0,
       "minutes": 240,
-      "dies_at": "2026-10-27T13:51:31+00:00",
-      "started_at": "2026-10-27T09:51:31+00:00",
+      "dies_at": "2026-10-27T14:11:04+00:00",
+      "started_at": "2026-10-27T10:11:04+00:00",
       "label": "4 h 00 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -616,8 +616,8 @@
       "burn_l_per_hour": 21.0,
       "hours": 3.33,
       "minutes": 200,
-      "dies_at": "2026-10-27T13:11:31+00:00",
-      "started_at": "2026-10-27T09:51:31+00:00",
+      "dies_at": "2026-10-27T13:31:04+00:00",
+      "started_at": "2026-10-27T10:11:04+00:00",
       "label": "3 h 20 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."

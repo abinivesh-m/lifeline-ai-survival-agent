@@ -362,7 +362,7 @@ export default function Page() {
       {/* -------------------------------------------------------------- offline */}
       <Section
         meta={SECTIONS[5]}
-        lede="The core — routing, topological order, the 70/30 validator, the ledger — runs on this laptop with the network off. Partner inference is shown for what it is: partner inference."
+        lede="The core — routing, topological order, the 70/30 validator, the ledger — runs on this laptop with the network off. The Open Weight claim is separate and exact: muse-spark-open-1026, partner-hosted on Baseten, with stored runs."
       >
         <OfflineProof3D />
       </Section>

@@ -215,22 +215,25 @@ every cumulative total from raw entries.
 
 ## Open-weight track
 
-The bonus asks for Muse Glimmer or Muse Spark Open, on your own hardware **or through partner inference**,
-verified by the infrastructure partner. This repo does both, and is honest about which is which:
+The bonus asks for Muse Glimmer or Muse Spark Open, on your own hardware **or through partner
+inference**. This submission claims exactly one path:
 
-| Path | Model | Where | Why |
+| Claim | Model | Where | Evidence |
 | --- | --- | --- | --- |
-| Partner inference | **Muse Spark Open** (`meta-models/muse-spark-open-1026`) | Baseten, 2M TPM | 816B MoE / 42B active - cannot run on a laptop |
-| Partner GPU | **Muse Glimmer 30B** | Modal (`abinivesh-1203`) | 18 GB of weights vs 6 GB VRAM |
-| Own hardware | `llama3.2:3b` via Ollama | RTX 3050, airplane mode | proves the **deterministic core** runs with no network |
+| **Qualifying** | **Muse Spark Open** (`meta-models/muse-spark-open-1026`) | Baseten, 2M TPM | `artifacts/openweight_proof.json` - verbatim responses, latency, token usage, locally re-validated |
+| **Not claimed** | Muse Glimmer 30B | Modal | 18 GB of weights vs 6 GB VRAM; not deployed in this build |
 
-The measurement that decided this: this laptop has **6 GB VRAM and 15.7 GB RAM**. Muse Glimmer's smallest
-published Ollama build is **18 GB**. It does not fit, and pretending otherwise would break on stage.
+No local model is claimed for the prize. This laptop has **6 GB VRAM and 15.7 GB RAM**, and Muse
+Glimmer's smallest published build is **18 GB**. It does not fit, so it is never presented as a
+laptop result - partner inference or nothing.
 
-So the offline claim is scoped to what is true: steps 3, 4, 6, 7 and 8 - the graph, the route, the ledger,
-the gate, the replan - run with the network cable out. A 3B local model is the natural-language fallback,
-not the eligibility path. Eligibility rests on Spark Open through Baseten and Glimmer on Modal, both
-partner-verified.
+The offline property is separate from the prize and scoped to what is true: steps 3, 4, 6, 7 and 8
+- the graph, the route, the ledger, the gate, the replan - run with the network cable out. That is
+resilience. It is not an Open Weight entry, and the page says so on screen.
+
+> A 3B local model was used during development as a natural-language sanity check only. It is not
+> part of the submitted entry, is not shown as an Open Weight result, and does not qualify.
+
 
 ## Safety and anti-disqualification
 
@@ -251,7 +254,7 @@ partner-verified.
 | SAM 3.1 | 20 | $1.50 | $30.00 | flood extent across 20 frames |
 | Muse Voice Transcribe | 50 | $0.60 | $30.00 | 50 Tamil field reports |
 | Muse Spark | 40 | $0.50 | $20.00 | coding + creative prompts |
-| Spark Open / Glimmer / Ollama / Muse Code | - | $0 | $0.00 | partner + local inference |
+| Spark Open / Glimmer / Muse Code | - | $0 | $0.00 | partner inference |
 | **Total** | **280** | | **$150.00** | |
 
 Alerts fire at **80% ($120)** and **95% ($142.50)**; a **$20 reserve** is tracked separately so the demo
@@ -287,17 +290,16 @@ pip install -r requirements.txt
 python allocator.py --mode wonder --log-credit
 ```
 
-### Offline proof (Best Open Weight / resilience)
+### Offline proof (resilience, not the prize entry)
 
 ```powershell
 nvidia-smi                                  # RTX 3050 6 GB
 $env:LIFELINE_OFFLINE = "1"                 # no network calls
-ollama run llama3.2:3b "Kottur bridge blocked, 100 L diesel, 70 L hospital, 30 L pump"
 python agent.py --yes --mode policy         # graph + A* + allocator + gate + replan
 ```
 
 Then turn on airplane mode and run it again. Screenshot `nvidia-smi`, the airplane-mode icon, and the
-run - that is the offline artefact.
+run - that is the offline artefact. No model is downloaded and no Open Weight claim is made here.
 
 ### Image generation note (India)
 

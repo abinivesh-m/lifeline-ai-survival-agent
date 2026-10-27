@@ -12,10 +12,10 @@ const LINES: Record<Mode, [string, string][]> = {
   offline: [
     ["$ ipconfig /all  |  findstr Media", "Media State . . . . . . : Media disconnected"],
     ["$ nvidia-smi --query-gpu=name,memory.total", "NVIDIA GeForce RTX 3050 Laptop GPU, 6144 MiB"],
-    ["$ ollama run llama3.2:3b", ">>> deterministic core loaded - no network calls"],
+    ["$ python agent.py --offline --yes", "8 steps, 0 network calls, 0 API keys read"],
     ["$ python a_star.py", "A* 4.2 km blocked -> 7.8 km found (40.0% saved)"],
-    ["$ python allocator.py --mode policy", "70 L hospital + 30 L pump = 100 L, validator pass"],
-    ["note", "llama3.2:3b proves the core offline. It is NOT the Open Weight entry."],
+    ["$ python allocator.py --mode policy", "70 L heart + 30 L lungs = 100 L, validator pass"],
+    ["note", "the core is offline. no local model is claimed for Open Weight."],
   ],
   online: [
     [
@@ -28,7 +28,7 @@ const LINES: Record<Mode, [string, string][]> = {
     ["$ python capture_sam.py", "9 frames, masks decoded, $0.02"],
     ["$ python capture_voice.py", "Tamil transcript, $0.000539"],
     ["note", "Glimmer is 18 GB. This 6 GB card cannot hold it: partner inference only."],
-    ["status", "no fabricated local weights - the split is stated on screen"],
+    ["status", "one partner-hosted open model, no fabricated local weights"],
   ],
 };
 
@@ -122,11 +122,11 @@ function Holograms({ mode }: { mode: Mode }) {
   return (
     <group>
       {[
-        { pos: [-2.7, 1.9, -1] as [number, number, number], label: "BASEten", detail: "muse-spark-open-1026", colour: COLORS.teal },
+        { pos: [-2.7, 1.9, -1] as [number, number, number], label: "BASETEN", detail: "muse-spark-open-1026 · qualifying", colour: COLORS.teal },
         { pos: [2.8, 1.5, -1.2] as [number, number, number], label: "MODAL", detail: "glimmer · 18 GB · not deployed", colour: COLORS.amber },
-        { pos: [2.6, -0.6, 0.6] as [number, number, number], label: "OLLAMA", detail: "llama3.2:3b · offline proof", colour: COLORS.lung },
+        { pos: [2.6, -0.6, 0.6] as [number, number, number], label: "THIS LAPTOP", detail: "deterministic core · no network", colour: COLORS.lung },
       ].map((holo) => {
-        const active = mode === "online" ? holo.label !== "OLLAMA" : holo.label === "OLLAMA";
+        const active = mode === "online" ? holo.label !== "THIS LAPTOP" : holo.label === "THIS LAPTOP";
         return (
           <group key={holo.label} position={holo.pos}>
             <mesh rotation={[0, 0, 0]}>
@@ -217,15 +217,27 @@ export default function OfflineProof3D() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-amber/25 bg-amber/5 p-4">
-          <div className="mono text-[10px] tracking-[0.18em] text-amber">STATED PLAINLY</div>
-          <p className="mt-1.5 text-[11.5px] leading-relaxed text-ink/80">
-            <span className="mono text-amber">llama3.2:3b</span> does not qualify for the
-            Open Weight prize. It is here to prove the routing and allocation logic runs
-            without a network. The qualifying weights are the partner-hosted Meta open
-            models, and Glimmer's 18 GB does not fit in 6 GB of VRAM — so it is partner
-            inference, not a laptop bluff.
-          </p>
+        <div className="rounded-xl border border-teal/25 bg-teal/5 p-4">
+          <div className="mono text-[10px] tracking-[0.18em] text-teal">WHAT IS CLAIMED, AND WHERE</div>
+          <div className="mt-2 space-y-2">
+            <div className="flex gap-2">
+              <span className="mono shrink-0 pt-0.5 text-[8px] tracking-[0.1em] text-teal">CLAIM</span>
+              <p className="text-[11px] leading-relaxed text-ink/80">
+                The Open Weight entry is{" "}
+                <span className="mono text-teal">muse-spark-open-1026</span>, partner-hosted on
+                Baseten. Those runs are stored verbatim, re-validated locally and counted above.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <span className="mono shrink-0 pt-0.5 text-[8px] tracking-[0.1em] text-muted">
+                NOT CLAIMED
+              </span>
+              <p className="text-[11px] leading-relaxed text-muted">
+                Any local model as the prize entry. This 6 GB laptop runs the deterministic core
+                only. Glimmer&apos;s 18 GB does not fit, so it is partner inference or nothing.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div

@@ -165,8 +165,8 @@
     "sam_3_1": {"vendor": "Meta", "role": "flood extent perception", "budget_usd": 30, "planned_calls": 20},
     "spark_voice": {"vendor": "Meta", "role": "Tamil field report transcription", "budget_usd": 30, "planned_calls": 50},
     "spark": {"vendor": "Meta", "role": "coding + creative prompts", "budget_usd": 20},
-    "spark_open_1026": {"vendor": "Meta via Baseten", "role": "open-weight offline reasoning", "budget_usd": 0},
-    "llama32_3b": {"vendor": "Ollama (local RTX 3050)", "role": "offline fallback", "budget_usd": 0}
+    "spark_open_1026": {"vendor": "Meta via Baseten", "role": "open-weight qualifying path (partner-hosted)", "budget_usd": 0},
+    "llama32_3b": {"vendor": "Ollama (local RTX 3050)", "role": "development-only sanity check, not an entry", "budget_usd": 0}
   },
 
   "credit_policy": {

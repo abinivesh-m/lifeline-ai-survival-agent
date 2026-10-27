@@ -471,8 +471,8 @@ def frame_offline(town: dict) -> None:
     rows = [
         ("nvidia-smi", "driver 592.82  ·  CUDA 13.1", GREEN),
         ("AIRPLANE MODE", "ON - no network", AMBER),
-        ("ollama run llama3.2:3b", "2.0 GB  ·  local", TEXT),
-        ("python agent.py", "graph + A* + gate + replan", TEXT),
+        ("python agent.py --offline", "graph + A* + gate + replan", TEXT),
+        ("python allocator.py --mode policy", "70 L / 30 L  ·  validator pass", TEXT),
     ]
     y = 470
     for cmd, note, color in rows:
@@ -498,10 +498,10 @@ def frame_offline(town: dict) -> None:
     f.panel([M, 724, W - M, 900], accent=BORDER)
     f.text((M + 28, 744), "WHAT ACTUALLY RUNS WHERE", font(F_BOLD, 19), MUTED)
     cols = [
-        ("LOCAL, FLIGHT MODE", "steps 3, 4, 6, 7, 8", "no model call", TEAL),
-        ("LOCAL, 3B FALLBACK", "natural language layer", "llama3.2:3b", GREEN),
-        ("BASETEN", "Spark Open reasoner", "2M TPM", BLUE),
+        ("LOCAL, FLIGHT MODE", "deterministic core", "no model call", TEAL),
+        ("BASETEN", "Spark Open reasoner", "qualifying path", BLUE),
         ("MODAL", "Glimmer 30B GPU", "18 GB > 6 GB VRAM", AMBER),
+        ("NO LOCAL CLAIM", "prize entry is partner-hosted", "stated on screen", MUTED),
     ]
     x = M + 28
     for head, body, note, color in cols:

@@ -56,10 +56,10 @@ export const SECTIONS: SectionMeta[] = [
   {
     id: "offline",
     n: "06",
-    kicker: "OFFLINE PROOF",
-    title: "What runs when the tower is down",
-    note: "Routing and allocation on this laptop with the network switched off.",
-    tools: ["LIFELINE_OFFLINE=1", "6 GB laptop", "no network"],
+    kicker: "OFFLINE + OPEN WEIGHT",
+    title: "The core runs with the wire cut",
+    note: "Deterministic routing and allocation with no network; the Open Weight path is partner-hosted, not local.",
+    tools: ["LIFELINE_OFFLINE=1", "no API key", "Spark Open · Baseten"],
   },
   {
     id: "timeline",
