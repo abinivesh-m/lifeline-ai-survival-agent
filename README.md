@@ -116,11 +116,31 @@ pump runs 90 minutes on 30 L. That is the whole thesis in one number.
 | 4 | **Route** around the landslide | `a_star.py` (heapq, haversine heuristic) | yes |
 | 5 | **Allocate** 100 L with evidence vs inference | `allocator.py` (+ Muse Spark Open on Baseten) | model proposes, code validates |
 | 6 | **Budget** the $150 | `credit_tracker.py` | yes |
-| 7 | **Approve** - human gate | operator | human |
+| 7 | **Approve + escalate** - human gate, four-tier ladder | operator + `escalation.py` | human decides; silence escalates |
 | 8 | **Replan** when the world changes | `agent.py` | yes |
 
 **Six of eight steps need no human. One human touchpoint. Zero model calls are required for steps 3, 4,
 6 and 8**, which is why the agent still works in flight mode.
+
+### Step 7 runs the ladder, it does not describe it
+
+`agent.py` calls `escalation.py` inside step 7, so every run record carries the real tier state and the
+real payloads, not a promise:
+
+- tier 1, 0-5 min - a person decides; `--yes` records a pre-approval
+- tier 2, 5-15 min - SMS, WhatsApp and voice payloads to duty officer, panchayat president and taluk control room
+- tier 3, 15-30 min - degraded autopilot, 50 L hospital / 20 L pump, 30 L kept in reserve
+- tier 4, over 30 min - three shelter leaders, two of three must agree
+
+The run regenerates tier-2 payloads in all eight locales and reports what actually happened:
+
+```
+ladder armed - tier 2 at T+5 min: 72 payloads / 8 languages / sms / voice_call / whatsapp
+PENDING_CREDENTIALS - generated and logged only - no SMS/WhatsApp/voice gateway configured
+```
+
+That is the honest state: 72 payloads (9 per language) are built and logged, none is claimed to have been
+sent. With a gateway configured the same call returns the gateway's status instead.
 
 Step 8 is not a diagram. Two real replans ship today:
 

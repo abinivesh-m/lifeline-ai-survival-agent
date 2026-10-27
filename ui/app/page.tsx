@@ -358,10 +358,15 @@ export default function Page() {
               language. They are generated, translated and logged.
             </p>
             <div className="mt-2 rounded border border-amber/40 bg-amber/5 px-2 py-1.5 mono text-[9px] text-amber">
-              DELIVERY: PENDING_CREDENTIALS
+              DELIVERY:{" "}
+              {lifeline.escalation.run
+                ? `${Array.isArray(lifeline.escalation.run.status) ? lifeline.escalation.run.status[0] : lifeline.escalation.run.status} · ${lifeline.escalation.run.payloads_total} payloads / ${lifeline.escalation.run.languages.length} languages`
+                : "PENDING_CREDENTIALS"}
             </div>
             <p className="mt-2 text-[10px] leading-relaxed text-muted/80">
-              No gateway is configured, so nothing here claims a message was sent.
+              {lifeline.escalation.run
+                ? `Step 7 of the last run armed tier 2 at T+${Math.round(lifeline.escalation.run.tier2_at_s / 60)} min across ${lifeline.escalation.run.channels.join(", ")}. Nothing was sent.`
+                : "No gateway is configured, so nothing here claims a message was sent."}
             </p>
           </div>
         </div>

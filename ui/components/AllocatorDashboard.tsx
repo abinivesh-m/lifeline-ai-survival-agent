@@ -238,7 +238,7 @@ export default function AllocatorDashboard() {
             ))}
             <span className="rounded border border-teal/40 px-1.5 py-0.5 mono text-[8.5px] text-teal">
               validator · {lifeline.allocation.validation?.ok ? "pass" : "fail"} 70L/30L ·{" "}
-              {Math.round((brainView === "openweight" ? brain?.confidence ?? lifeline.allocation.confidence : lifeline.allocation.confidence) * 100)}% conf
+              {Math.round(lifeline.allocation.confidence * 100)}% conf
             </span>
           </div>
           <p className="mt-1.5 mono text-[8px] leading-relaxed text-muted/70">

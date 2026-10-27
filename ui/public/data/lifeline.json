@@ -699,8 +699,8 @@
       "burn_l_per_hour": 17.5,
       "hours": 4.0,
       "minutes": 240,
-      "dies_at": "2026-10-27T18:01:51+00:00",
-      "started_at": "2026-10-27T14:01:51+00:00",
+      "dies_at": "2026-10-27T18:09:10+00:00",
+      "started_at": "2026-10-27T14:09:10+00:00",
       "label": "4 h 00 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -711,8 +711,8 @@
       "burn_l_per_hour": 21.0,
       "hours": 3.33,
       "minutes": 200,
-      "dies_at": "2026-10-27T17:21:51+00:00",
-      "started_at": "2026-10-27T14:01:51+00:00",
+      "dies_at": "2026-10-27T17:29:10+00:00",
+      "started_at": "2026-10-27T14:09:10+00:00",
       "label": "3 h 20 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -866,9 +866,9 @@
       "model": "meta-models/muse-spark-open-1026",
       "provider": "Baseten",
       "status": "live",
-      "latency_s": 6.41,
-      "at": "2026-10-27T14:01:50+00:00",
-      "justification": "Allocated full demand to priority 1 first then remaining reserve to priority 2 to satisfy exact-sum, demand-cap, and priority-order constraints with dependency met.",
+      "latency_s": 4.84,
+      "at": "2026-10-27T14:09:10+00:00",
+      "justification": "Allocated full stated demand to priority 1 first then remaining reserve to priority 2 to satisfy exact sum and priority constraints.",
       "confidence": 0.99,
       "allocation": {
         "hospital": 70,
@@ -1041,6 +1041,34 @@
       "hospital": 50,
       "water_pump": 20,
       "_held_reserve": 30
+    },
+    "run": {
+      "tier": 1,
+      "decision": "approved",
+      "window": "0-5 min",
+      "tier2_at_s": 300.0,
+      "languages": [
+        "en",
+        "es",
+        "fr",
+        "zh",
+        "ar",
+        "pt",
+        "sw",
+        "ta"
+      ],
+      "payloads_per_language": 9,
+      "payloads_total": 72,
+      "channels": [
+        "sms",
+        "voice_call",
+        "whatsapp"
+      ],
+      "status": "PENDING_CREDENTIALS",
+      "note": "generated and logged only - no SMS/WhatsApp/voice gateway configured",
+      "evidence": "escalation.notifications(tier 2) for every code in locales/index.json",
+      "gate": "approved",
+      "at": "2026-10-27T14:09:10+00:00"
     }
   },
   "world": {

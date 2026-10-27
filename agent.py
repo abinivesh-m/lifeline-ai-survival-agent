@@ -34,6 +34,8 @@ import a_star
 import allocator
 import credit_tracker
 import dependency_graph
+import escalation
+import i18n
 
 ROOT = Path(__file__).parent
 ARTIFACTS = ROOT / "artifacts"
@@ -179,6 +181,33 @@ def step_budget(town: dict) -> dict:
     }
 
 
+def _escalation_state(town: dict, decision: str) -> dict:
+    """Run the four-tier engine for this decision - do not describe it.
+
+    Every locale is asked for its real tier-2 payloads, so the run record carries
+    the actual channel list, the actual count and the actual delivery status. With
+    no gateway configured that status is PENDING_CREDENTIALS: generated and logged,
+    never claimed as sent.
+    """
+    languages = [entry["code"] for entry in i18n.available()]
+    batches = [escalation.notifications(2, town, locale=code) for code in languages]
+    payloads = [payload for batch in batches for payload in batch]
+    statuses = sorted({payload["status"] for payload in payloads})
+    return {
+        "tier": escalation.tier_for(0.0),
+        "decision": decision,
+        "window": "0-5 min",
+        "tier2_at_s": escalation.TIER1_END_S,
+        "languages": languages,
+        "payloads_per_language": len(batches[0]) if batches else 0,
+        "payloads_total": len(payloads),
+        "channels": sorted({payload["channel"] for payload in payloads}),
+        "status": statuses[0] if len(statuses) == 1 else statuses,
+        "note": "generated and logged only - no SMS/WhatsApp/voice gateway configured",
+        "evidence": "escalation.notifications(tier 2) for every code in locales/index.json",
+    }
+
+
 def step_approve(allocation: dict, town: dict, auto: bool) -> dict:
     print("\n  Proposed plan:")
     for organ, litres in allocation["allocation"].items():
@@ -188,23 +217,53 @@ def step_approve(allocation: dict, town: dict, auto: bool) -> dict:
 
     if auto:
         print("\n  APPROVED via --yes (recording mode, logged as operator approval)")
-        return {"step": 7, "name": "APPROVE", "status": "approved", "mode": "pre-approved"}
+        return {
+            "step": 7,
+            "name": "APPROVE",
+            "status": "approved",
+            "mode": "pre-approved",
+            "escalation": _escalation_state(town, "approved"),
+        }
 
     if not sys.stdin.isatty():
         print("\n  BLOCKED: no interactive terminal and no --yes. Refusing to execute.")
-        return {"step": 7, "name": "APPROVE", "status": "blocked", "mode": "no-tty"}
+        return {
+            "step": 7,
+            "name": "APPROVE",
+            "status": "blocked",
+            "mode": "no-tty",
+            "escalation": _escalation_state(town, "waiting"),
+        }
 
     try:
         answer = input("\n  Hospital 70 L first, pump 30 L. Approve dispatch? [y/N] ").strip().lower()
     except (EOFError, KeyboardInterrupt):
         print("\n  BLOCKED: operator input closed. Refusing to execute.")
-        return {"step": 7, "name": "APPROVE", "status": "blocked", "mode": "eof"}
+        return {
+            "step": 7,
+            "name": "APPROVE",
+            "status": "blocked",
+            "mode": "eof",
+            "escalation": _escalation_state(town, "waiting"),
+        }
 
     if answer in ("y", "yes"):
-        return {"step": 7, "name": "APPROVE", "status": "approved", "mode": "operator"}
+        return {
+            "step": 7,
+            "name": "APPROVE",
+            "status": "approved",
+            "mode": "operator",
+            "escalation": _escalation_state(town, "approved"),
+        }
 
     print("  DENIED by operator. Nothing dispatched.")
-    return {"step": 7, "name": "APPROVE", "status": "denied", "mode": "operator"}
+    return {
+        "step": 7,
+        "name": "APPROVE",
+        "status": "denied",
+        "mode": "operator",
+        "escalation": _escalation_state(town, "denied"),
+    }
 
 
 def step_replan(town: dict, scenario: str) -> dict:
@@ -278,6 +337,7 @@ def run(mode: str = "auto", approve: bool = False, scenario: str = "none", log_c
     _rule("STEP 7 - HUMAN APPROVAL GATE")
     approval = step_approve(allocation, town, approve)
     steps.append(approval)
+    _print_step(approval, town)
     if approval["status"] != "approved":
         run_record = _record(town, steps, scenario, started, executed=False)
         print("\n  Run stopped at the approval gate. Nothing was dispatched.")
@@ -331,6 +391,15 @@ def _print_step(result: dict, town: dict) -> None:
               f"({result['percent_used']:.1f}%), level {result['level'].upper()}")
         for alert in result["alerts"]:
             print(f"  ! {alert}")
+    elif result["name"] == "APPROVE":
+        esc = result.get("escalation") or {}
+        print(f"  status: {result['status']} ({result.get('mode')})")
+        if esc:
+            print(f"  tier {esc['tier']} ({esc['window']}) decided: {esc['decision']}")
+            print(f"  ladder armed - tier 2 at T+{int(esc['tier2_at_s'] // 60)} min: "
+                  f"{esc['payloads_total']} payloads / {len(esc['languages'])} languages / "
+                  f"{' / '.join(esc['channels'])}")
+            print(f"  {esc['status']} - {esc['note']}")
     elif result["name"] == "REPLAN":
         if result["status"] == "guardrail_held":
             print(f"  human instruction {result['instruction']} rejected:")

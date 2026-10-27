@@ -154,6 +154,7 @@ def build() -> dict:
                  "detail": "3 shelter leaders, 2 of 3 must agree"},
             ],
             "degraded": escalation.degraded_allocation(town),
+            "run": _latest_run_escalation(),
         },
         "world": {
             "towns": _world(),
@@ -174,6 +175,21 @@ def build() -> dict:
             "note": BASELINE_NOTE,
         },
     }
+
+
+def _latest_run_escalation() -> dict | None:
+    """The tier state and payloads the agent actually produced in step 7."""
+    path = ROOT / "runs" / "latest.json"
+    if not path.exists():
+        return None
+    try:
+        run = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    for step in run.get("steps", []):
+        if step.get("name") == "APPROVE" and step.get("escalation"):
+            return {**step["escalation"], "gate": step.get("status"), "at": run.get("generated_utc")}
+    return None
 
 
 def _latest_run_brain() -> dict | None:

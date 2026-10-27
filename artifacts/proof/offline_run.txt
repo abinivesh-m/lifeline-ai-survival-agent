@@ -1,5 +1,5 @@
 ﻿LIFELINE AI - offline agent run
-Captured (UTC): 2026-10-27T13:34:54Z
+Captured (UTC): 2026-10-27T14:09:01Z
 Mode: LIFELINE_OFFLINE=1, --mode policy, --yes (recorded operator approval)
 Host: ABINIVESH-M
 
@@ -66,9 +66,18 @@ STEP 7 - HUMAN APPROVAL GATE
   APPROVED via --yes (recording mode, logged as operator approval)
 
 --------------------------------------------------------------------
+STEP 7 - APPROVE  [approved]
+--------------------------------------------------------------------
+  status: approved (pre-approved)
+  tier 1 (0-5 min) decided: approved
+  ladder armed - tier 2 at T+5 min: 72 payloads / 8 languages / sms / voice_call / whatsapp
+  PENDING_CREDENTIALS - generated and logged only - no SMS/WhatsApp/voice gateway configured
+
+--------------------------------------------------------------------
 STEP 8 - REPLAN  [no_change]
 --------------------------------------------------------------------
   no new constraint
 
   run saved to runs\latest.json
+
 === exit: 0 ===

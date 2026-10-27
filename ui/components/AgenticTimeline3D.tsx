@@ -37,15 +37,21 @@ const DETAIL: Record<number, string[]> = {
     "alerts at 80% and 95%, sub-cent calls kept at 6 dp",
     `remaining $${lifeline.credit.remaining_usd.toFixed(2)}, reserve $${lifeline.credit.reserve_usd}`,
   ],
-  7: [
-    "nothing is dispatched until a person decides",
-    "approve, deny, or the four-tier escalation takes over",
-    "every transition appended to a sha256 hash chain",
-  ],
+  7: lifeline.escalation.run
+    ? [
+        `tier ${lifeline.escalation.run.tier} (${lifeline.escalation.run.window}) · gate ${lifeline.escalation.run.gate}: ${lifeline.escalation.run.decision}`,
+        `ladder armed — tier 2 at T+${Math.round(lifeline.escalation.run.tier2_at_s / 60)} min: ${lifeline.escalation.run.payloads_total} payloads / ${lifeline.escalation.run.languages.length} languages / ${lifeline.escalation.run.channels.join(" / ")}`,
+        `${Array.isArray(lifeline.escalation.run.status) ? lifeline.escalation.run.status.join(" · ") : lifeline.escalation.run.status} — generated and logged, nothing sent`,
+      ]
+    : [
+        "nothing is dispatched until a person decides",
+        "approve, deny, or the four-tier escalation takes over",
+        "every transition appended to a sha256 hash chain",
+      ],
   8: [
-    "reserve cut from 100 L to 80 L",
-    "same solver, new constraint, heart still protected",
-    "pump runtime drops — and the agent says so out loud",
+    "this run writes runs/latest.json — that write is the learning step",
+    "no new constraint applied: --scenario reserve-loss cuts the reserve to 80 L",
+    "same solver, same validator, no model call",
   ],
 };
 

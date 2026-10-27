@@ -1,13 +1,13 @@
 {
   "schema": "lifeline.run/1.0",
-  "generated_utc": "2026-10-27T14:01:50+00:00",
+  "generated_utc": "2026-10-27T14:09:10+00:00",
   "town": {
     "name": "Kottur",
     "lat": 11.0168,
     "lon": 76.9558
   },
   "scenario": "none",
-  "duration_s": 6.41,
+  "duration_s": 4.85,
   "executed": true,
   "steps": [
     {
@@ -234,7 +234,7 @@
           "confidence": 1.0
         }
       ],
-      "justification": "Allocated full demand to priority 1 first then remaining reserve to priority 2 to satisfy exact-sum, demand-cap, and priority-order constraints with dependency met.",
+      "justification": "Allocated full stated demand to priority 1 first then remaining reserve to priority 2 to satisfy exact sum and priority constraints.",
       "confidence": 0.99,
       "constraints": {
         "reserve_litres": 100,
@@ -268,8 +268,8 @@
           "provider": "Baseten",
           "model": "meta-models/muse-spark-open-1026",
           "status": "live",
-          "latency_s": 6.41,
-          "at": "2026-10-27T14:01:50+00:00"
+          "latency_s": 4.84,
+          "at": "2026-10-27T14:09:10+00:00"
         }
       },
       "human_approval_required": true,
@@ -292,7 +292,33 @@
       "step": 7,
       "name": "APPROVE",
       "status": "approved",
-      "mode": "pre-approved"
+      "mode": "pre-approved",
+      "escalation": {
+        "tier": 1,
+        "decision": "approved",
+        "window": "0-5 min",
+        "tier2_at_s": 300.0,
+        "languages": [
+          "en",
+          "es",
+          "fr",
+          "zh",
+          "ar",
+          "pt",
+          "sw",
+          "ta"
+        ],
+        "payloads_per_language": 9,
+        "payloads_total": 72,
+        "channels": [
+          "sms",
+          "voice_call",
+          "whatsapp"
+        ],
+        "status": "PENDING_CREDENTIALS",
+        "note": "generated and logged only - no SMS/WhatsApp/voice gateway configured",
+        "evidence": "escalation.notifications(tier 2) for every code in locales/index.json"
+      }
     },
     {
       "step": 8,
