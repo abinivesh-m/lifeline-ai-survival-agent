@@ -699,8 +699,8 @@
       "burn_l_per_hour": 17.5,
       "hours": 4.0,
       "minutes": 240,
-      "dies_at": "2026-10-27T14:45:01+00:00",
-      "started_at": "2026-10-27T10:45:01+00:00",
+      "dies_at": "2026-10-27T18:01:51+00:00",
+      "started_at": "2026-10-27T14:01:51+00:00",
       "label": "4 h 00 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -711,8 +711,8 @@
       "burn_l_per_hour": 21.0,
       "hours": 3.33,
       "minutes": 200,
-      "dies_at": "2026-10-27T14:05:01+00:00",
-      "started_at": "2026-10-27T10:45:01+00:00",
+      "dies_at": "2026-10-27T17:21:51+00:00",
+      "started_at": "2026-10-27T14:01:51+00:00",
       "label": "3 h 20 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -860,6 +860,21 @@
         "units are multiples of 5 L",
         "nothing executed - awaiting human approval"
       ]
+    },
+    "brain": {
+      "source": "openweight-live",
+      "model": "meta-models/muse-spark-open-1026",
+      "provider": "Baseten",
+      "status": "live",
+      "latency_s": 6.41,
+      "at": "2026-10-27T14:01:50+00:00",
+      "justification": "Allocated full demand to priority 1 first then remaining reserve to priority 2 to satisfy exact-sum, demand-cap, and priority-order constraints with dependency met.",
+      "confidence": 0.99,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "rejected": null
     }
   },
   "openweight": {
@@ -872,6 +887,8 @@
       "hospital": 70,
       "water_pump": 30
     },
+    "justification": "Reserve fully allocated in priority order within demand caps totaling exactly 100L.",
+    "confidence": 0.99,
     "latencies_s": [
       5.41,
       6.73
@@ -1236,12 +1253,30 @@
         "data_class": "coordinates_only"
       },
       {
+        "id": "guatemala_city",
+        "name": "Guatemala City",
+        "country": "GT",
+        "region": "Central America",
+        "lat": 14.6349,
+        "lon": -90.5069,
+        "data_class": "coordinates_only"
+      },
+      {
         "id": "barcelona",
         "name": "Barcelona",
         "country": "ES",
         "region": "Europe",
         "lat": 41.3851,
         "lon": 2.1734,
+        "data_class": "coordinates_only"
+      },
+      {
+        "id": "port_moresby",
+        "name": "Port Moresby",
+        "country": "PG",
+        "region": "Oceania",
+        "lat": -9.4438,
+        "lon": 147.1803,
         "data_class": "coordinates_only"
       }
     ],

@@ -114,7 +114,7 @@ pump runs 90 minutes on 30 L. That is the whole thesis in one number.
 | 2 | **Listen** to Tamil field reports | Muse Voice Transcribe (`artifacts/voice_reports.json`) | model |
 | 3 | **Graph** the town, sort dependencies | `dependency_graph.py` (Kahn) | yes |
 | 4 | **Route** around the landslide | `a_star.py` (heapq, haversine heuristic) | yes |
-| 5 | **Allocate** 100 L with evidence vs inference | `allocator.py` (+ Muse Wonder) | model proposes, code validates |
+| 5 | **Allocate** 100 L with evidence vs inference | `allocator.py` (+ Muse Spark Open on Baseten) | model proposes, code validates |
 | 6 | **Budget** the $150 | `credit_tracker.py` | yes |
 | 7 | **Approve** - human gate | operator | human |
 | 8 | **Replan** when the world changes | `agent.py` | yes |
@@ -163,16 +163,16 @@ same cascade in the Philippines, Indonesia, Kenya and Puerto Rico.
 
 ## Use of Meta AI tooling
 
-Six Meta surfaces, each doing work a different surface cannot do:
+Seven Meta surfaces, each doing work a different surface cannot do:
 
 | Model | Role | Budget | Status |
 | --- | --- | --- | --- |
-| **Muse Wonder** `muse-wonder-1.0`, `reasoning_effort=high` | allocation reasoning, cascade planning | $70 | wired, pending live capture |
-| **SAM 3.1** `sam-3.1` | flood extent per frame, boxes + masks | $30 | adapter ready, pending capture |
-| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched | $30 | adapter ready, pending capture |
+| **Muse Wonder** `muse-wonder-1.0`, `reasoning_effort=high` | optional second opinion, cascade planning | $70 | 1 call, $0.411765 spent |
+| **SAM 3.1** `sam-3.1` | flood extent per frame, boxes + masks | $30 | stored: 9 frames, 35.3% featured |
+| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched | $30 | stored: 1 report, synthetic placeholder labelled |
 | **Muse Spark** `muse-spark-1.3` | coding helper + LIFEGRID/creative prompts | $20 | wired |
-| **Muse Spark Open** `meta-models/muse-spark-open-1026` | open-weight reasoner, Baseten 2M TPM | $0 credits | pending Day 2 |
-| **Muse Glimmer 30B** | open-weight reasoner, Modal GPU | $0 credits | pending Day 2 |
+| **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 2/3 valid, 5.41 s / 6.73 s, 70/30 |
+| **Muse Glimmer 30B** | open-weight reasoner, Modal GPU | $0 credits | not deployed (18 GB does not fit) |
 | **Muse Code 1.4.13** | primary coding agent for this repo | $0 | used |
 
 Two deliberate choices worth a judge's attention:
@@ -181,12 +181,15 @@ Two deliberate choices worth a judge's attention:
   carries the exact `town.json` field it came from (`town.json#organs.hospital.runtime_hours_left`), and
   `inference[]` where every claim cites evidence ids (`because: ["E1","E2","E4"]`). A test resolves every
   evidence path and every cited id, so a hallucinated justification fails CI.
-- **The model proposes, code disposes.** Wonder returns `{"allocation": ..., "justification": ...}`. It is
-  then run through the same validator as the deterministic solver. Over-allocation, a short total, or
+- **The model proposes, code disposes.** Muse Spark Open returns `{"allocation": ..., "justification": ...}`.
+  It is then run through the same validator as the deterministic solver. Over-allocation, a short total, or
   starving the heart while funding the lungs is rejected with reasons and the policy solver takes over.
 
-`--mode wonder` uses the live API; `--mode auto` (default) falls back cleanly when unconfigured, so the
-demo never depends on a network call succeeding.
+`--mode openweight` is the product path: live Baseten inference when `BASETEN_BASE_URL` and `BASETEN_API_KEY`
+are present, otherwise the latest stored, validated run is replayed with its provenance attached (`stored` vs
+`live` is printed and exported). `--mode auto` (default) uses Open Weight when the wire is up and falls back
+to the deterministic policy when `LIFELINE_OFFLINE=1`. The fallback is the safety net, not a simulation of
+the model: same validator, same 70/30 result, no API key read.
 
 ## Technical depth
 
@@ -299,7 +302,9 @@ Live Meta calls (optional):
 ```bash
 cp .env.example .env      # add META_API_KEY from the Meta Model API dashboard
 pip install -r requirements.txt
+python allocator.py --mode openweight      # Baseten Spark Open, live or stored replay
 python allocator.py --mode wonder --log-credit
+python openweight.py                       # new qualifying run, appended to the proof
 ```
 
 ### Offline proof (resilience, not the prize entry)

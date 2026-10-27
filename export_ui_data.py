@@ -112,6 +112,7 @@ def build() -> dict:
             "evidence": allocation["evidence"],
             "inference": allocation.get("inference", []),
             "validation": allocation.get("validation", {}),
+            "brain": _latest_run_brain(),
         },
         "openweight": _openweight(),
         "sam": {            "available": bool(sam),
@@ -175,6 +176,39 @@ def build() -> dict:
     }
 
 
+def _latest_run_brain() -> dict | None:
+    """The allocation brain that actually produced runs/latest.json.
+
+    Read from the run record, so the panel shows which model answered, how long
+    it took and whether it was a live call or a stored replay - never inferred.
+    """
+    path = ROOT / "runs" / "latest.json"
+    if not path.exists():
+        return None
+    try:
+        run = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    for step in run.get("steps", []):
+        if step.get("name") != "ALLOCATE":
+            continue
+        trace = step.get("trace", {})
+        meta = trace.get("openweight") or trace.get("wonder") or {}
+        return {
+            "source": step.get("source"),
+            "model": meta.get("model"),
+            "provider": meta.get("provider"),
+            "status": meta.get("status"),
+            "latency_s": meta.get("latency_s"),
+            "at": meta.get("at") or run.get("generated_utc"),
+            "justification": step.get("justification"),
+            "confidence": step.get("confidence"),
+            "allocation": step.get("allocation"),
+            "rejected": trace.get("rejected"),
+        }
+    return None
+
+
 def _openweight() -> dict:
     """The Baseten proof, read from the artefact - never asserted in the page."""
     path = ROOT / "artifacts" / "openweight_proof.json"
@@ -191,6 +225,8 @@ def _openweight() -> dict:
         "runs": len(data.get("runs", [])),
         "valid_runs": len(valid),
         "allocation": valid[-1]["allocation"] if valid else None,
+        "justification": valid[-1].get("justification") if valid else None,
+        "confidence": valid[-1].get("confidence") if valid else None,
         "latencies_s": [run["latency_s"] for run in valid],
         "latest_at": valid[-1]["at"] if valid else None,
         "note": data.get("note"),

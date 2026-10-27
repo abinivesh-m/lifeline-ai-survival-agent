@@ -12,12 +12,16 @@ The rule is not "ask a model what to do".  It is:
 
 If Wonder is configured it proposes the allocation and the validator either
 accepts it or rejects it with reasons and the deterministic solver takes over.
+The Open Weight path does the same with Meta open weights on Baseten
+(`meta-models/muse-spark-open-1026`): live when credentials exist, otherwise the
+latest stored validated run - always re-checked by the same validator.
 The model never executes anything: a human approval gate sits after this step.
 
 Result for the Kottur crisis: 70 L hospital + 30 L pump = exactly 100 L.
 
 Run:  python allocator.py
       python allocator.py --mode policy --json
+      python allocator.py --mode openweight
       python allocator.py --mode wonder --log-credit
 """
 
@@ -31,11 +35,14 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 TOWN_PATH = Path(__file__).with_name("town.json")
 ENV_PATH = Path(__file__).with_name(".env")
+OPENWEIGHT_PROOF = Path(__file__).with_name("artifacts") / "openweight_proof.json"
+OPENWEIGHT_MODEL = "meta-models/muse-spark-open-1026"
 
 
 class AllocationError(ValueError):
@@ -322,6 +329,86 @@ def wonder_allocate(town: dict, evidence: list[dict], timeout: float = 60.0) -> 
 
 
 # --------------------------------------------------------------------------- #
+# step 3b - Open Weight proposal (Meta open weights, partner-hosted)
+# --------------------------------------------------------------------------- #
+
+def openweight_configured() -> bool:
+    if os.environ.get("LIFELINE_OFFLINE", "0") == "1":
+        return False
+    return bool(os.environ.get("BASETEN_BASE_URL") and os.environ.get("BASETEN_API_KEY"))
+
+
+def _latest_openweight_run() -> dict | None:
+    if not OPENWEIGHT_PROOF.exists():
+        return None
+    try:
+        proof = json.loads(OPENWEIGHT_PROOF.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    valid = [
+        run
+        for run in proof.get("runs", [])
+        if run.get("valid") and isinstance(run.get("allocation"), dict)
+    ]
+    return valid[-1] if valid else None
+
+
+def openweight_propose(town: dict, timeout: float = 90.0) -> tuple[dict | None, dict]:
+    """Muse Spark Open proposes the allocation; the validator still decides.
+
+    Live partner inference when Baseten credentials are present. Otherwise the
+    latest stored, validated run is replayed with its provenance attached, so a
+    demo can show the model's real answer without pretending the wire is up.
+    """
+    meta: dict[str, Any] = {
+        "provider": "Baseten",
+        "model": OPENWEIGHT_MODEL,
+        "status": "unavailable",
+        "latency_s": None,
+        "at": None,
+    }
+
+    if openweight_configured():
+        try:
+            import openweight  # local module; imported here so the CLI stays light
+
+            result = openweight.call(openweight._prompt(town), timeout=timeout)
+            parsed = openweight.parse(result["response_text"]) or {}
+            if isinstance(parsed.get("allocation"), dict):
+                meta.update(
+                    {
+                        "status": "live",
+                        "latency_s": result["latency_s"],
+                        "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                    }
+                )
+                return parsed, meta
+            meta["detail"] = "live response did not contain an allocation object"
+        except Exception as exc:  # network, auth, parse - fall back, never crash
+            meta["detail"] = f"live call failed: {type(exc).__name__}: {exc}"
+
+    run = _latest_openweight_run()
+    if run is None:
+        return None, meta
+
+    meta.update(
+        {
+            "status": "stored",
+            "provider": run.get("provider", "Baseten"),
+            "model": run.get("model", OPENWEIGHT_MODEL),
+            "latency_s": run.get("latency_s"),
+            "at": run.get("at"),
+            "stored_at": run.get("at"),
+        }
+    )
+    return {
+        "allocation": run.get("allocation"),
+        "justification": run.get("justification"),
+        "confidence": run.get("confidence"),
+    }, meta
+
+
+# --------------------------------------------------------------------------- #
 # step 4 - assemble + validate
 # --------------------------------------------------------------------------- #
 
@@ -332,11 +419,38 @@ def allocate(town: dict, mode: str = "auto", log_credit: bool = False) -> dict:
     proposal: dict | None = None
     source = "policy"
 
-    if mode in ("auto", "wonder"):
+    # Open Weight is the default brain when the wire is up: live Baseten when
+    # configured, otherwise the latest stored run, always re-validated below.
+    # With LIFELINE_OFFLINE=1 auto stays deterministic; --mode openweight can
+    # still replay the stored proposal and label it as stored.
+    if mode == "openweight" or (
+        mode == "auto" and os.environ.get("LIFELINE_OFFLINE", "0") != "1"
+    ):
+        candidate, openweight_meta = openweight_propose(town)
+        trace["openweight"] = openweight_meta
+        if candidate is not None:
+            problems = validate_proposal(candidate.get("allocation", {}), town)
+            if problems:
+                trace["rejected"] = {
+                    "source": "openweight",
+                    "allocation": candidate.get("allocation"),
+                    "reasons": problems,
+                }
+                source = "policy-fallback"
+            else:
+                proposal = candidate
+                source = (
+                    "openweight-live"
+                    if openweight_meta["status"] == "live"
+                    else "openweight-stored"
+                )
+
+    if proposal is None and mode in ("auto", "wonder"):
         candidate, wonder_meta = wonder_allocate(town, evidence)
         trace["wonder"] = wonder_meta
         if candidate is None:
-            source = "policy"
+            if "rejected" not in trace:
+                source = "policy"
         else:
             problems = validate_proposal(candidate.get("allocation", {}), town)
             if problems:
@@ -469,7 +583,7 @@ def main(argv: list[str] | None = None) -> int:
 
     load_env()
     parser = argparse.ArgumentParser(description="LIFELINE AI allocator")
-    parser.add_argument("--mode", choices=["auto", "policy", "wonder"], default="auto")
+    parser.add_argument("--mode", choices=["auto", "policy", "wonder", "openweight"], default="auto")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--log-credit", action="store_true")
     parser.add_argument("--town", default=str(TOWN_PATH))

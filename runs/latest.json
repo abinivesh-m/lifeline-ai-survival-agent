@@ -1,13 +1,13 @@
 {
   "schema": "lifeline.run/1.0",
-  "generated_utc": "2026-10-27T13:34:55+00:00",
+  "generated_utc": "2026-10-27T14:01:50+00:00",
   "town": {
     "name": "Kottur",
     "lat": 11.0168,
     "lon": 76.9558
   },
   "scenario": "none",
-  "duration_s": 0.02,
+  "duration_s": 6.41,
   "executed": true,
   "steps": [
     {
@@ -234,7 +234,7 @@
           "confidence": 1.0
         }
       ],
-      "justification": "Heart first, lungs next: the hospital's 4 h of runtime is the nearest failure, and the pump is fed from the hospital feeder, so 70 L hospital + 30 L pump is the only split that keeps both alive for the 6 h closure.",
+      "justification": "Allocated full demand to priority 1 first then remaining reserve to priority 2 to satisfy exact-sum, demand-cap, and priority-order constraints with dependency met.",
       "confidence": 0.99,
       "constraints": {
         "reserve_litres": 100,
@@ -261,9 +261,16 @@
           "nothing executed - awaiting human approval"
         ]
       },
-      "source": "policy",
+      "source": "openweight-live",
       "trace": {
-        "requested_mode": "policy"
+        "requested_mode": "auto",
+        "openweight": {
+          "provider": "Baseten",
+          "model": "meta-models/muse-spark-open-1026",
+          "status": "live",
+          "latency_s": 6.41,
+          "at": "2026-10-27T14:01:50+00:00"
+        }
       },
       "human_approval_required": true,
       "executed": false,

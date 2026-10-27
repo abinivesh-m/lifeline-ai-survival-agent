@@ -9,6 +9,7 @@ import AllocatorDashboard from "@/components/AllocatorDashboard";
 import OfflineProof3D from "@/components/OfflineProof3D";
 import AgenticTimeline3D from "@/components/AgenticTimeline3D";
 import WorldPanel from "@/components/WorldPanel";
+import TempleBell from "@/components/TempleBell";
 import LanguageBar from "@/components/LanguageBar";
 import SectionNav from "@/components/SectionNav";
 import RunningGridBackground from "@/components/RunningGridBackground";
@@ -401,6 +402,7 @@ export default function Page() {
               </div>
             ))}
           </div>
+          <TempleBell />
           <p className="mt-2 text-[10px] leading-relaxed text-muted/70">
             Protocol design, not a deployed gateway. Nothing here claims a message was sent.
           </p>
@@ -410,7 +412,7 @@ export default function Page() {
       {/* -------------------------------------------------------------- offline */}
       <Section
         meta={SECTIONS[5]}
-        lede="The core — routing, topological order, the 70/30 validator, the ledger — runs on this laptop with the network off. The Open Weight claim is separate and exact: muse-spark-open-1026, partner-hosted on Baseten, with stored runs."
+        lede="The core — routing, topological order, the 70/30 validator, the ledger — runs on this laptop with the network off. The Open Weight brain is exact and partner-hosted: muse-spark-open-1026 on Baseten, live when the wire is up, replayed from the stored run when it is not."
       >
         <OfflineProof3D />
       </Section>

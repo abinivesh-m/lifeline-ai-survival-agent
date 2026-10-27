@@ -17,6 +17,14 @@ const PRESETS = [
   { id: "lahore", label: "LAHORE", lat: "31.5204", lon: "74.3587" },
 ];
 
+/** Tour context. Population is real; the save is the template scenario, labelled as such. */
+const TOUR_NOTES: Record<string, string> = {
+  manila: "metro 18M people · 42% modelled save",
+  jakarta: "11M people · subsiding delta · 43% modelled save",
+  rio_favela: "informal hillside grid",
+  kibera: "informal grid · shared standpipes",
+};
+
 function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371.0088;
   const toRad = (v: number) => (v * Math.PI) / 180;
@@ -54,7 +62,7 @@ export default function WorldPanel() {
         if (town) setSelected(town);
         return next;
       });
-    }, 3200);
+    }, 6000);
     return () => window.clearInterval(id);
   }, [touring]);
 
@@ -155,12 +163,17 @@ export default function WorldPanel() {
                 {selected.data_class}
               </span>
               <span className="rounded border border-line px-1.5 py-0.5 mono text-[8.5px] text-muted">
-                70 L heart · 30 L lungs
+                {selected.data_class === "surveyed" ? "70 L heart · 30 L lungs" : "template · 70 L / 30 L"}
               </span>
               <span className="rounded border border-line px-1.5 py-0.5 mono text-[8.5px] text-muted">
-                A* 7.8 km · 40% saved
+                {selected.data_class === "surveyed" ? "A* 7.8 km · 40% saved" : "template · A* 7.8 km · 40%"}
               </span>
             </div>
+            {TOUR_NOTES[selected.id] && (
+              <p className="mt-2 mono text-[9px] leading-relaxed text-amber/80">
+                {TOUR_NOTES[selected.id]} · template scenario, not a local survey
+              </p>
+            )}
             <p className="mt-2 text-[10.5px] leading-relaxed text-muted">
               {selected.data_class === "surveyed"
                 ? "Surveyed case: reserve and demands come from town.json in this repo."

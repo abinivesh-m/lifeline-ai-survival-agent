@@ -42,12 +42,25 @@ export default function AllocatorDashboard() {
   // other eight stay in the artefact, not on the page.
   const frame =
     frames.find((item) => item.file === "Flood_kerala_2018_3.jpg") ?? frames[0];
-  const justification = useTypewriter(lifeline.allocation.justification);
 
-  const allocation = lifeline.allocation.policy;
+  // The qualifying brain and the offline fallback, side by side. Both are
+  // re-validated by the same code; this switch changes the proposal, not the rules.
+  const brain = lifeline.allocation.brain;
+  const hasBrain = Boolean(brain?.source?.startsWith("openweight"));
+  const [brainView, setBrainView] = useState<"openweight" | "policy">(
+    hasBrain ? "openweight" : "policy",
+  );
+  const policyJustification = lifeline.allocation.justification;
+  const typedOpenweight = useTypewriter(brain?.justification ?? policyJustification);
+  const typedPolicy = useTypewriter(policyJustification);
+
+  const allocation =
+    brainView === "openweight" && brain?.allocation
+      ? brain.allocation
+      : lifeline.allocation.policy;
   const hospital = allocation.hospital ?? 0;
   const pump = allocation.water_pump ?? 0;
-  const total = lifeline.allocation.total;
+  const total = hospital + pump;
 
   const spend = lifeline.credit.spent_usd;
   const budget = lifeline.credit.budget_usd;
@@ -115,6 +128,10 @@ export default function AllocatorDashboard() {
           </div>
         </div>
 
+        <div className="mono mt-1.5 text-[8.5px] text-muted/70">
+          stored · artifacts/photos/{frame?.file}
+        </div>
+
         <p className="mt-2 text-[10.5px] leading-relaxed text-muted">
           Noun-phrase prompt <span className="mono text-ink">&quot;{lifeline.sam.prompt}&quot;</span>,
           mask decoded from the model response. One frame, one measured number:{" "}
@@ -164,14 +181,49 @@ export default function AllocatorDashboard() {
           </p>
         </div>
 
-        <div className="mt-3 flex items-baseline justify-between">
+        <div className="mt-3 flex items-baseline justify-between gap-2">
           <div className="mono text-[10px] tracking-[0.18em] text-muted">05 · ALLOCATE</div>
-          <div className="mono text-[9px] text-muted">{lifeline.allocation.source}</div>
+          <div className="flex gap-1">
+            <button
+              onClick={() => setBrainView("openweight")}
+              disabled={!hasBrain}
+              aria-pressed={brainView === "openweight"}
+              className={`rounded border px-1.5 py-0.5 mono text-[8px] tracking-[0.1em] transition ${
+                brainView === "openweight"
+                  ? "border-teal/60 bg-teal/10 text-teal"
+                  : "border-line/70 bg-black/20 text-muted hover:border-muted/50"
+              } ${hasBrain ? "" : "opacity-40"}`}
+            >
+              OPEN WEIGHT
+            </button>
+            <button
+              onClick={() => setBrainView("policy")}
+              aria-pressed={brainView === "policy"}
+              className={`rounded border px-1.5 py-0.5 mono text-[8px] tracking-[0.1em] transition ${
+                brainView === "policy"
+                  ? "border-amber/60 bg-amber/10 text-amber"
+                  : "border-line/70 bg-black/20 text-muted hover:border-muted/50"
+              }`}
+            >
+              OFFLINE POLICY
+            </button>
+          </div>
         </div>
         <div className="mt-1.5 rounded-lg border border-line bg-[#08141a] p-2.5">
-          <div className="mono text-[9px] text-muted">wonder · inference trace</div>
+          <div className="flex items-baseline justify-between gap-2">
+            <div className="mono text-[9px] text-muted">
+              {brainView === "openweight" && brain
+                ? `${brain.provider ?? "Baseten"} · ${brain.model ?? "meta-models/muse-spark-open-1026"}`
+                : "deterministic policy · no network"}
+            </div>
+            {brainView === "openweight" && brain && (
+              <span className="mono shrink-0 text-[8px] text-teal">
+                {brain.status === "live" ? "LIVE CALL" : "STORED RUN"} · {brain.latency_s}s
+              </span>
+            )}
+          </div>
           <p className="mt-1 min-h-[54px] text-[11.5px] leading-relaxed text-teal/90">
-            {justification}
+            {brainView === "openweight" ? typedOpenweight : typedPolicy}
             <span className="ml-0.5 inline-block h-3 w-1 animate-pulse bg-teal align-middle" />
           </p>
           <div className="mt-1.5 flex flex-wrap gap-1">
@@ -186,9 +238,14 @@ export default function AllocatorDashboard() {
             ))}
             <span className="rounded border border-teal/40 px-1.5 py-0.5 mono text-[8.5px] text-teal">
               validator · {lifeline.allocation.validation?.ok ? "pass" : "fail"} 70L/30L ·{" "}
-              {Math.round(lifeline.allocation.confidence * 100)}% conf
+              {Math.round((brainView === "openweight" ? brain?.confidence ?? lifeline.allocation.confidence : lifeline.allocation.confidence) * 100)}% conf
             </span>
           </div>
+          <p className="mt-1.5 mono text-[8px] leading-relaxed text-muted/70">
+            {brainView === "openweight"
+              ? "The model proposes; the validator re-checks every hard constraint in code. Nothing is trusted from the model."
+              : "LIFELINE_OFFLINE=1 fallback: same validator, no model call, no API key."}
+          </p>
         </div>
       </div>
 

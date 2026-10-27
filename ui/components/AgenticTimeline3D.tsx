@@ -26,9 +26,11 @@ const DETAIL: Record<number, string[]> = {
     `${lifeline.route.distance_km} km found, ${lifeline.route.saving.percent}% fuel saved`,
   ],
   5: [
-    `policy: ${JSON.stringify(lifeline.allocation.policy)} = ${lifeline.allocation.total} L`,
-    "validator re-checks every hard constraint in code",
-    `source: ${lifeline.allocation.source}`,
+    lifeline.allocation.brain?.model
+      ? `${lifeline.allocation.brain.model} · ${lifeline.allocation.brain.status} · ${lifeline.allocation.brain.latency_s} s`
+      : "deterministic policy brain",
+    `proposal ${JSON.stringify(lifeline.allocation.policy)} = ${lifeline.allocation.total} L, validator re-checks every cap`,
+    "offline: same validator, no model call, no API key",
   ],
   6: [
     `spent $${lifeline.credit.spent_usd.toFixed(6)} of a $${lifeline.credit.budget_usd} ceiling`,
@@ -85,6 +87,30 @@ export default function AgenticTimeline3D() {
             </span>
           </div>
         </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-line/70 bg-black/25 p-2">
+        <span className="mono text-[8.5px] tracking-[0.14em] text-muted/70">LOOP</span>
+        {[
+          { phase: "PERCEIVE", at: "01-02" },
+          { phase: "PLAN", at: "03-04" },
+          { phase: "ACT", at: "05" },
+          { phase: "REFLECT", at: "06" },
+          { phase: "ESCALATE", at: "07" },
+          { phase: "LEARN", at: "08" },
+        ].map((item, index, all) => (
+          <span key={item.phase} className="flex items-center gap-1.5">
+            <span className="rounded border border-teal/25 bg-teal/5 px-1.5 py-0.5 mono text-[8.5px] text-teal/90">
+              {item.phase} <span className="text-muted">{item.at}</span>
+            </span>
+            <span className="mono text-[8px] text-muted/50">
+              {index === all.length - 1 ? "↻" : "→"}
+            </span>
+          </span>
+        ))}
+        <span className="ml-auto mono text-[8px] text-muted/60">
+          every incident re-enters at perceive
+        </span>
       </div>
 
       <div className="relative">

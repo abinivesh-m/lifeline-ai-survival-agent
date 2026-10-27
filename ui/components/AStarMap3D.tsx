@@ -379,12 +379,13 @@ export default function AStarMap3D() {
                   SNAKE BOAT RELAY
                 </span>
                 <span className="mono text-[8px] text-muted">
-                  {relay.mode} · {relay.water_edges} water edges
+                  {relay.armed ? "ARMED" : "SWITCHED"} · {relay.water_edges} water edges
                 </span>
               </div>
               <p className="mt-1 text-[10.5px] leading-relaxed text-muted">
                 Road A* runs first. If the last road closes, the same solver re-runs on
-                water edges.
+                water edges. Kottur has {relay.water_edges} surveyed water edges, so the
+                relay stays armed and refuses to invent a river.
                 <span className="mt-0.5 block text-teal/90">Result: {relay.note}.</span>
               </p>
             </div>

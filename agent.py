@@ -319,6 +319,10 @@ def _print_step(result: dict, town: dict) -> None:
         for organ, litres in result["allocation"].items():
             print(f"  {litres:3d} L  {organ:12s} {town['organs'][organ]['role']}")
         print(f"  {result['total']:3d} L  total  (source: {result['source']})")
+        brain = result["trace"].get("openweight") or {}
+        if brain.get("model"):
+            print(f"  brain: {brain['status']} · {brain['model']} · "
+                  f"{brain.get('latency_s') or '?'} s")
         print(f"  justification: {result['justification']}")
         if result["trace"].get("rejected"):
             print(f"  model proposal rejected: {result['trace']['rejected']['reasons']}")
@@ -383,7 +387,9 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = argparse.ArgumentParser(description="LIFELINE AI - 8 step survival agent")
     parser.add_argument("--yes", action="store_true", help="pre-approve dispatch (recording mode)")
-    parser.add_argument("--mode", choices=["auto", "policy", "wonder"], default="auto")
+    parser.add_argument(
+        "--mode", choices=["auto", "policy", "wonder", "openweight"], default="auto"
+    )
     parser.add_argument("--scenario", choices=["none", "pump-critical", "reserve-loss"], default="none")
     parser.add_argument("--log-credit", action="store_true")
     parser.add_argument("--json", action="store_true")

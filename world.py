@@ -94,8 +94,12 @@ WORLD_TOWNS: list[dict] = [
      "lat": 12.7855, "lon": 45.0187, "data_class": "coordinates_only"},
     {"id": "san_juan", "name": "San Juan", "country": "PR", "region": "Caribbean",
      "lat": 18.4655, "lon": -66.1057, "data_class": "coordinates_only"},
+    {"id": "guatemala_city", "name": "Guatemala City", "country": "GT", "region": "Central America",
+     "lat": 14.6349, "lon": -90.5069, "data_class": "coordinates_only"},
     {"id": "barcelona", "name": "Barcelona", "country": "ES", "region": "Europe",
      "lat": 41.3851, "lon": 2.1734, "data_class": "coordinates_only"},
+    {"id": "port_moresby", "name": "Port Moresby", "country": "PG", "region": "Oceania",
+     "lat": -9.4438, "lon": 147.1803, "data_class": "coordinates_only"},
 ]
 
 

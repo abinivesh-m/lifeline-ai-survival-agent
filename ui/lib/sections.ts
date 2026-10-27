@@ -35,7 +35,7 @@ export const SECTIONS: SectionMeta[] = [
     kicker: "BLOOD INTELLIGENCE",
     title: "Measure the blood before you spend it",
     note: "Usable volume at 42 °C, lot provenance and runtime hours, before any model speaks.",
-    tools: ["blood.py --all", "no model call", "reproducible"],
+    tools: ["blood.py --all", "diesel 0.00084/°C", "no model call"],
   },
   {
     id: "allocate",
@@ -43,7 +43,7 @@ export const SECTIONS: SectionMeta[] = [
     kicker: "ALLOCATE",
     title: "What the models actually returned",
     note: "Segmentation, transcript, reasoning, validation and the ledger, side by side.",
-    tools: ["SAM 3.1", "muse-voice", "muse-wonder", "ledger"],
+    tools: ["SAM 3.1", "muse-voice", "muse-spark-open", "ledger"],
   },
   {
     id: "escalation",
@@ -65,8 +65,8 @@ export const SECTIONS: SectionMeta[] = [
     id: "timeline",
     n: "07",
     kicker: "AGENTIC RUN",
-    title: "Eight steps, in the order they execute",
-    note: "The exact CLI sequence: perceive, listen, order, route, allocate, budget, approve, replan.",
+    title: "A loop, not a script: eight steps per incident",
+    note: "perceive → plan → act → reflect → escalate → learn, with the tool each step actually calls.",
     tools: ["agent.py --yes", "8 steps", "replan"],
   },
   {
@@ -74,7 +74,7 @@ export const SECTIONS: SectionMeta[] = [
     n: "08",
     kicker: "WORKS ANYWHERE",
     title: "One point query, any point on Earth",
-    note: "24 configured coordinates, one surveyed town, every template labelled as a template.",
-    tools: ["24 points", "1 surveyed", "honest labels"],
+    note: "26 configured coordinates, one surveyed town, every template labelled as a template.",
+    tools: ["26 towns", "1 surveyed", "honest labels"],
   },
 ];

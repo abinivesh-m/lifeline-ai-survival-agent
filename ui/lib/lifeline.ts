@@ -160,6 +160,18 @@ export type LifeLineData = {
     evidence: { id: string; claim: string; source?: string }[];
     inference: { claim: string; litres: number; confidence: number }[];
     validation?: { ok: boolean; checks?: string[] };
+    brain?: {
+      source: string | null;
+      model: string | null;
+      provider: string | null;
+      status: string | null;
+      latency_s: number | null;
+      at: string | null;
+      justification: string | null;
+      confidence: number | null;
+      allocation: Record<string, number> | null;
+      rejected: unknown;
+    } | null;
   };
   sam: {
     available: boolean;
@@ -238,7 +250,7 @@ export const STEPS = [
   { n: 2, key: "LISTEN", tool: "Voice Transcribe", detail: "Tamil report, language bias, keywords" },
   { n: 3, key: "GRAPH", tool: "Kahn sort", detail: "heartbeat before lungs, always" },
   { n: 4, key: "ROUTE", tool: "A* heapq", detail: "4.2 km blocked, 7.8 km found" },
-  { n: 5, key: "ALLOCATE", tool: "Wonder + validator", detail: "70 L / 30 L, then checked in code" },
+  { n: 5, key: "ALLOCATE", tool: "Open weight + validator", detail: "70 L / 30 L, then checked in code" },
   { n: 6, key: "BUDGET", tool: "$150 ledger", detail: "every call priced, alerts at 80 / 95%" },
   { n: 7, key: "APPROVE", tool: "human gate", detail: "nothing moves until a person decides" },
   { n: 8, key: "REPLAN", tool: "new constraint", detail: "same solver, reserve cut to 80 L" },
