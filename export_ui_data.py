@@ -235,9 +235,13 @@ def _copy_media() -> dict[str, int]:
         for jpg in src.glob("*.jpg"):
             shutil.copy2(jpg, dst / jpg.name)
             counts["photos"] += 1
+
+    # serve the full credit file (photos + SAM + Open Weight + data sources)
+    credits = ROOT / "CREDITS.json"
+    if not credits.exists():
         credits = src / "CREDITS.json"
-        if credits.exists():
-            shutil.copy2(credits, MEDIA / "CREDITS.json")
+    if credits.exists():
+        shutil.copy2(credits, MEDIA / "CREDITS.json")
 
     for name in ("flood.mp4", "fuel_flow.mp4"):
         src_video = ROOT / "artifacts" / "videos" / name

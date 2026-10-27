@@ -699,8 +699,8 @@
       "burn_l_per_hour": 17.5,
       "hours": 4.0,
       "minutes": 240,
-      "dies_at": "2026-10-27T14:34:37+00:00",
-      "started_at": "2026-10-27T10:34:37+00:00",
+      "dies_at": "2026-10-27T14:45:01+00:00",
+      "started_at": "2026-10-27T10:45:01+00:00",
       "label": "4 h 00 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -711,8 +711,8 @@
       "burn_l_per_hour": 21.0,
       "hours": 3.33,
       "minutes": 200,
-      "dies_at": "2026-10-27T13:54:37+00:00",
-      "started_at": "2026-10-27T10:34:37+00:00",
+      "dies_at": "2026-10-27T14:05:01+00:00",
+      "started_at": "2026-10-27T10:45:01+00:00",
       "label": "3 h 20 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
