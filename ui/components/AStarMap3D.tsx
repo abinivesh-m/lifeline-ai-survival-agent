@@ -6,6 +6,8 @@ import { useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import { COLORS, lifeline } from "@/lib/lifeline";
+import { useVisible } from "@/lib/useVisible";
+import { ClampDelta } from "./ClampDelta";
 
 /** Real relative geography, scaled from the lat/lon in town.json. */
 const ORIGIN = { lat: 11.0168, lon: 76.9558 };
@@ -212,11 +214,20 @@ export default function AStarMap3D() {
   const saved = lifeline.route.saving;
   const relay = lifeline.protocols.snake_boat_relay;
   const ants = lifeline.protocols.ant_pheromone;
+  const { ref: frameRef, visible } = useVisible<HTMLDivElement>();
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
-      <div className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#061017]">
-        <Canvas dpr={[1, 1.6]} camera={{ position: [0, 12, 13], fov: 40 }}>
+      <div
+        ref={frameRef}
+        className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#061017]"
+      >
+        <Canvas
+          frameloop={visible ? "always" : "never"}
+          dpr={[1, 1.6]}
+          camera={{ position: [0, 12, 13], fov: 40 }}
+        >
+          <ClampDelta />
           <color attach="background" args={["#061017"]} />
           <ambientLight intensity={0.6} />
           <directionalLight position={[6, 12, 6]} intensity={2.1} color="#cfe9ff" />

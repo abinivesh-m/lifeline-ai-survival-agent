@@ -5,6 +5,8 @@ import { OrbitControls } from "@react-three/drei";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { COLORS, lifeline } from "@/lib/lifeline";
+import { useVisible } from "@/lib/useVisible";
+import { ClampDelta } from "./ClampDelta";
 import { useLocale } from "./LocaleProvider";
 
 type NodeId = "depot" | "heart" | "lungs" | "organs";
@@ -297,6 +299,7 @@ export default function Lifegrid3D() {
   const { t } = useLocale();
   const [selected, setSelected] = useState<NodeId>("heart");
   const curves = useCurves();
+  const { ref: frameRef, visible } = useVisible<HTMLDivElement>();
 
   const info: Record<NodeId, { label: string; value: string; note: string; color: string }> = {
     depot: {
@@ -330,12 +333,14 @@ export default function Lifegrid3D() {
   const order: NodeId[] = ["depot", "heart", "lungs", "organs"];
 
   return (
-    <div className="relative h-full w-full">
+    <div ref={frameRef} className="relative h-full w-full">
       <Canvas
+        frameloop={visible ? "always" : "never"}
         dpr={[1, 1.75]}
         camera={{ position: [0.35, 0.55, 9.9], fov: 42 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
+        <ClampDelta />
         <Rig />
         <ambientLight intensity={0.55} />
         <pointLight position={[-4, 3, 4]} intensity={28} color={COLORS.teal} distance={16} />

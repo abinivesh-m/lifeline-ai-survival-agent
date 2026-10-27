@@ -5,6 +5,7 @@ import { Html, Line } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { COLORS, lifeline } from "@/lib/lifeline";
+import { ClampDelta } from "./ClampDelta";
 
 /* Palette: lifeline colours where they exist, the three extra accents the
    scene needs (router red / bypass green / flow orange) declared once. */
@@ -489,6 +490,7 @@ export default function RunningGridBackground() {
           gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
           style={{ pointerEvents: "none" }}
         >
+          <ClampDelta />
           <Rig />
           <Scene drift={!reduced} />
         </Canvas>

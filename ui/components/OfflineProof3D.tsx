@@ -5,6 +5,8 @@ import { Html, OrbitControls } from "@react-three/drei";
 import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import { COLORS, lifeline } from "@/lib/lifeline";
+import { useVisible } from "@/lib/useVisible";
+import { ClampDelta } from "./ClampDelta";
 
 type Mode = "offline" | "online";
 
@@ -163,11 +165,20 @@ function Holograms({ mode }: { mode: Mode }) {
 export default function OfflineProof3D() {
   const [mode, setMode] = useState<Mode>("offline");
   const options = useMemo(() => ["offline", "online"] as Mode[], []);
+  const { ref: frameRef, visible } = useVisible<HTMLDivElement>();
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
-      <div className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#050c10]">
-        <Canvas dpr={[1, 1.6]} camera={{ position: [0, 1.2, 6.4], fov: 42 }}>
+      <div
+        ref={frameRef}
+        className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#050c10]"
+      >
+        <Canvas
+          frameloop={visible ? "always" : "never"}
+          dpr={[1, 1.6]}
+          camera={{ position: [0, 1.2, 6.4], fov: 42 }}
+        >
+          <ClampDelta />
           <ambientLight intensity={0.5} />
           <directionalLight position={[3, 5, 4]} intensity={1.1} />
           <pointLight position={[-4, 2, 3]} intensity={12} color={COLORS.blood} distance={12} />

@@ -6,6 +6,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import { COLORS, ORDER_KEY, lifeline } from "@/lib/lifeline";
+import { useVisible } from "@/lib/useVisible";
+import { ClampDelta } from "./ClampDelta";
 import { useLocale } from "./LocaleProvider";
 
 const NODES = ["fuel_depot", "hospital", "water_pump", "shelters"] as const;
@@ -207,11 +209,20 @@ export default function DependencyGraph3D() {
 
   const order = lifeline.graph.order as NodeName[];
   const people = lifeline.graph.cascade.people_affected;
+  const { ref: frameRef, visible } = useVisible<HTMLDivElement>();
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
-      <div className="relative h-[420px] overflow-hidden rounded-xl border border-line bg-[#071016]">
-        <Canvas dpr={[1, 1.6]} camera={{ position: [0, 1.4, 9.4], fov: 40 }}>
+      <div
+        ref={frameRef}
+        className="relative h-[420px] overflow-hidden rounded-xl border border-line bg-[#071016]"
+      >
+        <Canvas
+          frameloop={visible ? "always" : "never"}
+          dpr={[1, 1.6]}
+          camera={{ position: [0, 1.4, 9.4], fov: 40 }}
+        >
+          <ClampDelta />
           <ambientLight intensity={0.7} />
           <pointLight position={[-4, 4, 5]} intensity={22} color={COLORS.teal} />
           <pointLight position={[4, -2, 4]} intensity={16} color={COLORS.blood} />

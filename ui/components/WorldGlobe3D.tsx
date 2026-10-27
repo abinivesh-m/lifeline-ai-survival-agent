@@ -5,6 +5,8 @@ import { OrbitControls } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { COLORS, lifeline, type WorldTown } from "@/lib/lifeline";
+import { useVisible } from "@/lib/useVisible";
+import { ClampDelta } from "./ClampDelta";
 
 const TOWNS = lifeline.world.towns;
 const ORIGIN = TOWNS.find((town) => town.data_class === "surveyed") ?? TOWNS[0];
@@ -188,13 +190,17 @@ export default function WorldGlobe3D({
   onSelect: (town: WorldTown) => void;
   className?: string;
 }) {
+  const { ref: frameRef, visible } = useVisible<HTMLDivElement>();
+
   return (
-    <div className={`relative ${className}`}>
+    <div ref={frameRef} className={`relative ${className}`}>
       <Canvas
+        frameloop={visible ? "always" : "never"}
         dpr={[1, 2]}
         camera={{ position: [0, 0, 3.05], fov: 42 }}
         gl={{ antialias: true, alpha: true }}
       >
+        <ClampDelta />
         <ambientLight intensity={0.9} />
         <directionalLight position={[2.5, 2, 3]} intensity={1.4} />
         <Globe focus={selected} onSelect={onSelect} />
