@@ -10,41 +10,67 @@ import OfflineProof3D from "@/components/OfflineProof3D";
 import AgenticTimeline3D from "@/components/AgenticTimeline3D";
 import WorldPanel from "@/components/WorldPanel";
 import LanguageBar from "@/components/LanguageBar";
+import SectionNav from "@/components/SectionNav";
 import { useLocale } from "@/components/LocaleProvider";
 import { COLORS, lifeline } from "@/lib/lifeline";
+import { SECTIONS, type SectionMeta } from "@/lib/sections";
 
+/**
+ * Every feature lives in its own numbered room. Alternating background bands,
+ * a top hairline and a left rule mean two sections can never read as one
+ * continuous page — which is exactly what a live demo needs.
+ */
 function Section({
-  id,
-  index,
-  kicker,
-  title,
+  meta,
   lede,
   children,
 }: {
-  id: string;
-  index: string;
-  kicker: string;
-  title: string;
+  meta: SectionMeta;
   lede?: string;
   children: React.ReactNode;
 }) {
+  const raised = Number(meta.n) % 2 === 0;
+
   return (
-    <section id={id} className="mx-auto w-full max-w-[1800px] px-5 py-14">
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.55 }}
-        className="mb-5 flex flex-wrap items-end justify-between gap-3"
-      >
-        <div>
-          <div className="mono text-[10px] tracking-[0.22em] text-teal">{index} · {kicker}</div>
-          <h2 className="mt-1.5 text-2xl font-semibold tracking-tight md:text-[28px]">{title}</h2>
-          {lede && <p className="mt-1.5 max-w-3xl text-[13px] leading-relaxed text-muted">{lede}</p>}
-        </div>
-        <div className="hairline hidden w-40 md:block" />
-      </motion.div>
-      {children}
+    <section
+      id={meta.id}
+      className={`relative scroll-mt-28 border-t border-line/70 ${
+        raised ? "bg-[#08141b]/70" : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto w-full max-w-[1800px] px-5 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.55 }}
+          className="mb-6 grid gap-3 border-l-2 border-teal/40 pl-4 md:grid-cols-[auto_1fr_auto] md:items-start md:gap-5 md:pl-5"
+        >
+          <div className="mono text-[34px] font-bold leading-[0.8] text-teal/25 md:text-[44px]">
+            {meta.n}
+          </div>
+          <div>
+            <div className="mono text-[10px] tracking-[0.22em] text-teal">{meta.kicker}</div>
+            <h2 className="mt-1.5 text-2xl font-semibold tracking-tight md:text-[28px]">
+              {meta.title}
+            </h2>
+            {lede && (
+              <p className="mt-2 max-w-3xl text-[13px] leading-relaxed text-muted">{lede}</p>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-1.5 md:max-w-[300px] md:justify-end">
+            {meta.tools.map((tool) => (
+              <span
+                key={tool}
+                className="rounded border border-line/80 bg-black/40 px-2 py-0.5 mono text-[8.5px] tracking-[0.08em] text-muted"
+              >
+                {tool}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+        {children}
+      </div>
     </section>
   );
 }
@@ -131,6 +157,12 @@ export default function Page() {
                 >
                   WHY THE HEART COMES FIRST
                 </a>
+                <a
+                  href="#contents"
+                  className="rounded-md px-2 py-2.5 mono text-[10.5px] tracking-[0.12em] text-muted underline decoration-line underline-offset-4 transition hover:text-teal"
+                >
+                  ALL 8 SECTIONS ↓
+                </a>
               </div>
             </motion.div>
           </div>
@@ -162,12 +194,62 @@ export default function Page() {
         </div>
       </section>
 
+      <SectionNav />
+
+      {/* ------------------------------------------------------------- contents */}
+      <section id="contents" className="relative mx-auto w-full max-w-[1800px] scroll-mt-28 px-5 py-10">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className="mono text-[10px] tracking-[0.22em] text-teal">
+              CONTENTS · {SECTIONS.length} SECTIONS
+            </div>
+            <h2 className="mt-1.5 text-2xl font-semibold tracking-tight md:text-[28px]">
+              Every feature gets its own room
+            </h2>
+            <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-muted">
+              Nothing is stacked on top of anything else. Jump straight to a section, or
+              follow the 30-second path a judge follows: dependency, route, allocation,
+              world.
+            </p>
+          </div>
+          <div className="mono hidden text-right text-[9px] leading-relaxed text-muted/70 md:block">
+            <div>8 ROOMS · 1 AGENT</div>
+            <div>NO FEATURE HIDDEN BEHIND A TAB</div>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {SECTIONS.map((section, position) => (
+            <motion.a
+              key={section.id}
+              href={`#${section.id}`}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: position * 0.03 }}
+              className="group rounded-xl border border-line/80 bg-panel/50 p-3.5 transition hover:border-teal/50 hover:bg-panel"
+            >
+              <div className="flex items-baseline justify-between">
+                <span className="mono text-[10px] text-teal/70">{section.n}</span>
+                <span className="mono text-[8px] tracking-[0.14em] text-muted/60 transition group-hover:text-teal">
+                  OPEN →
+                </span>
+              </div>
+              <div className="mt-2 mono text-[8.5px] tracking-[0.16em] text-muted">
+                {section.kicker}
+              </div>
+              <div className="mt-1 text-[12.5px] font-semibold leading-snug text-ink/90">
+                {section.title}
+              </div>
+              <p className="mt-1.5 text-[10.5px] leading-relaxed text-muted">{section.note}</p>
+            </motion.a>
+          ))}
+        </div>
+      </section>
+
       {/* ------------------------------------------------------------- cascade */}
       <Section
-        id="cascade"
-        index="01"
-        kicker="DEPENDENCY"
-        title="The pump cannot run without the heart"
+        meta={SECTIONS[0]}
         lede="Four organs, one directed graph. Kahn's algorithm decides the order, and the order is the whole argument: fund anything below the heart first and the money is wasted."
       >
         <DependencyGraph3D />
@@ -175,10 +257,7 @@ export default function Page() {
 
       {/* --------------------------------------------------------------- route */}
       <Section
-        id="route"
-        index="02"
-        kicker="ROUTE"
-        title="4.2 km that cannot be driven"
+        meta={SECTIONS[1]}
         lede="A* with a binary heap over the real road graph. The blocked corridor is not a saving — it is an impossibility. Every percentage is measured against the 13.0 km detour an operator would actually take."
       >
         <AStarMap3D />
@@ -186,10 +265,7 @@ export default function Page() {
 
       {/* --------------------------------------------------------------- blood */}
       <Section
-        id="blood"
-        index="03"
-        kicker="BLOOD INTELLIGENCE"
-        title="Measure the blood before you spend it"
+        meta={SECTIONS[2]}
         lede="Four deterministic calculations that exist before any model speaks: usable volume at 42 °C, lot provenance, fuel-limited runtime, and the same plan expressed in hours of life. Reproduce every figure with python blood.py --all."
       >
         <BloodPanel />
@@ -197,10 +273,7 @@ export default function Page() {
 
       {/* ------------------------------------------------------------ allocate */}
       <Section
-        id="allocate"
-        index="04"
-        kicker="ALLOCATE"
-        title="What the models actually returned"
+        meta={SECTIONS[3]}
         lede="Segmentation, transcription, reasoning, validation, the credit ledger and the human gate, side by side. Every number below is read from an artefact in the repo, not typed into the page."
       >
         <AllocatorDashboard />
@@ -208,10 +281,7 @@ export default function Page() {
 
       {/* ---------------------------------------------------------- escalation */}
       <Section
-        id="escalation"
-        index="05"
-        kicker="LATE APPROVAL"
-        title="When the one person with the phone does not answer"
+        meta={SECTIONS[4]}
         lede="A single approval button is a single point of failure. Four tiers, each one logged to a sha256 hash chain so the record cannot be quietly rewritten."
       >
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -291,10 +361,7 @@ export default function Page() {
 
       {/* -------------------------------------------------------------- offline */}
       <Section
-        id="offline"
-        index="05"
-        kicker="OFFLINE PROOF"
-        title="What runs when the tower is down"
+        meta={SECTIONS[5]}
         lede="The core — routing, topological order, the 70/30 validator, the ledger — runs on this laptop with the network off. Partner inference is shown for what it is: partner inference."
       >
         <OfflineProof3D />
@@ -302,10 +369,7 @@ export default function Page() {
 
       {/* ------------------------------------------------------------- timeline */}
       <Section
-        id="timeline"
-        index="06"
-        kicker="AGENTIC RUN"
-        title="Eight steps, in the order they execute"
+        meta={SECTIONS[6]}
         lede="The same sequence the CLI runs: perceive, listen, order, route, allocate, budget, approve, replan."
       >
         <AgenticTimeline3D />
@@ -313,10 +377,7 @@ export default function Page() {
 
       {/* ---------------------------------------------------------------- world */}
       <Section
-        id="world"
-        index="07"
-        kicker="WORKS ANYWHERE"
-        title="One point query, any point on Earth"
+        meta={SECTIONS[7]}
         lede="Built in Kottur because that is where the numbers are real. The same cascade exists in Manila, Jakarta, Nairobi and Khartoum — and the page says exactly which data is surveyed and which is a labelled template."
       >
         <WorldPanel />

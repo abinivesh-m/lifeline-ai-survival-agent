@@ -1,10 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { lifeline } from "@/lib/lifeline";
+import { lifeline, type WorldTown } from "@/lib/lifeline";
+import WorldGlobe3D from "./WorldGlobe3D";
 
 const TOWNS = lifeline.world.towns;
+const ORIGIN = TOWNS.find((town) => town.data_class === "surveyed") ?? TOWNS[0];
+
+/** The 30-second demo path: origin, then three continents. */
+const TOUR_IDS = ["kottur", "manila", "jakarta", "rio_favela", "kibera"];
 
 function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371.0088;
@@ -17,22 +22,15 @@ function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   return Math.round(2 * R * Math.asin(Math.sqrt(a)) * 10) / 10;
 }
 
-type Result = {
-  name: string;
-  country: string;
-  distance: number;
-  dataClass: string;
-  lat: number;
-  lon: number;
-} | null;
-
 export default function WorldPanel() {
-  const [lat, setLat] = useState("14.5995");
-  const [lon, setLon] = useState("120.9842");
-  const [result, setResult] = useState<Result>(null);
+  const [lat, setLat] = useState("11.0168");
+  const [lon, setLon] = useState("76.9558");
+  const [selected, setSelected] = useState<WorldTown>(ORIGIN);
+  const [touring, setTouring] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
 
   const byRegion = useMemo(() => {
-    const groups = new Map<string, typeof TOWNS>();
+    const groups = new Map<string, WorldTown[]>();
     TOWNS.forEach((town) => {
       const list = groups.get(town.region) ?? [];
       list.push(town);
@@ -41,6 +39,21 @@ export default function WorldPanel() {
     return Array.from(groups.entries());
   }, []);
 
+  useEffect(() => {
+    if (!touring) return;
+    const id = window.setInterval(() => {
+      setTourStep((step) => {
+        const next = (step + 1) % TOUR_IDS.length;
+        const town = TOWNS.find((candidate) => candidate.id === TOUR_IDS[next]);
+        if (town) setSelected(town);
+        return next;
+      });
+    }, 3200);
+    return () => window.clearInterval(id);
+  }, [touring]);
+
+  const distanceFromOrigin = haversine(ORIGIN.lat, ORIGIN.lon, selected.lat, selected.lon);
+
   const query = () => {
     const la = Number(lat);
     const lo = Number(lon);
@@ -48,19 +61,11 @@ export default function WorldPanel() {
     const ranked = [...TOWNS]
       .map((town) => ({ town, d: haversine(la, lo, town.lat, town.lon) }))
       .sort((a, b) => a.d - b.d);
-    const best = ranked[0];
-    setResult({
-      name: best.town.name,
-      country: best.town.country,
-      distance: best.d,
-      dataClass: best.town.data_class,
-      lat: best.town.lat,
-      lon: best.town.lon,
-    });
+    setSelected(ranked[0].town);
   };
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_1.35fr]">
+    <div className="grid gap-4 lg:grid-cols-[1fr_1.15fr]">
       <div className="space-y-3">
         <div className="glass rounded-xl p-4">
           <div className="mono text-[10px] tracking-[0.18em] text-muted">SINGLE POINT QUERY</div>
@@ -93,48 +98,48 @@ export default function WorldPanel() {
             RUN lifeline_query()
           </button>
 
-          {result && (
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-3 rounded-lg border border-line bg-black/40 p-3"
-            >
-              <div className="flex items-baseline justify-between">
-                <span className="text-[13px] font-semibold text-ink">{result.name}</span>
-                <span className="mono text-[10px] text-muted">{result.country}</span>
-              </div>
-              <div className="mono mt-1 text-[10px] text-muted">
-                nearest configured point · {result.distance} km · {result.lat.toFixed(4)},{" "}
-                {result.lon.toFixed(4)}
-              </div>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                <span
-                  className={`rounded border px-1.5 py-0.5 mono text-[8.5px] ${
-                    result.dataClass === "surveyed"
-                      ? "border-teal/50 bg-teal/10 text-teal"
-                      : "border-amber/50 bg-amber/10 text-amber"
-                  }`}
-                >
-                  {result.dataClass}
-                </span>
-                <span className="rounded border border-line px-1.5 py-0.5 mono text-[8.5px] text-muted">
-                  70 L heart · 30 L lungs
-                </span>
-              </div>
-              <p className="mt-2 text-[10.5px] leading-relaxed text-muted">
-                {result.dataClass === "surveyed"
-                  ? "Surveyed case: reserve and demands come from town.json in this repo."
-                  : "Generic template. The arithmetic is real; the local fuel figures are not measured. This is labelled rather than dressed up as a local survey."}
-              </p>
-            </motion.div>
-          )}
+          <motion.div
+            key={selected.id}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-3 rounded-lg border border-line bg-black/40 p-3"
+          >
+            <div className="flex items-baseline justify-between">
+              <span className="text-[13px] font-semibold text-ink">{selected.name}</span>
+              <span className="mono text-[10px] text-muted">{selected.country}</span>
+            </div>
+            <div className="mono mt-1 text-[10px] text-muted">
+              {selected.lat.toFixed(4)}, {selected.lon.toFixed(4)} ·{" "}
+              {distanceFromOrigin === 0 ? "origin case" : `${distanceFromOrigin.toLocaleString()} km from Kottur`}
+            </div>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              <span
+                className={`rounded border px-1.5 py-0.5 mono text-[8.5px] ${
+                  selected.data_class === "surveyed"
+                    ? "border-teal/50 bg-teal/10 text-teal"
+                    : "border-amber/50 bg-amber/10 text-amber"
+                }`}
+              >
+                {selected.data_class}
+              </span>
+              <span className="rounded border border-line px-1.5 py-0.5 mono text-[8.5px] text-muted">
+                70 L heart · 30 L lungs
+              </span>
+              <span className="rounded border border-line px-1.5 py-0.5 mono text-[8.5px] text-muted">
+                A* 7.8 km · 40% saved
+              </span>
+            </div>
+            <p className="mt-2 text-[10.5px] leading-relaxed text-muted">
+              {selected.data_class === "surveyed"
+                ? "Surveyed case: reserve and demands come from town.json in this repo."
+                : "Generic template. The arithmetic is real; the local fuel figures are not measured. This is labelled rather than dressed up as a local survey."}
+            </p>
+          </motion.div>
         </div>
 
         <div className="rounded-xl border border-line bg-panel/70 p-4">
           <div className="mono text-[10px] tracking-[0.18em] text-muted">SCALE</div>
-          <p className="mt-1.5 text-[11.5px] leading-relaxed text-muted">
-            {lifeline.world.note}
-          </p>
+          <p className="mt-1.5 text-[11.5px] leading-relaxed text-muted">{lifeline.world.note}</p>
           <div className="mt-2 grid grid-cols-3 gap-2 text-center">
             <div className="rounded border border-line bg-black/30 p-2">
               <div className="text-lg font-bold text-teal">{TOWNS.length}</div>
@@ -153,13 +158,60 @@ export default function WorldPanel() {
       </div>
 
       <div className="rounded-xl border border-line bg-panel/60 p-4">
-        <div className="mono text-[10px] tracking-[0.18em] text-muted">
-          CONFIGURED WORLD POINTS · COORDINATES ONLY EXCEPT KOTTUR
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <div className="mono text-[10px] tracking-[0.18em] text-muted">
+              BUILT IN KOTTUR · APPLIED ANYWHERE
+            </div>
+            <div className="mono mt-1 text-[9px] text-muted/70">
+              arc = {ORIGIN.name} → {selected.name}
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              setTouring((value) => !value);
+              setTourStep(0);
+            }}
+            className={`shrink-0 rounded-md border px-2.5 py-1.5 mono text-[9px] font-semibold tracking-[0.12em] transition ${
+              touring
+                ? "border-blood/60 bg-blood/10 text-blood"
+                : "border-teal/60 bg-teal/10 text-teal hover:bg-teal/20"
+            }`}
+          >
+            {touring ? "STOP TOUR" : "30s TOUR"}
+          </button>
         </div>
-        <div className="mt-2 max-h-[330px] space-y-3 overflow-y-auto pr-1">
+
+        <WorldGlobe3D selected={selected} onSelect={setSelected} className="mt-2 h-[330px] w-full" />
+
+        <div className="mt-1 flex flex-wrap gap-1">
+          {TOUR_IDS.map((id) => {
+            const town = TOWNS.find((candidate) => candidate.id === id);
+            if (!town) return null;
+            const active = town.id === selected.id;
+            return (
+              <button
+                key={id}
+                onClick={() => {
+                  setTouring(false);
+                  setSelected(town);
+                }}
+                className={`rounded border px-2 py-1 mono text-[9px] transition ${
+                  active
+                    ? "border-teal/60 bg-teal/10 text-teal"
+                    : "border-line/70 bg-black/20 text-muted hover:border-muted/50"
+                }`}
+              >
+                {town.name.split(",")[0]}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-2 max-h-[150px] space-y-2 overflow-y-auto pr-1">
           {byRegion.map(([region, towns]) => (
             <div key={region}>
-              <div className="mono text-[9px] tracking-[0.16em] text-teal/80">
+              <div className="mono text-[8.5px] tracking-[0.16em] text-teal/80">
                 {region.toUpperCase()} · {towns.length}
               </div>
               <div className="mt-1 grid gap-1 sm:grid-cols-2">
@@ -167,26 +219,22 @@ export default function WorldPanel() {
                   <button
                     key={town.id}
                     onClick={() => {
+                      setTouring(false);
+                      setSelected(town);
                       setLat(String(town.lat));
                       setLon(String(town.lon));
-                      setResult({
-                        name: town.name,
-                        country: town.country,
-                        distance: 0,
-                        dataClass: town.data_class,
-                        lat: town.lat,
-                        lon: town.lon,
-                      });
                     }}
                     className={`flex items-baseline justify-between gap-2 rounded border px-2 py-1 text-left transition ${
-                      town.data_class === "surveyed"
-                        ? "border-teal/40 bg-teal/5 hover:bg-teal/10"
-                        : "border-line/70 bg-black/20 hover:border-muted/50"
+                      town.id === selected.id
+                        ? "border-teal/50 bg-teal/10"
+                        : town.data_class === "surveyed"
+                          ? "border-teal/40 bg-teal/5 hover:bg-teal/10"
+                          : "border-line/70 bg-black/20 hover:border-muted/50"
                     }`}
                   >
-                    <span className="truncate text-[10.5px] text-ink/85">{town.name}</span>
-                    <span className="mono shrink-0 text-[8.5px] text-muted">
-                      {town.lat.toFixed(2)}, {town.lon.toFixed(2)}
+                    <span className="truncate text-[10px] text-ink/85">{town.name}</span>
+                    <span className="mono shrink-0 text-[8px] text-muted">
+                      {town.lat.toFixed(1)}, {town.lon.toFixed(1)}
                     </span>
                   </button>
                 ))}
