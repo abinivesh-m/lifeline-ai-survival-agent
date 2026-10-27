@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LIFELINE AI - live run</title>
+<style>
+  :root{
+    --bg:#0a1216; --panel:#101f27; --panel2:#162a34; --line:#203844;
+    --text:#e8f3f6; --muted:#86a0ab; --teal:#2dd4bf; --red:#f87171;
+    --amber:#f5b942; --blue:#60a5fa; --green:#4ade80;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Segoe UI",system-ui,sans-serif; overflow:hidden; height:100vh;
+  }
+  .wrap{display:flex;flex-direction:column;height:100vh}
+  header{
+    display:flex;align-items:center;gap:18px;padding:16px 28px;
+    border-bottom:1px solid var(--line);background:#0c171c;
+  }
+  header .dot{width:10px;height:10px;border-radius:50%;background:var(--muted);transition:.3s}
+  header .dot.on{background:var(--teal);box-shadow:0 0 12px var(--teal)}
+  h1{font-size:19px;margin:0;letter-spacing:.06em}
+  .kicker{color:var(--teal);font-size:12px;letter-spacing:.14em;font-weight:600}
+  .coords{margin-left:auto;color:var(--muted);font:12px Consolas,monospace;text-align:right;line-height:1.6}
+  main{flex:1;display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr) minmax(340px,430px);gap:14px;padding:14px 18px;min-height:0;overflow:hidden}
+  .col{display:flex;flex-direction:column;gap:12px;min-height:0;min-width:0}
+  .card{min-width:0}
+  .alloc-row .bar{min-width:0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .card h2{font-size:11px;letter-spacing:.13em;color:var(--muted);margin:0 0 10px;font-weight:600}
+  .organ{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid #17282f}
+  .organ:last-child{border:0}
+  .organ .role{font:11px Consolas,monospace;letter-spacing:.1em;width:62px}
+  .organ .val{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+  .organ .unit{color:var(--muted);font-size:11px}
+  .organ .note{margin-left:auto;color:var(--muted);font-size:10.5px;text-align:right;max-width:110px}
+  #steps{display:flex;flex-direction:column;gap:7px;min-height:0;overflow:auto}
+  .step{
+    display:grid;grid-template-columns:26px 92px 1fr;gap:10px;align-items:center;
+    padding:8px 12px;border-radius:10px;border:1px solid #17282f;background:#0d1a20;
+    opacity:.38;transition:all .35s ease;
+  }
+  .step.active{opacity:1;border-color:var(--teal);background:#10242b;transform:translateX(3px)}
+  .step.ok{opacity:1;border-color:#1f4a44}
+  .step.warn{opacity:1;border-color:var(--amber)}
+  .step.deny{opacity:1;border-color:var(--red)}
+  .step .n{font:600 12px Consolas,monospace;color:var(--muted)}
+  .step .nm{font-size:11px;letter-spacing:.09em;font-weight:600}
+  .step .dt{color:var(--muted);font-size:11px;line-height:1.35;overflow:hidden;text-overflow:ellipsis}
+  .alloc-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .alloc-row .nm{width:96px;font:12px Consolas,monospace}
+  .bar{flex:1;height:14px;background:#1c2d37;border-radius:7px;overflow:hidden}
+  .bar>i{display:block;height:100%;width:0;border-radius:7px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+  .alloc-row .lv{width:52px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  .meter{height:12px;background:#1c2d37;border-radius:6px;overflow:hidden;margin:8px 0 6px}
+  .meter>i{display:block;height:100%;width:0;background:var(--teal);transition:width .6s}
+  .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+  .row b{color:var(--text);font-variant-numeric:tabular-nums}
+  #gate{display:none;gap:10px;margin-top:6px}
+  #gate.show{display:flex}
+  button{
+    flex:1;padding:10px 14px;border-radius:9px;border:1px solid var(--line);
+    background:#16262e;color:var(--text);font:600 12px/1 "Segoe UI",sans-serif;
+    cursor:pointer;transition:.2s;letter-spacing:.04em;
+  }
+  button:hover{border-color:var(--teal);color:var(--teal)}
+  button.go{background:#0f3d38;border-color:var(--teal);color:var(--teal)}
+  button.no:hover{border-color:var(--red);color:var(--red)}
+  #log{
+    flex:1;overflow:auto;font:11px/1.6 Consolas,monospace;color:var(--muted);
+    background:#0b171d;border:1px solid #17282f;border-radius:10px;padding:10px 12px;min-height:0;
+  }
+  #log b{color:var(--teal);font-weight:600}
+  #log .ta{color:var(--amber);font-family:"Nirmala UI","Segoe UI",sans-serif;font-size:12px}
+  .tag{font:10px Consolas,monospace;padding:2px 7px;border-radius:9px;border:1px solid var(--line);color:var(--muted)}
+  .flash{animation:fl .6s}
+  @keyframes fl{from{background:#1d4a52}to{background:transparent}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="dot" id="pulse"></span>
+    <div>
+      <div class="kicker">LIFELINE AI / TOWN AS MACHINE</div>
+      <h1>Kottur survival agent &mdash; live run</h1>
+    </div>
+    <div class="coords">
+      11.0168&deg; N &nbsp;76.9558&deg; E<br>
+      POLLACHI &middot; COIMBATORE &middot; TAMIL NADU<br>
+      <span id="runid">run &mdash;</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="col">
+      <div class="card">
+        <h2>LIFEGRID / ORGANS</h2>
+        <div class="organ"><span class="role" style="color:var(--teal)">BLOOD</span><span class="val">100</span><span class="unit">L</span><span class="note">fuel depot</span></div>
+        <div class="organ"><span class="role" style="color:var(--red)">HEART</span><span class="val" id="o-heart">70</span><span class="unit">L</span><span class="note">4 h runtime left</span></div>
+        <div class="organ"><span class="role" style="color:var(--blue)">LUNGS</span><span class="val" id="o-lungs">30</span><span class="unit">L</span><span class="note">fed by the heart</span></div>
+        <div class="organ"><span class="role" style="color:var(--amber)">ORGANS</span><span class="val">200</span><span class="unit">ppl</span><span class="note">no water, 6 h</span></div>
+      </div>
+      <div class="card">
+        <h2>ARTERY / NH-544 km 42</h2>
+        <div class="row"><span>direct corridor</span><b style="color:var(--red)">4.2 km BLOCKED</b></div>
+        <div class="row"><span>signposted bypass</span><b>13.0 km</b></div>
+        <div class="row"><span>A* route</span><b id="r-km" style="color:var(--green)">&mdash;</b></div>
+        <div class="row"><span>fuel saved</span><b id="r-save" style="color:var(--teal)">&mdash;</b></div>
+      </div>
+      <div class="card" style="flex:1;display:flex;flex-direction:column;min-height:0">
+        <h2>EVIDENCE / town.json</h2>
+        <div id="log">waiting for the run&hellip;</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card" style="flex:1;display:flex;flex-direction:column;min-height:0">
+        <h2>EIGHT STEPS</h2>
+        <div id="steps"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <h2>ALLOCATION / DIESEL ONLY</h2>
+        <div class="alloc-row">
+          <span class="nm">hospital</span>
+          <span class="bar"><i id="b-hosp" style="background:var(--red)"></i></span>
+          <span class="lv" id="l-hosp" style="color:var(--red)">&mdash;</span>
+        </div>
+        <div class="alloc-row">
+          <span class="nm">water_pump</span>
+          <span class="bar"><i id="b-pump" style="background:var(--blue)"></i></span>
+          <span class="lv" id="l-pump" style="color:var(--blue)">&mdash;</span>
+        </div>
+        <div class="row" style="margin-top:4px"><span>total</span><b id="a-total">&mdash;</b></div>
+        <div class="row"><span>source</span><b id="a-src">&mdash;</b></div>
+        <div id="just" style="color:var(--muted);font-size:11.5px;line-height:1.5;margin-top:8px"></div>
+        <div id="gate">
+          <button class="go" onclick="decide('approve')">APPROVE DISPATCH</button>
+          <button class="no" onclick="decide('deny')">DENY</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>CREDIT LEDGER / CEILING $150</h2>
+        <div class="row"><span>spent</span><b id="c-spent">$0.0000</b></div>
+        <div class="meter"><i id="c-bar"></i></div>
+        <div class="row"><span>alerts 80% / 95%</span><b id="c-level">OK</b></div>
+        <div id="c-models" style="margin-top:8px;font:10.5px/1.7 Consolas,monospace;color:var(--muted)"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const NAMES = {
+  1:["PERCEIVE","SAM 3.1"],2:["LISTEN","Voice Transcribe"],3:["GRAPH","Kahn sort"],
+  4:["ROUTE","A* heapq"],5:["ALLOCATE","Wonder + validator"],6:["BUDGET","$150 ledger"],
+  7:["APPROVE","human gate"],8:["REPLAN","new constraint"]
+};
+const stepsEl = document.getElementById("steps");
+const logEl = document.getElementById("log");
+
+Object.entries(NAMES).forEach(([n,[nm,tool]])=>{
+  const d = document.createElement("div");
+  d.className = "step"; d.id = "s"+n;
+  d.innerHTML = `<span class="n">${n.padStart(2,"0")}</span>
+    <span class="nm">${nm}<br><span style="color:var(--muted);font-weight:400;font-size:10px">${tool}</span></span>
+    <span class="dt" id="d${n}">&mdash;</span>`;
+  stepsEl.appendChild(d);
+});
+
+function log(msg, cls){
+  const p = document.createElement("div");
+  p.className = "flash";
+  if (cls === "ta"){ p.className += " ta"; p.textContent = msg; }
+  else p.innerHTML = msg;
+  logEl.appendChild(p);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+function mark(n, state){
+  const el = document.getElementById("s"+n);
+  if (!el) return;
+  el.classList.remove("active");
+  el.classList.add(state);
+  el.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+function setDetail(n, text){ document.getElementById("d"+n).textContent = text; }
+
+function decide(d){
+  fetch("/approve",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({decision:d})});
+  document.getElementById("gate").classList.remove("show");
+}
+
+const es = new EventSource("/events");
+es.onmessage = (e)=>{
+  const ev = JSON.parse(e.data);
+  if (ev.type === "start"){
+    document.getElementById("pulse").classList.add("on");
+    document.getElementById("runid").textContent = "run " + ev.run;
+    log("<b>run " + ev.run + " started</b>");
+    return;
+  }
+  if (ev.type === "done"){
+    document.getElementById("pulse").classList.remove("on");
+    log("<b>run complete</b> &mdash; nothing executed without approval");
+    es.close();
+    return;
+  }
+  const n = ev.step;
+  mark(n, ev.status === "ok" || ev.status === "approved" || ev.status === "replanned"
+        ? "ok" : ev.status === "denied" ? "deny" : "warn");
+  document.getElementById("s"+n).classList.add("active");
+  setTimeout(()=>document.getElementById("s"+n).classList.remove("active"), 1400);
+
+  if (n === 1){
+    setDetail(1, ev.detail + " / worst " + ev.worst_pct + "%");
+    log(`<b>SAM</b> ${ev.detail}`);
+    log(`water severity: ${ev.severity.join("% / ")}%`);
+  }
+  if (n === 2){
+    setDetail(2, ev.detail);
+    log(`<b>VOICE</b> ${ev.detail}`);
+    log(ev.transcript, "ta");
+  }
+  if (n === 3){
+    setDetail(3, ev.order.join(" → "));
+    log(`<b>KAHN</b> ${ev.order.join(" → ")}`);
+    log(`if the heart fails: ${ev.downstream.join(", ")} — ${ev.people} people lose service`);
+  }
+  if (n === 4){
+    setDetail(4, ev.km + " km, " + ev.saving.percent + "% saved");
+    document.getElementById("r-km").textContent = ev.km + " km";
+    document.getElementById("r-save").textContent = ev.saving.percent + "% / " + ev.saving.km + " km";
+    log(`<b>A*</b> ${ev.path.join(" → ")}`);
+    log(`${ev.km} km, saves ${ev.saving.km} km and ${ev.saving.fuel_litres} L diesel`);
+  }
+  if (n === 5){
+    const a = ev.allocation;
+    setDetail(5, `${a.hospital} L + ${a.water_pump} L = ${ev.total} L`);
+    document.getElementById("b-hosp").style.width = (a.hospital/70*100) + "%";
+    document.getElementById("b-pump").style.width = (a.water_pump/70*100) + "%";
+    document.getElementById("l-hosp").textContent = a.hospital + " L";
+    document.getElementById("l-pump").textContent = a.water_pump + " L";
+    document.getElementById("a-total").textContent = ev.total + " L";
+    document.getElementById("a-src").textContent = ev.source + (ev.cache === "cache" ? " (cached)" : "");
+    document.getElementById("just").textContent = ev.justification;
+    log(`<b>ALLOCATE</b> hospital ${a.hospital} L + pump ${a.water_pump} L = ${ev.total} L`);
+    log(`source: ${ev.source}${ev.cache === "cache" ? " (cached, no new spend)" : ""}`);
+    ev.evidence.forEach(x => log(`  [${x.id}] ${x.claim}`));
+  }
+  if (n === 6){
+    setDetail(6, "$" + ev.spent.toFixed(4) + " of $" + ev.budget);
+    document.getElementById("c-spent").textContent = "$" + ev.spent.toFixed(4);
+    document.getElementById("c-bar").style.width = Math.max(ev.percent, 0.7) + "%";
+    document.getElementById("c-level").textContent = ev.level.toUpperCase();
+    document.getElementById("c-models").innerHTML = Object.entries(ev.by_model)
+      .filter(([k,v]) => v.calls > 0)
+      .map(([k,v]) => `${k.padEnd(10)} ${String(v.calls).padStart(3)} calls  $${v.spent_usd.toFixed(4)}`)
+      .join("<br>") || "no calls yet";
+    log(`<b>LEDGER</b> $${ev.spent.toFixed(4)} against a $${ev.budget} ceiling`);
+  }
+  if (n === 7 && ev.status === "waiting"){
+    setDetail(7, "waiting for you");
+    document.getElementById("gate").classList.add("show");
+    log("<b>GATE</b> nothing is dispatched until you decide");
+  }
+  if (n === 7 && ev.status === "approved"){ setDetail(7, "approved"); log("<b>GATE</b> approved by operator"); }
+  if (n === 7 && ev.status === "denied"){
+    setDetail(7, "denied — halted"); log("<b>GATE</b> denied — nothing dispatched");
+  }
+  if (n === 8){
+    if (ev.status === "guardrail"){
+      setDetail(8, "validator refused the instruction");
+      log(`<b>REPLAN</b> human asked for ${JSON.stringify(ev.instruction)}`);
+      ev.rejected.forEach(r => log("  refused: " + r));
+      log("  applied instead: " + JSON.stringify(ev.applied));
+    } else {
+      setDetail(8, JSON.stringify(ev.allocation));
+      log(`<b>REPLAN</b> ${ev.trigger}`);
+      log(`  ${JSON.stringify(ev.allocation)} — heart protected: ${ev.hospital_protected}`);
+    }
+  }
+};
+es.onerror = ()=> log("<b>stream closed</b>");
+</script>
+</body>
+</html>

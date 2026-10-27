@@ -1,0 +1,138 @@
+{
+  "allocation": {
+    "hospital": 70,
+    "water_pump": 30
+  },
+  "total": 100,
+  "evidence": [
+    {
+      "id": "E1",
+      "claim": "hospital generator has 4 h of runtime left",
+      "value": 4.0,
+      "unit": "h",
+      "source": "town.json#organs.hospital.runtime_hours_left"
+    },
+    {
+      "id": "E2",
+      "claim": "hospital needs 70 L of diesel to cover the 6 h road closure",
+      "value": 70,
+      "unit": "L",
+      "source": "town.json#organs.hospital.fuel_demand_litres"
+    },
+    {
+      "id": "E3",
+      "claim": "water pump needs 30 L to keep pumping through the closure",
+      "value": 30,
+      "unit": "L",
+      "source": "town.json#organs.water_pump.fuel_demand_litres"
+    },
+    {
+      "id": "E4",
+      "claim": "200 people depend on the hospital feeder",
+      "value": 200,
+      "unit": "people",
+      "source": "town.json#organs.hospital.serves_people"
+    },
+    {
+      "id": "E5",
+      "claim": "200 people in shelters have no water until the pump runs",
+      "value": 200,
+      "unit": "people",
+      "source": "town.json#organs.shelters.people"
+    },
+    {
+      "id": "E6",
+      "claim": "the pump draws power from the hospital feeder, so the heart must be stable first",
+      "value": "hospital",
+      "unit": "organ",
+      "source": "town.json#organs.water_pump.powered_from"
+    },
+    {
+      "id": "E7",
+      "claim": "total diesel reserve at the depot",
+      "value": 100,
+      "unit": "L",
+      "source": "town.json#reserve.total_litres"
+    },
+    {
+      "id": "E8",
+      "claim": "NH-544 km 42 is blocked for ~6 h",
+      "value": 6,
+      "unit": "h",
+      "source": "town.json#crisis.expected_clear_hours"
+    }
+  ],
+  "inference": [
+    {
+      "claim": "fund the hospital first",
+      "litres": 70,
+      "because": [
+        "E1",
+        "E2",
+        "E4"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "claim": "fund the pump second, inside the hospital feeder budget",
+      "litres": 30,
+      "because": [
+        "E3",
+        "E5",
+        "E6"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "claim": "no diesel left over, no organ over-funded",
+      "litres": 0,
+      "because": [
+        "E7",
+        "E8"
+      ],
+      "confidence": 1.0
+    }
+  ],
+  "justification": "Hospital is prioritized and capped at 70 L and the water pump at 30 L, totaling the full 100 L reserve.",
+  "confidence": 1.0,
+  "constraints": {
+    "reserve_litres": 100,
+    "caps_litres": {
+      "hospital": 70,
+      "water_pump": 30
+    },
+    "priority_order": [
+      "hospital",
+      "water_pump",
+      "shelters"
+    ],
+    "min_unit_litres": 5,
+    "fill_reserve_exactly": true
+  },
+  "validation": {
+    "ok": true,
+    "checks": [
+      "total 100 L == reserve 100 L",
+      "hospital 70 L <= cap 70 L",
+      "pump 30 L <= cap 30 L",
+      "priority order respected (hospital before water_pump)",
+      "units are multiples of 5 L",
+      "nothing executed - awaiting human approval"
+    ]
+  },
+  "source": "wonder-high",
+  "trace": {
+    "requested_mode": "auto",
+    "wonder": {
+      "model": "muse-wonder-1.0",
+      "endpoint": "https://api.meta.ai/v1",
+      "reasoning_effort": "high",
+      "status": "answered",
+      "latency_s": 5.65,
+      "raw_preview": "{\"allocation\": {\"hospital\": 70, \"water_pump\": 30}, \"justification\": \"Hospital is prioritized and capped at 70 L and the water pump at 30 L, totaling the full 100 L reserve.\", \"confidence\": 1}"
+    }
+  },
+  "human_approval_required": true,
+  "executed": false,
+  "safety": "diesel allocation only - no medical triage, no dosing, no clinical advice"
+}

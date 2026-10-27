@@ -29,6 +29,14 @@ models/
 *.mp3
 captures/
 artifacts/live/
+artifacts/shots/
+
+# --- node / next.js --------------------------------------------------------
+node_modules/
+ui/node_modules/
+ui/.next/
+ui/out/
+*.tsbuildinfo
 
 # --- os / editor -----------------------------------------------------------
 .DS_Store

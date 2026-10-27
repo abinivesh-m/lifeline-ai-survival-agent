@@ -1,0 +1,42 @@
+{
+  "schema": "lifeline.voice_reports/1.0",
+  "captured_utc": "2026-10-27T08:00:11+00:00",
+  "model": "muse-voice-transcribe-1.0",
+  "endpoint": "/asr/transcribe",
+  "mode": "PUSH_TO_TALK",
+  "audio_seconds": 10.78,
+  "cost_usd": 0.000539,
+  "reports": [
+    {
+      "file": "report_01.wav",
+      "transcript": "ஏனைச் செய்த நான்கு நான்கு km 42 மைனஸ் நிலச்சரிவு. சாலை ஆறு ஆறு மணி நேரத்திற்கும் மூடப்பட்டுள்ளது. மருத்துவமனைக்கு diesel தேவை..",
+      "audio_duration_ms": 10800,
+      "turns": [],
+      "audio": {
+        "channels": 1,
+        "sample_rate_hz": 24000,
+        "sample_width_bytes": 2,
+        "frames": 258624,
+        "seconds": 10.78
+      },
+      "language_bias": [
+        "Tamil",
+        "English"
+      ],
+      "keywords": [
+        "NH-544",
+        "km 42",
+        "Kottur",
+        "Pollachi",
+        "landslide",
+        "diesel",
+        "hospital",
+        "water pump",
+        "shelter"
+      ],
+      "synthetic": true
+    }
+  ],
+  "failures": [],
+  "note": "Placeholder audio synthesised with edge-tts (ta-IN-ValluvarNeural) because this machine has no Tamil voice installed. It is labelled synthetic in each report. Replace artifacts/audio/report_01.wav with a real field recording and re-run - nothing else changes."
+}

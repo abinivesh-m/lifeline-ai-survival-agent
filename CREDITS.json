@@ -1,0 +1,83 @@
+{
+  "note": "Every photographic frame on this page is a Wikimedia Commons file under the licence shown. None of them is a photo of Kottur. The Kottur flood account is first-hand; the imagery is public flood evidence used to run SAM 3.1.",
+  "images": [
+    {
+      "file": "Flood_affected_house__2_.jpg",
+      "title": "File:Flood affected house (2).jpg",
+      "author": "KEmel49",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Flood_affected_house_(2).jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "Flood_kerala_2018_3.jpg",
+      "title": "File:Flood kerala 2018 3.jpg",
+      "author": "Vishnus00",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Flood_kerala_2018_3.jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "Flood_kerala_2018_4.jpg",
+      "title": "File:Flood kerala 2018 4.jpg",
+      "author": "Vishnus00",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Flood_kerala_2018_4.jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "Flooded_Marina_beach_Near_Service_Road___2015__.jpg",
+      "title": "File:Flooded Marina beach Near Service Road ( 2015 ).jpg",
+      "author": "SIDDHAR",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Flooded_Marina_beach_Near_Service_Road_(_2015_).jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "Kerala_flood_2018.jpg",
+      "title": "File:Kerala flood 2018.jpg",
+      "author": "Smibinozone",
+      "license": "CC BY 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Kerala_flood_2018.jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "Pala_during_2018_Kerala_floods_02.jpg",
+      "title": "File:Pala during 2018 Kerala floods 02.jpg",
+      "author": "Praveenp",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Pala_during_2018_Kerala_floods_02.jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "Aerial_view_of_Chennai_during_floods.jpg",
+      "title": "File:Aerial view of Chennai during floods.jpg",
+      "author": "Veethika",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_Chennai_during_floods.jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "Aerial_view_of_Chennai_during_floods_-_2.jpg",
+      "title": "File:Aerial view of Chennai during floods - 2.jpg",
+      "author": "Veethika",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_Chennai_during_floods_-_2.jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    },
+    {
+      "file": "An_aerial_view_of_rain_hit_area_in_Chennai__Tamil_.jpg",
+      "title": "File:An aerial view of rain hit area in Chennai, Tamil Nadu on December 03, 2015.jpg",
+      "author": "Prime M",
+      "license": "GODL-India",
+      "source": "https://commons.wikimedia.org/wiki/File:An_aerial_view_of_rain_hit_area_in_Chennai,_Tamil_Nadu_on_December_03,_2015.jpg",
+      "used_for": "SAM 3.1 flood-water mask measurement (real API output)"
+    }
+  ],
+  "voice": {
+    "file": "artifacts/audio/report_01.wav",
+    "status": "synthetic placeholder until the real Kottur voice note is supplied",
+    "model": "muse-voice-transcribe-1.0"
+  },
+  "fonts": "system stack plus bundled local fonts; see ui/app/globals.css"
+}

@@ -1,0 +1,54 @@
+{
+  "locales": [
+    {
+      "code": "en",
+      "language": "English",
+      "native": "English",
+      "dir": "ltr"
+    },
+    {
+      "code": "es",
+      "language": "Spanish",
+      "native": "Español",
+      "dir": "ltr"
+    },
+    {
+      "code": "fr",
+      "language": "French",
+      "native": "Français",
+      "dir": "ltr"
+    },
+    {
+      "code": "zh",
+      "language": "Chinese",
+      "native": "中文",
+      "dir": "ltr"
+    },
+    {
+      "code": "ar",
+      "language": "Arabic",
+      "native": "العربية",
+      "dir": "rtl"
+    },
+    {
+      "code": "pt",
+      "language": "Portuguese",
+      "native": "Português",
+      "dir": "ltr"
+    },
+    {
+      "code": "sw",
+      "language": "Swahili",
+      "native": "Kiswahili",
+      "dir": "ltr"
+    },
+    {
+      "code": "ta",
+      "language": "Tamil",
+      "native": "தமிழ்",
+      "dir": "ltr"
+    }
+  ],
+  "count": 8,
+  "keys_per_locale": 39
+}

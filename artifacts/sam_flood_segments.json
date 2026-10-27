@@ -1,0 +1,411 @@
+{
+  "schema": "lifeline.sam_flood_segments/1.0",
+  "captured_utc": "2026-10-27T08:10:44+00:00",
+  "model": "sam-3.1",
+  "endpoint": "/responses",
+  "prompt": "flood water",
+  "prompt_rule": "SAM 3.1 takes a short noun phrase; instructions return zero matches",
+  "severity_definition": "sum(mask fill ratio * box area) / frame area * 100, clamped to 100",
+  "cost_usd": 0.0225,
+  "images": [
+    {
+      "file": "Flood_affected_house__2_.jpg",
+      "title": "File:Flood affected house (2).jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Flood_affected_house_(2).jpg",
+      "author": "<a href=\"//commons.wikimedia.org/wiki/User:KEmel49\" title=\"User:KEmel49\">KEmel49</a>",
+      "license": "CC BY-SA 4.0",
+      "bytes": 717823,
+      "size": "5312x2988"
+    },
+    {
+      "file": "Flood_kerala_2018_3.jpg",
+      "title": "File:Flood kerala 2018 3.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Flood_kerala_2018_3.jpg",
+      "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Vishnus00&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Vishnus00 (page does not exist)\">Vishnus00</a>",
+      "license": "CC BY-SA 3.0",
+      "bytes": 1698738,
+      "size": "3120x4160"
+    },
+    {
+      "file": "Flood_kerala_2018_4.jpg",
+      "title": "File:Flood kerala 2018 4.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Flood_kerala_2018_4.jpg",
+      "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Vishnus00&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Vishnus00 (page does not exist)\">Vishnus00</a>",
+      "license": "CC BY-SA 3.0",
+      "bytes": 735258,
+      "size": "4160x3120"
+    },
+    {
+      "file": "Flooded_Marina_beach_Near_Service_Road___2015__.jpg",
+      "title": "File:Flooded Marina beach Near Service Road ( 2015 ).jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Flooded_Marina_beach_Near_Service_Road_(_2015_).jpg",
+      "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:SIDDHAR&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:SIDDHAR (page does not exist)\">SIDDHAR</a>",
+      "license": "CC BY-SA 4.0",
+      "bytes": 60792,
+      "size": "960x817"
+    },
+    {
+      "file": "Kerala_flood_2018.jpg",
+      "title": "File:Kerala flood 2018.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Kerala_flood_2018.jpg",
+      "author": "<a href=\"//commons.wikimedia.org/wiki/User:Smibinozone\" title=\"User:Smibinozone\">Smibinozone</a>",
+      "license": "CC BY 3.0",
+      "bytes": 314824,
+      "size": "1600x1200"
+    },
+    {
+      "file": "Pala_during_2018_Kerala_floods_02.jpg",
+      "title": "File:Pala during 2018 Kerala floods 02.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Pala_during_2018_Kerala_floods_02.jpg",
+      "author": "<a href=\"//commons.wikimedia.org/wiki/User:Praveenp\" title=\"User:Praveenp\">Praveenp</a>",
+      "license": "CC BY-SA 4.0",
+      "bytes": 774474,
+      "size": "4160x3120"
+    },
+    {
+      "file": "Aerial_view_of_Chennai_during_floods.jpg",
+      "title": "File:Aerial view of Chennai during floods.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_Chennai_during_floods.jpg",
+      "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Veethika&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Veethika (page does not exist)\">Veethika</a>",
+      "license": "CC BY-SA 4.0",
+      "bytes": 1044475,
+      "size": "1500x994"
+    },
+    {
+      "file": "Aerial_view_of_Chennai_during_floods_-_2.jpg",
+      "title": "File:Aerial view of Chennai during floods - 2.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_Chennai_during_floods_-_2.jpg",
+      "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Veethika&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Veethika (page does not exist)\">Veethika</a>",
+      "license": "CC BY-SA 4.0",
+      "bytes": 397766,
+      "size": "2000x1325"
+    },
+    {
+      "file": "An_aerial_view_of_rain_hit_area_in_Chennai__Tamil_.jpg",
+      "title": "File:An aerial view of rain hit area in Chennai, Tamil Nadu on December 03, 2015.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:An_aerial_view_of_rain_hit_area_in_Chennai,_Tamil_Nadu_on_December_03,_2015.jpg",
+      "author": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Prime_Minister%27s_Office_(India)\" class=\"extiw\" title=\"w:en:Prime Minister's Office (India)\"><span title=\"Office of the Prime Minister of India\">Prime M",
+      "license": "GODL-India",
+      "bytes": 659456,
+      "size": "2200x1464"
+    }
+  ],
+  "frames": [
+    {
+      "file": "Aerial_view_of_Chennai_during_floods.jpg",
+      "prompt": "flood water",
+      "objects_found": 1,
+      "water_severity_percent": 0.3,
+      "frame_px": [
+        1500,
+        994
+      ],
+      "water_px_estimate": 3760,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            991,
+            413,
+            1159,
+            449
+          ],
+          "frame_px": [
+            1500,
+            994
+          ],
+          "confidence": 0.5311355590820312,
+          "mask_raster": [
+            37,
+            169
+          ],
+          "mask_fill_ratio": 0.6013,
+          "box_area_px": 6253,
+          "water_px_estimate": 3760
+        }
+      ]
+    },
+    {
+      "file": "Aerial_view_of_Chennai_during_floods_-_2.jpg",
+      "prompt": "flood water",
+      "objects_found": 0,
+      "water_severity_percent": 0.0,
+      "frame_px": [
+        0,
+        0
+      ],
+      "water_px_estimate": 0,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": []
+    },
+    {
+      "file": "An_aerial_view_of_rain_hit_area_in_Chennai__Tamil_.jpg",
+      "prompt": "flood water",
+      "objects_found": 2,
+      "water_severity_percent": 34.1,
+      "frame_px": [
+        1920,
+        1278
+      ],
+      "water_px_estimate": 836469,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            75,
+            212,
+            315,
+            293
+          ],
+          "frame_px": [
+            1920,
+            1278
+          ],
+          "confidence": 0.6404494643211365,
+          "mask_raster": [
+            82,
+            241
+          ],
+          "mask_fill_ratio": 0.5898,
+          "box_area_px": 19762,
+          "water_px_estimate": 11655
+        },
+        {
+          "object_id": 1,
+          "box": [
+            0,
+            447,
+            1919,
+            1277
+          ],
+          "frame_px": [
+            1920,
+            1278
+          ],
+          "confidence": 0.8518518805503845,
+          "mask_raster": [
+            443,
+            1024
+          ],
+          "mask_fill_ratio": 0.517,
+          "box_area_px": 1595520,
+          "water_px_estimate": 824814
+        }
+      ]
+    },
+    {
+      "file": "Flood_affected_house__2_.jpg",
+      "prompt": "flood water",
+      "objects_found": 1,
+      "water_severity_percent": 59.4,
+      "frame_px": [
+        1920,
+        1080
+      ],
+      "water_px_estimate": 1231061,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            0,
+            306,
+            1919,
+            1079
+          ],
+          "frame_px": [
+            1920,
+            1080
+          ],
+          "confidence": 0.9804878830909729,
+          "mask_raster": [
+            413,
+            1024
+          ],
+          "mask_fill_ratio": 0.8284,
+          "box_area_px": 1486080,
+          "water_px_estimate": 1231061
+        }
+      ]
+    },
+    {
+      "file": "Flood_kerala_2018_3.jpg",
+      "prompt": "flood water",
+      "objects_found": 1,
+      "water_severity_percent": 35.3,
+      "frame_px": [
+        1920,
+        2560
+      ],
+      "water_px_estimate": 1736045,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            274,
+            913,
+            1919,
+            2559
+          ],
+          "frame_px": [
+            1920,
+            2560
+          ],
+          "confidence": 0.9375000596046448,
+          "mask_raster": [
+            1024,
+            1023
+          ],
+          "mask_fill_ratio": 0.6404,
+          "box_area_px": 2710962,
+          "water_px_estimate": 1736045
+        }
+      ]
+    },
+    {
+      "file": "Flood_kerala_2018_4.jpg",
+      "prompt": "flood water",
+      "objects_found": 1,
+      "water_severity_percent": 33.7,
+      "frame_px": [
+        1920,
+        1440
+      ],
+      "water_px_estimate": 931591,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            0,
+            506,
+            1888,
+            1439
+          ],
+          "frame_px": [
+            1920,
+            1440
+          ],
+          "confidence": 0.9726027250289917,
+          "mask_raster": [
+            506,
+            1024
+          ],
+          "mask_fill_ratio": 0.528,
+          "box_area_px": 1764326,
+          "water_px_estimate": 931591
+        }
+      ]
+    },
+    {
+      "file": "Flooded_Marina_beach_Near_Service_Road___2015__.jpg",
+      "prompt": "flood water",
+      "objects_found": 1,
+      "water_severity_percent": 51.1,
+      "frame_px": [
+        960,
+        817
+      ],
+      "water_px_estimate": 400642,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            0,
+            287,
+            959,
+            816
+          ],
+          "frame_px": [
+            960,
+            817
+          ],
+          "confidence": 0.9298245906829834,
+          "mask_raster": [
+            530,
+            960
+          ],
+          "mask_fill_ratio": 0.7874,
+          "box_area_px": 508800,
+          "water_px_estimate": 400642
+        }
+      ]
+    },
+    {
+      "file": "Kerala_flood_2018.jpg",
+      "prompt": "flood water",
+      "objects_found": 1,
+      "water_severity_percent": 46.4,
+      "frame_px": [
+        1600,
+        1200
+      ],
+      "water_px_estimate": 890167,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            0,
+            603,
+            1599,
+            1199
+          ],
+          "frame_px": [
+            1600,
+            1200
+          ],
+          "confidence": 0.976608157157898,
+          "mask_raster": [
+            382,
+            1024
+          ],
+          "mask_fill_ratio": 0.9319,
+          "box_area_px": 955200,
+          "water_px_estimate": 890167
+        }
+      ]
+    },
+    {
+      "file": "Pala_during_2018_Kerala_floods_02.jpg",
+      "prompt": "flood water",
+      "objects_found": 1,
+      "water_severity_percent": 51.4,
+      "frame_px": [
+        1920,
+        1440
+      ],
+      "water_px_estimate": 1420952,
+      "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+      "objects": [
+        {
+          "object_id": 0,
+          "box": [
+            0,
+            621,
+            1919,
+            1439
+          ],
+          "frame_px": [
+            1920,
+            1440
+          ],
+          "confidence": 0.96875,
+          "mask_raster": [
+            437,
+            1024
+          ],
+          "mask_fill_ratio": 0.9036,
+          "box_area_px": 1572480,
+          "water_px_estimate": 1420952
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "note": "Placeholder imagery from Wikimedia Commons with attribution in artifacts/photos/CREDITS.json. These are NOT Kottur photographs. Drop real Kottur photos into artifacts/photos/ and re-run to replace them."
+}

@@ -1,0 +1,149 @@
+{
+  "schema": "lifeline.escalation_ledger/1.0",
+  "hash_algorithm": "sha256",
+  "note": "append-only hash chain - no blockchain, no network, no token",
+  "head": "942868a92563913c1772220b5bb82dced5b82809ef7e722226983da4b0d87bc0",
+  "entries": [
+    {
+      "seq": 1,
+      "ts": "2026-10-27T08:15:32+00:00",
+      "tier": 1,
+      "action": "approved",
+      "detail": {
+        "tier": 1,
+        "action": "approved",
+        "elapsed_s": 120.0,
+        "allocation": {
+          "hospital": 70,
+          "water_pump": 30
+        },
+        "reserve_kept_l": 0,
+        "notifications": 0,
+        "votes": null,
+        "note": "human decision inside the tier window"
+      },
+      "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "d431bf2d5bd68bfa95a253ac4e6d702ee1b183bd1007094290b04f94b3107903"
+    },
+    {
+      "seq": 2,
+      "ts": "2026-10-27T08:15:32+00:00",
+      "tier": 1,
+      "action": "denied",
+      "detail": {
+        "tier": 1,
+        "action": "denied",
+        "elapsed_s": 240.0,
+        "allocation": {},
+        "reserve_kept_l": 0,
+        "notifications": 0,
+        "votes": null,
+        "note": "human decision inside the tier window"
+      },
+      "prev": "d431bf2d5bd68bfa95a253ac4e6d702ee1b183bd1007094290b04f94b3107903",
+      "hash": "4b003a94c221b4157dcc9fda452eeb969ef01a9a56ab8348d789e4201ec26449"
+    },
+    {
+      "seq": 3,
+      "ts": "2026-10-27T08:15:33+00:00",
+      "tier": 2,
+      "action": "pending",
+      "detail": {
+        "tier": 2,
+        "action": "pending",
+        "elapsed_s": 540,
+        "allocation": {},
+        "reserve_kept_l": 0,
+        "notifications": 9,
+        "votes": null,
+        "note": "gate still open, escalation sent to responders"
+      },
+      "prev": "4b003a94c221b4157dcc9fda452eeb969ef01a9a56ab8348d789e4201ec26449",
+      "hash": "924182ad9e32cab019e058ac7f6c0aeef0c0be5268958c63231cea8e01122dac"
+    },
+    {
+      "seq": 4,
+      "ts": "2026-10-27T08:15:33+00:00",
+      "tier": 3,
+      "action": "degraded_autopilot",
+      "detail": {
+        "tier": 3,
+        "action": "degraded_autopilot",
+        "elapsed_s": 1260,
+        "allocation": {
+          "hospital": 50,
+          "water_pump": 20
+        },
+        "reserve_kept_l": 30,
+        "notifications": 9,
+        "votes": null,
+        "note": "no human for 21 min - degraded profile, reserve still held"
+      },
+      "prev": "924182ad9e32cab019e058ac7f6c0aeef0c0be5268958c63231cea8e01122dac",
+      "hash": "a2976087aa1c51c3d7bfdd08b17ea34efca0dfdf720d94d6e3f6ffa9b7ef74f3"
+    },
+    {
+      "seq": 5,
+      "ts": "2026-10-27T08:15:33+00:00",
+      "tier": 4,
+      "action": "community",
+      "detail": {
+        "tier": 4,
+        "action": "community",
+        "elapsed_s": 2040,
+        "allocation": {
+          "hospital": 50,
+          "water_pump": 20
+        },
+        "reserve_kept_l": 30,
+        "notifications": 9,
+        "votes": {
+          "votes": [
+            true,
+            true,
+            false
+          ],
+          "yes": 2,
+          "no": 1,
+          "quorum": 3,
+          "threshold": 2,
+          "approved": true,
+          "rule": "2 of 3 shelter leaders"
+        },
+        "note": "community approved the degraded profile"
+      },
+      "prev": "a2976087aa1c51c3d7bfdd08b17ea34efca0dfdf720d94d6e3f6ffa9b7ef74f3",
+      "hash": "0dd15a5364595ded604c12c8354e42b3517b4d40fa3215e4cdf41faf6612b275"
+    },
+    {
+      "seq": 6,
+      "ts": "2026-10-27T08:15:33+00:00",
+      "tier": 4,
+      "action": "denied",
+      "detail": {
+        "tier": 4,
+        "action": "denied",
+        "elapsed_s": 2040,
+        "allocation": {},
+        "reserve_kept_l": 0,
+        "notifications": 9,
+        "votes": {
+          "votes": [
+            true,
+            false,
+            false
+          ],
+          "yes": 1,
+          "no": 2,
+          "quorum": 3,
+          "threshold": 2,
+          "approved": false,
+          "rule": "2 of 3 shelter leaders"
+        },
+        "note": "community rejected - nothing dispatched, reserve intact"
+      },
+      "prev": "0dd15a5364595ded604c12c8354e42b3517b4d40fa3215e4cdf41faf6612b275",
+      "hash": "942868a92563913c1772220b5bb82dced5b82809ef7e722226983da4b0d87bc0"
+    }
+  ]
+}

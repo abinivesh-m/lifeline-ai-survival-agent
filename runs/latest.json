@@ -1,12 +1,12 @@
 {
   "schema": "lifeline.run/1.0",
-  "generated_utc": "2026-10-27T07:34:52+00:00",
+  "generated_utc": "2026-10-27T09:51:47+00:00",
   "town": {
     "name": "Kottur",
     "lat": 11.0168,
     "lon": 76.9558
   },
-  "scenario": "pump-critical",
+  "scenario": "none",
   "duration_s": 0.0,
   "executed": true,
   "steps": [
@@ -14,15 +14,65 @@
       "step": 1,
       "name": "PERCEIVE",
       "model": "sam-3.1",
-      "status": "pending_capture",
-      "detail": "artifacts/sam_flood_segments.json not captured yet (Day 2)"
+      "status": "ok",
+      "frames": 9,
+      "water_severity_percent": [
+        0.3,
+        0.0,
+        34.1,
+        59.4,
+        35.3,
+        33.7,
+        51.1,
+        46.4,
+        51.4
+      ],
+      "worst_frame": {
+        "file": "Flood_affected_house__2_.jpg",
+        "prompt": "flood water",
+        "objects_found": 1,
+        "water_severity_percent": 59.4,
+        "frame_px": [
+          1920,
+          1080
+        ],
+        "water_px_estimate": 1231061,
+        "method": "sum(fill_ratio * box_area) / frame_area, clamped to 100",
+        "objects": [
+          {
+            "object_id": 0,
+            "box": [
+              0,
+              306,
+              1919,
+              1079
+            ],
+            "frame_px": [
+              1920,
+              1080
+            ],
+            "confidence": 0.9804878830909729,
+            "mask_raster": [
+              413,
+              1024
+            ],
+            "mask_fill_ratio": 0.8284,
+            "box_area_px": 1486080,
+            "water_px_estimate": 1231061
+          }
+        ]
+      },
+      "evidence": "pixel masks returned by sam-3.1, stored verbatim in artifacts/"
     },
     {
       "step": 2,
       "name": "LISTEN",
       "model": "muse-voice-transcribe-1.0",
-      "status": "pending_capture",
-      "detail": "artifacts/voice_reports.json not captured yet (Day 2)"
+      "status": "ok",
+      "reports": 1,
+      "blocked_mentions": 0,
+      "sample": "\u0b8f\u0ba9\u0bc8\u0b9a\u0bcd \u0b9a\u0bc6\u0baf\u0bcd\u0ba4 \u0ba8\u0bbe\u0ba9\u0bcd\u0b95\u0bc1 \u0ba8\u0bbe\u0ba9\u0bcd\u0b95\u0bc1 km 42 \u0bae\u0bc8\u0ba9\u0bb8\u0bcd \u0ba8\u0bbf\u0bb2\u0b9a\u0bcd\u0b9a\u0bb0\u0bbf\u0bb5\u0bc1. \u0b9a\u0bbe\u0bb2\u0bc8 \u0b86\u0bb1\u0bc1 \u0b86\u0bb1\u0bc1 \u0bae\u0ba3\u0bbf \u0ba8\u0bc7\u0bb0\u0ba4\u0bcd\u0ba4\u0bbf\u0bb1\u0bcd\u0b95\u0bc1\u0bae\u0bcd \u0bae\u0bc2\u0b9f\u0baa\u0bcd\u0baa\u0b9f\u0bcd\u0b9f\u0bc1\u0bb3\u0bcd\u0bb3\u0ba4\u0bc1. \u0bae\u0bb0\u0bc1\u0ba4\u0bcd\u0ba4\u0bc1\u0bb5\u0bae\u0ba9\u0bc8\u0b95\u0bcd\u0b95\u0bc1 diesel \u0ba4\u0bc7\u0bb5\u0bc8..",
+      "evidence": "verbatim transcripts, Tamil original kept alongside English"
     },
     {
       "step": 3,
@@ -213,7 +263,16 @@
       },
       "source": "policy",
       "trace": {
-        "requested_mode": "policy"
+        "requested_mode": "auto",
+        "wonder": {
+          "model": "muse-wonder-1.0",
+          "endpoint": "https://api.meta.ai/v1",
+          "reasoning_effort": "high",
+          "status": "unconfigured",
+          "latency_s": null,
+          "raw_preview": null,
+          "detail": "LIFELINE_OFFLINE=1 - no network calls, deterministic solver only"
+        }
       },
       "human_approval_required": true,
       "executed": false,
@@ -223,9 +282,9 @@
       "step": 6,
       "name": "BUDGET",
       "status": "ok",
-      "spent_usd": 0,
-      "remaining_usd": 150.0,
-      "percent_used": 0.0,
+      "spent_usd": 0.449804,
+      "remaining_usd": 149.55,
+      "percent_used": 0.3,
       "level": "ok",
       "alerts": [],
       "plan_usd": 150.0,
@@ -240,20 +299,8 @@
     {
       "step": 8,
       "name": "REPLAN",
-      "status": "guardrail_held",
-      "instruction": {
-        "hospital": 60,
-        "water_pump": 40
-      },
-      "validator_rejected_because": [
-        "water_pump: 40 L exceeds stated demand 30 L",
-        "hospital is under-funded (60/70 L) while water_pump receives diesel"
-      ],
-      "applied_instead": {
-        "hospital": 70,
-        "water_pump": 30
-      },
-      "note": "the agent will not starve the heart because a human shouted louder"
+      "status": "no_change",
+      "detail": "no new constraint"
     }
   ],
   "measured_outcome": {

@@ -1,0 +1,92 @@
+{
+  "schema": "lifeline.credit_usage/1.0",
+  "budget_usd": 150.0,
+  "reserve_buffer_usd": 20.0,
+  "alert_percent": 80.0,
+  "critical_percent": 95.0,
+  "updated_utc": "2026-10-27T08:13:46+00:00",
+  "totals": {
+    "wonder": {
+      "calls": 1,
+      "spent_usd": 0.411765,
+      "budget_usd": 70.0
+    },
+    "sam": {
+      "calls": 15,
+      "spent_usd": 0.0375,
+      "budget_usd": 30.0
+    },
+    "voice": {
+      "calls": 1,
+      "spent_usd": 0.000539,
+      "budget_usd": 30.0
+    },
+    "spark": {
+      "calls": 0,
+      "spent_usd": 0,
+      "budget_usd": 20.0
+    },
+    "spark_open": {
+      "calls": 0,
+      "spent_usd": 0,
+      "budget_usd": 0.0
+    },
+    "ollama": {
+      "calls": 0,
+      "spent_usd": 0,
+      "budget_usd": 0.0
+    },
+    "modal": {
+      "calls": 0,
+      "spent_usd": 0,
+      "budget_usd": 0.0
+    },
+    "muse_code": {
+      "calls": 0,
+      "spent_usd": 0,
+      "budget_usd": 0.0
+    }
+  },
+  "entries": [
+    {
+      "id": 1,
+      "timestamp_utc": "2026-10-27T07:56:38+00:00",
+      "model": "sam",
+      "calls": 6,
+      "unit_cost_usd": 0.0025,
+      "cost_usd": 0.015,
+      "cumulative_usd": 0.015,
+      "note": "SAM 3.1 flood capture, 6 images"
+    },
+    {
+      "id": 2,
+      "timestamp_utc": "2026-10-27T08:00:11+00:00",
+      "model": "voice",
+      "calls": 1,
+      "unit_cost_usd": 0.000539,
+      "cost_usd": 0.000539,
+      "cumulative_usd": 0.015539,
+      "note": "Muse Voice Transcribe, 1 report(s), 10.8s"
+    },
+    {
+      "id": 3,
+      "timestamp_utc": "2026-10-27T08:01:44+00:00",
+      "model": "wonder",
+      "calls": 1,
+      "unit_cost_usd": 0.411765,
+      "cost_usd": 0.411765,
+      "cumulative_usd": 0.427304,
+      "note": "allocator allocation proposal (accepted by validator)"
+    },
+    {
+      "id": 4,
+      "timestamp_utc": "2026-10-27T08:10:44+00:00",
+      "model": "sam",
+      "calls": 9,
+      "unit_cost_usd": 0.0025,
+      "cost_usd": 0.0225,
+      "cumulative_usd": 0.449804,
+      "note": "SAM 3.1 flood capture, 9 images"
+    }
+  ]
+}

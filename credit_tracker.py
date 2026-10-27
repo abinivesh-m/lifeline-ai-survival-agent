@@ -113,10 +113,15 @@ class CreditTracker:
 
     # -- accounting --------------------------------------------------------- #
 
-    def spend(self, model: str | None = None) -> float:
+    def spend_precise(self, model: str | None = None) -> float:
+        """Exact ledger sum, 6 dp. Sub-cent calls are real money and must show."""
         if model is None:
-            return round(sum(e["cost_usd"] for e in self.entries), 2)
-        return round(sum(e["cost_usd"] for e in self.entries if e["model"] == model), 2)
+            return round(sum(e["cost_usd"] for e in self.entries), 6)
+        return round(sum(e["cost_usd"] for e in self.entries if e["model"] == model), 6)
+
+    def spend(self, model: str | None = None) -> float:
+        """Budget view, rounded to cents - the unit every ceiling is stated in."""
+        return round(self.spend_precise(model), 2)
 
     def calls(self, model: str | None = None) -> int:
         if model is None:
@@ -134,11 +139,11 @@ class CreditTracker:
         return {
             model: {
                 "calls": self.calls(model),
-                "spent_usd": self.spend(model),
+                "spent_usd": self.spend_precise(model),
                 "budget_usd": PLAN.get(model, {}).get("budget", 0.0),
             }
             for model in PLAN
-        } | ({"other": {"calls": self.calls("other"), "spent_usd": self.spend("other"), "budget_usd": 0.0}}
+        } | ({"other": {"calls": self.calls("other"), "spent_usd": self.spend_precise("other"), "budget_usd": 0.0}}
              if self.calls("other") else {})
 
     # -- logging ------------------------------------------------------------ #
@@ -157,17 +162,19 @@ class CreditTracker:
             raise BudgetError(f"unknown model '{model}' - pass an explicit --cost")
 
         unit = PLAN.get(model, {}).get("unit_cost", 0.0) if cost is None else float(cost) / max(calls, 1)
-        total_cost = round(unit * calls if cost is None else float(cost), 2)
+        # 6 dp, not cents: a Voice Transcribe call costs $0.0005 and rounding it
+        # to 0.00 would hide real spend from the ledger a judge audits.
+        total_cost = round(unit * calls if cost is None else float(cost), 6)
 
         model_budget = PLAN.get(model, {}).get("budget")
-        if model_budget is not None and self.spend(model) + total_cost > model_budget + MONEY_EPS:
+        if model_budget is not None and self.spend_precise(model) + total_cost > model_budget + MONEY_EPS:
             raise BudgetError(
-                f"{model}: {self.spend(model) + total_cost:.2f} USD would exceed its "
+                f"{model}: {self.spend_precise(model) + total_cost:.4f} USD would exceed its "
                 f"{model_budget:.2f} USD bucket"
             )
-        if self.spend() + total_cost > self.budget + MONEY_EPS:
+        if self.spend_precise() + total_cost > self.budget + MONEY_EPS:
             raise BudgetError(
-                f"total {self.spend() + total_cost:.2f} USD would exceed the "
+                f"total {self.spend_precise() + total_cost:.4f} USD would exceed the "
                 f"{self.budget:.2f} USD budget"
             )
 
@@ -178,7 +185,7 @@ class CreditTracker:
             "calls": calls,
             "unit_cost_usd": round(unit, 6),
             "cost_usd": total_cost,
-            "cumulative_usd": round(self.spend() + total_cost, 2),
+            "cumulative_usd": round(self.spend_precise() + total_cost, 6),
             "note": note,
         }
         self.entries.append(entry)
@@ -220,7 +227,8 @@ class CreditTracker:
     def status(self) -> dict:
         return {
             "budget_usd": self.budget,
-            "spent_usd": self.spend(),
+            "spent_usd": self.spend_precise(),
+            "spent_cents_usd": self.spend(),
             "remaining_usd": self.remaining(),
             "reserve_buffer_usd": self.reserve,
             "spendable_after_buffer_usd": self.spendable(),
@@ -249,11 +257,11 @@ class CreditTracker:
                 problems.append(
                     f"entry {index}: cumulative {entry['cumulative_usd']} != recomputed {running}"
                 )
-        if self.spend() > self.budget + MONEY_EPS:
-            problems.append(f"spend {self.spend():.2f} exceeds budget {self.budget:.2f}")
+        if self.spend_precise() > self.budget + MONEY_EPS:
+            problems.append(f"spend {self.spend_precise():.4f} exceeds budget {self.budget:.2f}")
         for model, bucket in PLAN.items():
-            if self.spend(model) > bucket["budget"] + MONEY_EPS:
-                problems.append(f"{model}: {self.spend(model):.2f} exceeds bucket {bucket['budget']:.2f}")
+            if self.spend_precise(model) > bucket["budget"] + MONEY_EPS:
+                problems.append(f"{model}: {self.spend_precise(model):.4f} exceeds bucket {bucket['budget']:.2f}")
         if abs(PLANNED_TOTAL - self.budget) > 1e-9:
             problems.append(f"plan totals {PLANNED_TOTAL:.2f} but budget is {self.budget:.2f}")
         return problems
@@ -266,6 +274,13 @@ class CreditTracker:
         self.path.replace(target)
         self.entries = []
         return target
+
+
+def _money(value: float) -> str:
+    """Two decimals for dollars, six for sub-cent spend - never round real money to 0."""
+    if 0 < value < 0.01:
+        return f"{value:.6f}"
+    return f"{value:.2f}"
 
 
 def _bar(spent: float, total: float, width: int = 28) -> str:
@@ -284,12 +299,12 @@ def _fmt_status(tracker: CreditTracker) -> str:
     ]
     for model, bucket in status["by_model"].items():
         lines.append(
-            f"  {model:12s} {bucket['calls']:>6d} {bucket['spent_usd']:>8.2f} "
+            f"  {model:12s} {bucket['calls']:>6d} {_money(bucket['spent_usd']):>10s} "
             f"{bucket['budget_usd']:>8.2f}  {_bar(bucket['spent_usd'], bucket['budget_usd'])}"
         )
     lines += [
         "",
-        f"  total        {status['calls']:>6d} {status['spent_usd']:>8.2f} "
+        f"  total        {status['calls']:>6d} {_money(status['spent_usd']):>10s} "
         f"{status['budget_usd']:>8.2f}  {_bar(status['spent_usd'], status['budget_usd'])} "
         f"{status['percent_used']:.1f}%",
         f"  remaining    ${status['remaining_usd']:.2f}   "

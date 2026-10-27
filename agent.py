@@ -194,7 +194,12 @@ def step_approve(allocation: dict, town: dict, auto: bool) -> dict:
         print("\n  BLOCKED: no interactive terminal and no --yes. Refusing to execute.")
         return {"step": 7, "name": "APPROVE", "status": "blocked", "mode": "no-tty"}
 
-    answer = input("\n  Hospital 70 L first, pump 30 L. Approve dispatch? [y/N] ").strip().lower()
+    try:
+        answer = input("\n  Hospital 70 L first, pump 30 L. Approve dispatch? [y/N] ").strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        print("\n  BLOCKED: operator input closed. Refusing to execute.")
+        return {"step": 7, "name": "APPROVE", "status": "blocked", "mode": "eof"}
+
     if answer in ("y", "yes"):
         return {"step": 7, "name": "APPROVE", "status": "approved", "mode": "operator"}
 

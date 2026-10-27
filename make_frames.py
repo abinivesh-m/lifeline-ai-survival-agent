@@ -1,4 +1,4 @@
-"""LIFELINE AI - generate the six demo frames as 1920x1080 PNGs.
+﻿"""LIFELINE AI - generate the six demo frames as 1920x1080 PNGs.
 
     python make_frames.py
 
@@ -403,12 +403,13 @@ def frame_allocator(town: dict, alloc: dict) -> None:
     # inference
     f.panel([M, 724, 780, 900], accent=AMBER)
     f.text((M + 28, 744), "INFERENCE  /  every claim cites evidence", font(F_BOLD, 19), AMBER)
-    y = 782
+    y = 776
     for item in alloc["inference"]:
         f.text((M + 28, y), f"{item['litres']:>3d} L", font(F_MONO_B, 17), AMBER)
-        f.text((M + 106, y), f.wrap(item["claim"], font(F_REG, 16), 500)[0], font(F_REG, 16), TEXT)
-        f.text((M + 740, y), ",".join(item["because"]), font(F_MONO, 14), MUTED, anchor="ra")
-        y += 36
+        claim = f.wrap(item["claim"], font(F_REG, 16), 470)[0]
+        f.text((M + 106, y), claim, font(F_REG, 16), TEXT)
+        f.text((M + 676, y), ",".join(item["because"]), font(F_MONO, 14), MUTED, anchor="ra")
+        y += 32
     f.text((M + 28, 868), "8 evidence items total · every item carries its town.json path",
            font(F_MONO, 13), MUTED)
 
@@ -429,7 +430,7 @@ def frame_allocator(town: dict, alloc: dict) -> None:
 
     # credit plan
     f.panel([820, 664, W - M, 900], accent=BORDER)
-    f.text((852, 682), "CREDIT PLAN  /  $150, ZERO WASTE", font(F_BOLD, 19), MUTED)
+    f.text((852, 682), f"BUDGET PLAN  /  SPENT ${tracker.status()['spent_usd']:.4f} OF $150", font(F_BOLD, 19), MUTED)
     buckets = [
         ("wonder", 70.0, TEAL),
         ("sam", 30.0, BLUE),
@@ -490,7 +491,7 @@ def frame_offline(town: dict) -> None:
     f.panel([940, 494, W - M, 700], accent=AMBER)
     f.text((972, 516), "PARTNER GPU", font(F_BOLD, 19), AMBER)
     f.text((972, 556), "Muse Glimmer 30B", font(F_BOLD, 32), TEXT)
-    f.text((972, 600), "Modal  ·  abinivesh-1203", font(F_MONO, 17), MUTED)
+    f.text((972, 600), "Modal  ·  not deployed in this build", font(F_MONO, 17), MUTED)
     f.text((972, 630), "18 GB weights vs 6 GB VRAM", font(F_REG, 18), AMBER)
 
     # honest fit table
@@ -500,7 +501,7 @@ def frame_offline(town: dict) -> None:
         ("LOCAL, FLIGHT MODE", "steps 3, 4, 6, 7, 8", "no model call", TEAL),
         ("LOCAL, 3B FALLBACK", "natural language layer", "llama3.2:3b", GREEN),
         ("BASETEN", "Spark Open reasoner", "2M TPM", BLUE),
-        ("MODAL", "Glimmer 30B GPU", "partner run", AMBER),
+        ("MODAL", "Glimmer 30B GPU", "18 GB > 6 GB VRAM", AMBER),
     ]
     x = M + 28
     for head, body, note, color in cols:
@@ -584,3 +585,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
