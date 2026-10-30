@@ -380,6 +380,23 @@ def test_full_plan_verifies_and_persists() -> None:
     Path(t.path).unlink(missing_ok=True)
 
 
+def test_verify_survives_sub_cent_rows() -> None:
+    """verify() must re-derive at the 6 dp the writer uses, not at cents.
+
+    The real ledger mixes $0.411765 intent checks with $0.00014 transcriptions.
+    Rounding each row to cents while re-deriving the cumulative total drops
+    $0.0018 per intent row, drifts $0.05 over 28 of them, and reports a healthy
+    ledger as corrupt - which is exactly what it did before this test existed.
+    """
+    t = _tracker()
+    for _ in range(28):
+        t.log("wonder", calls=1, cost=0.411765, note="seri gate intent")
+        t.log("voice", calls=1, cost=0.00014, note="seri gate asr")
+    eq(t.verify(), [])
+    approx(t.spend_precise(), 28 * 0.411765 + 28 * 0.00014, 1e-9, "mixed-precision total")
+    Path(t.path).unlink(missing_ok=True)
+
+
 # --------------------------------------------------------------------------- #
 # end-to-end
 # --------------------------------------------------------------------------- #

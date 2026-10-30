@@ -50,9 +50,13 @@ PLAN: dict[str, dict[str, float]] = {
     "muse_code": {"budget": 0.0, "planned_calls": 0, "unit_cost": 0.0},
 }
 
-# Money is rounded to cents; comparisons use the same tolerance.
+# Budget ceilings are stated in cents, but ledger rows are written at 6 dp: a
+# Voice Transcribe call costs $0.00014 and rounding it to cents would erase
+# real money. verify() re-derives at the same 6 dp the writer uses, or 80
+# sub-cent rows drift by $0.08 and report themselves as corrupt.
 CENT = 0.01
 MONEY_EPS = 0.005
+LEDGER_EPS = 1e-6
 
 PLANNED_TOTAL = round(sum(b["budget"] for b in PLAN.values()), 2)
 
@@ -248,13 +252,13 @@ class CreditTracker:
         for index, entry in enumerate(self.entries, start=1):
             if entry.get("id") != index:
                 problems.append(f"entry {index}: id is {entry.get('id')}")
-            expected = round(entry["unit_cost_usd"] * entry["calls"], 2)
-            if abs(expected - entry["cost_usd"]) > CENT:
+            expected = round(entry["unit_cost_usd"] * entry["calls"], 6)
+            if abs(expected - entry["cost_usd"]) > LEDGER_EPS:
                 problems.append(
                     f"entry {index}: {entry['calls']} x {entry['unit_cost_usd']} != {entry['cost_usd']}"
                 )
-            running = round(running + entry["cost_usd"], 2)
-            if abs(running - entry["cumulative_usd"]) > CENT:
+            running = round(running + entry["cost_usd"], 6)
+            if abs(running - entry["cumulative_usd"]) > LEDGER_EPS:
                 problems.append(
                     f"entry {index}: cumulative {entry['cumulative_usd']} != recomputed {running}"
                 )

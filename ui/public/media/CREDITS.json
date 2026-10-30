@@ -101,9 +101,9 @@
     "model": "meta-models/muse-spark-open-1026",
     "provider": "Baseten",
     "proof": "artifacts/openweight_proof.json",
-    "valid_runs": 2,
-    "total_runs": 3,
-    "latencies_s": [5.41, 6.73],
+    "valid_runs": 3,
+    "total_runs": 4,
+    "latencies_s": [5.41, 6.73, 6.05],
     "status": "partner-hosted inference, stored verbatim and re-validated locally",
     "not_claimed": "no local open-weight model is loaded on the RTX 3050 6GB laptop"
   },

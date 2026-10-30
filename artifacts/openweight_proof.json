@@ -80,6 +80,41 @@
       "confidence": 0.99,
       "valid": true,
       "problems": []
+    },
+    {
+      "at": "2026-10-30T14:54:02+00:00",
+      "provider": "Baseten",
+      "model": "meta-models/muse-spark-open-1026",
+      "latency_s": 6.05,
+      "response_text": "{\"allocation\": {\"hospital\": 70, \"water_pump\": 30}, \"justification\": \"Allocated full 70L demand to priority 1 hospital to secure feeder power, then allocated remaining 30L to priority 2 water pump to exactly exhaust the 100L reserve.\", \"confidence\": 0.99}",
+      "reasoning_chars": 5910,
+      "reasoning_preview": "We need to parse the task. We are allocation step of disaster fuel agent. Diesel only. Never give medical advice, never triage patients, never mention medicine.\n\nReserve at depot: 100 L.\nHospital (heart, priority 1): needs up to 70 L, burns 17.5 L/h, 4.0 h left.\nWater pump (lungs, priority 2): needs up to 30 L, burns 5.0 L/h, and only runs if the hospital feeder has power.\nShelters (organs, priority 3): 200 people, no water.\nRoad: 4.2 km direct corridor is blocked; A* detour is 7.8 km.\n\nHard constraints: two allocations must sum to exactly reserve; never exceed stated demand; do not fund lower",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 365,
+        "completion_tokens": 1413,
+        "total_tokens": 1778,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 1038,
+          "audio_tokens": 0,
+          "reasoning_tokens": 1336,
+          "rejected_prediction_tokens": 1587
+        }
+      },
+      "model_served": "meta-models/muse-spark-open-1026",
+      "request_sha256": "453884d7f9aec933b426fd92cec2435269f5e7e83e8b8285b1ac94f9c91f15d1",
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "justification": "Allocated full 70L demand to priority 1 hospital to secure feeder power, then allocated remaining 30L to priority 2 water pump to exactly exhaust the 100L reserve.",
+      "confidence": 0.99,
+      "valid": true,
+      "problems": []
     }
   ]
 }

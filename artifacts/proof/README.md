@@ -28,7 +28,7 @@ raw transcripts and labels the recordings as pending.
    `nvidia-smi` → airplane mode on → `set LIFELINE_OFFLINE=1` →
    `python agent.py --yes` → all eight steps.
 3. Record `baseten_proof.mp4`:
-   `python openweight.py` → two valid runs, 5.41 s and 6.73 s, 70 L / 30 L.
+   `python openweight.py` → three valid runs, 5.41 s, 6.73 s and 6.05 s, 70 L / 30 L.
 
 The `.gitignore` already allows `artifacts/proof/*.mp4` and
 `artifacts/audio/report_01.wav` once they exist.

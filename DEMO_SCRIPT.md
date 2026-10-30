@@ -95,7 +95,7 @@ Section 07.
 
 ## 2:45 — close (15 s)
 
-> "Seventy-eight tests, one command to reproduce, and a ledger that shows every dollar: $14.77 of $150.
+> "Seventy-nine tests, one command to reproduce, and a ledger that shows every dollar: $23.42 of $150.
 > No gateway is configured, so nothing here claims a message was sent. That is the product: a decision
 > that survives the wire going down, and a town that can still say yes."
 

@@ -240,11 +240,11 @@ Seven Meta surfaces, each doing work a different surface cannot do:
 
 | Model | Role | Budget | Status |
 | --- | --- | --- | --- |
-| **Muse Wonder** `muse-wonder-1.0`, `reasoning_effort=high` | second opinion, cascade planning, 8-locale payload review, spoken-intent check | $70 | 20 calls, $8.235300 spent |
+| **Muse Wonder** `muse-wonder-1.0`, `reasoning_effort=high` | second opinion, cascade planning, 8-locale payload review, spoken-intent check | $70 | 41 calls, $16.882365 spent |
 | **SAM 3.1** `sam-3.1` | flood extent per frame, boxes + masks | $30 | stored: 9 frames, 35.3% featured |
-| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched; Seri Gate ears | $30 | 8 calls, $0.001479 - one report + seven approval passes |
+| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched; Seri Gate ears | $30 | 29 calls, $0.004198 - one report + 28 approval passes |
 | **Muse Spark** `muse-spark-1.3` | 8-locale SMS + spoken payload drafting; coding helper | $20 | 13 calls, $6.500000 spent |
-| **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 2/3 valid, 5.41 / 6.73 s stored, latest live 4.44 s, 70/30 |
+| **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 3/4 valid, 5.41 / 6.73 / 6.05 s stored, in-agent run 4.44 s, 70/30 |
 | **MMS-TTS** `facebook/mms-tts-*` | speaks the approved payloads, 7 locales, local CPU | $0 credits | 14 clips, 0 network at playback |
 | **Muse Glimmer 30B** | open-weight reasoner, Modal GPU | $0 credits | not deployed (18 GB does not fit) |
 | **Muse Code 1.4.13** | primary coding agent for this repo | $0 | used |
@@ -354,15 +354,15 @@ The table above is the *plan*. Actual live spend at build time, read from the ap
 
 | Bucket | Calls | Spent | Where it came from |
 | --- | --- | --- | --- |
-| Muse Wonder | 20 | $8.235300 | one allocation proposal, twelve 8-locale payload reviews, seven spoken-approval passes |
+| Muse Wonder | 41 | $16.882365 | one allocation proposal, twelve 8-locale payload reviews, 28 spoken-intent checks (4 passes x 7 locales) |
 | SAM 3.1 | 15 | $0.037500 | six capture images + nine flood frames |
-| Muse Voice Transcribe | 8 | $0.001479 | one Tamil report + seven Seri Gate passes |
+| Muse Voice Transcribe | 29 | $0.004198 | one Tamil field report + 28 Seri Gate transcriptions (4 passes x 7 locales) |
 | Muse Spark | 13 | $6.500000 | 8 locales x (SMS + spoken alert + decision), plus early retries |
 | MMS-TTS (local) | 14 | $0.000000 | spoken SMS and 70/30 decision in 7 locales |
 | Spark Open / Glimmer / Muse Code | 0 | $0 | partner inference at $0 |
-| **Total** | **70** | **$14.774279** | **$14.77 of $150 - the badge on the page** |
+| **Total** | **112** | **$23.424063** | **$23.42 of $150 - the badge on the page** |
 
-The SAM bucket aggregates two rows (6 + 9 calls), which is why the panel says 15 calls. The seven Seri
+The SAM bucket aggregates two rows (6 + 9 calls), which is why the panel says 15 calls. The four Seri
 Gate passes are the cost of proving the gate refuses a misheard word as well as it accepts a clear one,
 not of the demo path. Meta's free credits cover the spend; Open Weight calls on Baseten and every
 MMS-TTS clip are not metered against this budget at all.
@@ -378,7 +378,7 @@ Core has **zero third-party dependencies** - Python 3.11+ standard library only.
 git clone https://github.com/abinivesh-m/lifeline-ai-survival-agent
 cd lifeline-ai-survival-agent
 
-python -m pytest -q                   # 78 acceptance tests
+python -m pytest -q                   # 79 acceptance tests
 python dependency_graph.py            # LIFEGRID + topological order + cascade
 python a_star.py                      # 4.2 blocked -> 7.8 km -> 40% fuel saved
 python a_star.py --audit              # prove the heuristic is admissible
@@ -422,7 +422,7 @@ Proof captures live in `artifacts/proof/`:
 | `credit_usage_live.json` | snapshot of the live $150 ledger |
 | `gpu_6gb_taskmgr.png` | real capture: Task Manager > Performance > GPU, `0.6/6.0 GB` dedicated |
 | `offline_proof.mp4` | **capture needed** - airplane mode + `LIFELINE_OFFLINE=1 python agent.py --yes` |
-| `baseten_proof.mp4` | **capture needed** - `python openweight.py`, 2/3 valid, 5.41 s and 6.73 s |
+| `baseten_proof.mp4` | **capture needed** - `python openweight.py`, 3/4 valid, 5.41 / 6.73 / 6.05 s |
 
 The pending two need the desktop session that owns the GPU. They are labelled pending rather than
 generated, because a fabricated screenshot is the one artefact a judge can disprove in a minute.
@@ -456,7 +456,7 @@ solo entrant. No pre-existing product, no borrowed codebase.
 
 | Phase | Status | What exists |
 | --- | --- | --- |
-| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 78 tests |
+| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 79 tests |
 | Phase 2 - model capture | pending | SAM frames, Tamil transcripts, Wonder live calls, Baseten + Modal runs |
 | Phase 3 - demo | pending | 3-minute video, LIFEGRID visuals, X post |
 

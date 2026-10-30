@@ -143,7 +143,7 @@ export default function Page() {
                     .map((locale) => locale.code.toUpperCase())
                     .join(" ")}]`,
                   `ledger $${lifeline.credit.spent_usd.toFixed(4)}/$${lifeline.credit.budget_usd.toFixed(0)} live`,
-                  "78/78 pytest",
+                  "79/79 pytest",
                 ].map((chip) => (
                   <span
                     key={chip}
