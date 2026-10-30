@@ -437,8 +437,10 @@ Gate passes are the cost of proving the gate refuses a misheard word as well as 
 not of the demo path. Meta's free credits cover the spend; Open Weight calls on Baseten and every
 MMS-TTS clip are not metered against this budget at all.
 
-> `credit_usage.json` is git-ignored because it is generated at runtime. The submission attaches the
-> ledger produced by the real capture runs; `python credit_tracker.py verify` proves it.
+> `credit_usage.json` is committed, so the $23.42 above is reproducible from a clean clone:
+> `python credit_tracker.py verify` re-derives all 86 rows and prints
+> `VERIFY OK - 86 entries, $23.42 spent, $126.58 remaining`. `artifacts/proof/credit_usage_live.json`
+> is the same ledger frozen at capture time. No API key, request header or prompt body is in either file.
 
 ## Run it
 

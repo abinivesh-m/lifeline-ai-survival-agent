@@ -3,8 +3,9 @@
 .env.*
 !.env.example
 
-# --- credit ledger: generated at runtime, never committed ------------------
-credit_usage.json
+# --- credit ledger ---------------------------------------------------------
+# credit_usage.json IS committed: the badge on the page says $23.42 of $150 and
+# a judge must be able to reproduce that number from the repo alone.
 credit_usage.tmp
 credit_usage.archive.json
 

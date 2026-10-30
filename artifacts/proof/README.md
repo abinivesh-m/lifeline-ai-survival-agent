@@ -7,7 +7,7 @@ something it is not.
 | --- | --- | --- |
 | `nvidia_smi.txt` | Raw `nvidia-smi` output from the demo laptop | real |
 | `gpu_6gb_nvidia_smi.png` | The same output rendered, titled as *not* Task Manager | real |
-| `credit_usage_live.json` | Snapshot of the live $150 ledger at capture time | real |
+| `credit_usage_live.json` | The live $150 ledger frozen at capture time: 86 rows, $23.424063 spent. Byte-identical to the repo-root `credit_usage.json` | real |
 | `offline_run.txt` | Full 8-step `LIFELINE_OFFLINE=1 python agent.py --yes` transcript | real |
 | `protocols.txt` | Snake-boat relay + ant-pheromone output | real |
 | `gpu_6gb_taskmgr.png` | Task Manager > Performance > GPU: `RTX 3050 6GB Laptop GPU`, `0.6/6.0 GB` dedicated, driver 32.0.15.9282 | real |
