@@ -110,7 +110,8 @@
   "proof": {
     "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 6144 MiB",
     "gpu_query": "nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv,noheader",
-    "task_manager_screenshot": "artifacts/proof/gpu_6gb_taskmgr.png (capture on the demo machine)",
+    "task_manager_screenshot": "artifacts/proof/gpu_6gb_taskmgr.png",
+    "task_manager_shows": "Task Manager > Performance > GPU, 0.6/6.0 GB dedicated, driver 32.0.15.9282",
     "offline_video": "artifacts/proof/offline_proof.mp4",
     "baseten_video": "artifacts/proof/baseten_proof.mp4"
   },
