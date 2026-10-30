@@ -34,6 +34,13 @@ const LINES: Record<Mode, [string, string][]> = {
   ],
 };
 
+// "5.41 s, 6.73 s and 6.05 s" - joining on " s and " read as "5.41 s and 6.73 s and 6.05 s".
+function fmtLatencies(values: number[]): string {
+  const parts = values.map((v) => `${v} s`);
+  if (parts.length <= 1) return parts[0] ?? "0 s";
+  return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+}
+
 function useScreenTexture(mode: Mode) {
   const [texture, setTexture] = useState<THREE.CanvasTexture | null>(null);
 
@@ -273,7 +280,7 @@ export default function OfflineProof3D() {
           </div>
           <p className="mt-1 text-[10.5px] leading-relaxed text-muted">
             {lifeline.openweight.available
-              ? `${lifeline.openweight.valid_runs}/${lifeline.openweight.runs} runs valid · ${lifeline.openweight.latencies_s.join(" s and ")} s · ${lifeline.openweight.allocation?.hospital} L / ${lifeline.openweight.allocation?.water_pump} L. Stored verbatim in artifacts/openweight_proof.json and re-validated locally, not trusted from the model.`
+              ? `${lifeline.openweight.valid_runs}/${lifeline.openweight.runs} runs valid · ${fmtLatencies(lifeline.openweight.latencies_s)} · ${lifeline.openweight.allocation?.hospital} L / ${lifeline.openweight.allocation?.water_pump} L. Stored verbatim in artifacts/openweight_proof.json and re-validated locally, not trusted from the model.`
               : "No valid run on file yet. Run python openweight.py before recording the demo."}
           </p>
           <div className="mt-1.5 flex gap-1.5">
