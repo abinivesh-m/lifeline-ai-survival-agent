@@ -113,13 +113,13 @@ pump runs 90 minutes on 30 L. That is the whole thesis in one number.
 | # | Step | Who does it | Deterministic? |
 | --- | --- | --- | --- |
 | 1 | **Perceive** flood extent | SAM 3.1 (`artifacts/sam_flood_segments.json`) | model |
-| 2 | **Listen** to Tamil field reports | Muse Voice Transcribe (`artifacts/voice_reports.json`) | model |
+| 2 | **Listen** to Tamil field reports | Muse Voice Transcribe (`artifacts/voice_reports.json`) → typed constraints | model transcribes, code extracts |
 | 3 | **Graph** the town, sort dependencies | `dependency_graph.py` (Kahn) | yes |
 | 4 | **Route** around the landslide | `a_star.py` (heapq, haversine heuristic) | yes |
 | 5 | **Allocate** 100 L with evidence vs inference | `allocator.py` (+ Muse Spark Open on Baseten) | model proposes, code validates |
 | 6 | **Budget** the $150 | `credit_tracker.py` | yes |
 | 7 | **Approve + escalate** - human gate, four-tier ladder | operator + `escalation.py` | human decides; silence escalates |
-| 8 | **Replan** when the world changes | `agent.py` | yes |
+| 8 | **Replan** when a constraint arrives from step 2 | `field_reports.py` → `agent.py` | yes - no model call |
 
 **Seven of eight steps need no human. One human touchpoint. Zero model calls are required for steps 3, 4,
 6 and 8**, which is why the agent still works in flight mode.
@@ -274,6 +274,46 @@ applied instead: {'hospital': 70, 'water_pump': 30}
 That is the one worth a judge's attention: the agent accepts a changed world but refuses a changed
 priority. It will not starve the heart because someone shouted louder.
 
+### The phone call is the constraint
+
+Those scenarios are flags. The real loop is closed in `field_reports.py`: step 2's transcript becomes
+typed constraints, and step 8 re-solves against them - same A* search, same priority solver, no restart
+and no model call. `python agent.py --yes --mode policy --scenario field-report` runs it end to end.
+
+Two calls were captured. **The first changes nothing**, and that is the point:
+
+```
+report_01.wav  (real capture, Tamil, Muse Voice Transcribe)
+constraint road_blocked   = NH-544 km 42
+constraint closure_hours  = 6 h
+status: no_change   allocation {'hospital': 70, 'water_pump': 30} -> unchanged
+```
+
+An agent that rewrites its plan on every phone call is not one you can trust. The transcript confirmed
+what `town.json` already said, so the plan did not move.
+
+**The second call takes the village road away** (`report_02.wav`, MMS-TTS, labelled `synthetic: true`):
+
+```
+constraint road_blocked = Kottur village road   <- "கிராம சாலை வெள்ளத்தில்..."
+changed road_blocked:  open -> blocked  (2 edge(s))
+changed delivery_fuel: 100 -> 95 L
+route    7.8 km -> 13.0 km   (2.73 L -> 4.55 L)
+plan     {'hospital': 70, 'water_pump': 30} -> {'hospital': 70, 'water_pump': 25}
+pump     6.0 h -> 5.0 h, 4000 L of water lost
+validator: pass
+```
+
+The 40% saving the agent had found is gone, the detour burns 1.82 L more, and at the 5 L minimum unit
+that costs the pump one block: an hour of water, stated in litres. The fuel accounting is explicit in
+the artefact - the base plan does not charge delivery fuel, so the replan charges only the increase this
+call introduced. A judge can disagree with that modelling choice; they cannot find it hidden.
+
+**Extraction is regex, not a model.** A transcript that can say "the hospital needs forty litres" must
+never be able to invent a number that moves a town's last diesel. The model transcribes; code decides
+what the words are allowed to change. Unknown phrasing produces no constraint - `test_field_reports.py`
+pins that, including the case where a caller says "the road is closed" without naming a road.
+
 ### It constrains itself
 
 `CreditTracker.log()` raises `BudgetError` **before** it writes if a call would break a per-model bucket
@@ -312,7 +352,7 @@ Seven Meta surfaces, each doing work a different surface cannot do:
 | --- | --- | --- | --- |
 | **Muse Wonder** `muse-wonder-1.0`, `reasoning_effort=high` | second opinion, cascade planning, 8-locale payload review, spoken-intent check | $70 | 41 calls, $16.882365 spent |
 | **SAM 3.1** `sam-3.1` | flood extent per frame, boxes + masks | $30 | stored: 9 frames, 35.3% featured |
-| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched; Seri Gate ears | $30 | 29 calls, $0.004198 - one report + 28 approval passes |
+| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched; Seri Gate ears | $30 | 31 calls, $0.005036 - two field reports (one retried) + 28 approval passes |
 | **Muse Spark** `muse-spark-1.3` | 8-locale SMS + spoken payload drafting; coding helper | $20 | 13 calls, $6.500000 spent |
 | **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 3/4 valid, 5.41 / 6.73 / 6.05 s stored, in-agent run 4.44 s, 70/30 |
 | **MMS-TTS** `facebook/mms-tts-*` | speaks the approved payloads, 7 locales, local CPU | $0 credits | 14 clips, 0 network at playback |
@@ -426,11 +466,11 @@ The table above is the *plan*. Actual live spend at build time, read from the ap
 | --- | --- | --- | --- |
 | Muse Wonder | 41 | $16.882365 | one allocation proposal, twelve 8-locale payload reviews, 28 spoken-intent checks (4 passes x 7 locales) |
 | SAM 3.1 | 15 | $0.037500 | six capture images + nine flood frames |
-| Muse Voice Transcribe | 29 | $0.004198 | one Tamil field report + 28 Seri Gate transcriptions (4 passes x 7 locales) |
+| Muse Voice Transcribe | 31 | $0.005036 | two Tamil field reports (one retried) + 28 Seri Gate transcriptions (4 passes x 7 locales) |
 | Muse Spark | 13 | $6.500000 | 8 locales x (SMS + spoken alert + decision), plus early retries |
 | MMS-TTS (local) | 14 | $0.000000 | spoken SMS and 70/30 decision in 7 locales |
 | Spark Open / Glimmer / Muse Code | 0 | $0 | partner inference at $0 |
-| **Total** | **112** | **$23.424063** | **$23.42 of $150 - the badge on the page** |
+| **Total** | **114** | **$23.424901** | **$23.42 of $150 - the badge on the page** |
 
 The SAM bucket aggregates two rows (6 + 9 calls), which is why the panel says 15 calls. The four Seri
 Gate passes are the cost of proving the gate refuses a misheard word as well as it accepts a clear one,
@@ -450,7 +490,7 @@ Core has **zero third-party dependencies** - Python 3.11+ standard library only.
 git clone https://github.com/abinivesh-m/lifeline-ai-survival-agent
 cd lifeline-ai-survival-agent
 
-python -m pytest -q                   # 79 acceptance tests
+python -m pytest -q                   # 94 acceptance tests
 python dependency_graph.py            # LIFEGRID + topological order + cascade
 python a_star.py                      # 4.2 blocked -> 7.8 km -> 40% fuel saved
 python a_star.py --audit              # prove the heuristic is admissible
@@ -514,8 +554,10 @@ a_star.py               heapq A*, haversine heuristic, admissibility audit, fuel
 protocols.py            snake-boat mode switch + seeded ant-pheromone learner
 allocator.py            70/30 solver, evidence vs inference, Wonder client, validator
 credit_tracker.py       $150 ledger, 80%/95% alerts, verify()
+field_reports.py        transcript -> typed constraints -> route + allocation replan
 agent.py                the eight-step workflow, approval gate, replanning
 test_phase1.py          acceptance tests pinning every claim in this README
+test_field_reports.py   the loop: what it extracts, what it refuses to extract
 test_protocols.py       proof the relay refuses to invent a river, and the colony learns
 runs/latest.json        last agent run, as evidence
 artifacts/              captured model output (SAM frames, voice reports, proof)
@@ -528,7 +570,7 @@ solo entrant. No pre-existing product, no borrowed codebase.
 
 | Phase | Status | What exists |
 | --- | --- | --- |
-| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 79 tests |
+| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 94 tests |
 | Phase 2 - model capture | pending | SAM frames, Tamil transcripts, Wonder live calls, Baseten + Modal runs |
 | Phase 3 - demo | pending | 3-minute video, LIFEGRID visuals, X post |
 

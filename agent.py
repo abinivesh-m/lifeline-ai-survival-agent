@@ -35,6 +35,7 @@ import allocator
 import credit_tracker
 import dependency_graph
 import escalation
+import field_reports
 import i18n
 
 ROOT = Path(__file__).parent
@@ -121,6 +122,19 @@ def step_listen(town: dict) -> dict:
 
     reports = artifact.get("reports", [])
     blocked = [r for r in reports if "block" in r.get("transcript", "").lower()]
+
+    # The transcript is not just displayed: it becomes typed constraints that
+    # step 8 can act on. Extraction is regex, so a misheard number cannot move
+    # diesel - the ASR model is not allowed to decide what a litre is.
+    constraints: list[dict] = []
+    for report in reports:
+        constraints.extend(
+            field_reports.extract(
+                report.get("transcript", ""),
+                source=report.get("file") or "report",
+            )
+        )
+
     return {
         "step": 2,
         "name": "LISTEN",
@@ -128,6 +142,8 @@ def step_listen(town: dict) -> dict:
         "status": "ok",
         "reports": len(reports),
         "blocked_mentions": len(blocked),
+        "constraints": constraints,
+        "constraint_kinds": sorted({c["kind"] for c in constraints}),
         "sample": reports[0].get("transcript") if reports else None,
         "evidence": "verbatim transcripts, Tamil original kept alongside English",
     }
@@ -273,8 +289,14 @@ def step_approve(allocation: dict, town: dict, auto: bool) -> dict:
     }
 
 
-def step_replan(town: dict, scenario: str) -> dict:
+def step_replan(town: dict, scenario: str, listen: dict | None = None) -> dict:
     """Step 8: a new constraint arrives and the plan must move without a restart."""
+    if scenario == "field-report":
+        # The constraint comes from step 2, not from a CLI flag: this is the loop.
+        constraints = (listen or {}).get("constraints") or []
+        result = field_reports.replan(town, constraints)
+        return {"step": 8, "name": "REPLAN", "trigger": "field report", **result}
+
     if scenario == "pump-critical":
         # A human insists the pump outranks the hospital. The validator refuses.
         forced = {"hospital": 60, "water_pump": 40}
@@ -350,7 +372,7 @@ def run(mode: str = "auto", approve: bool = False, scenario: str = "none", log_c
         print("\n  Run stopped at the approval gate. Nothing was dispatched.")
         return run_record
 
-    replan = step_replan(town, scenario)
+    replan = step_replan(town, scenario, listen=steps[1] if len(steps) > 1 else None)
     steps.append(replan)
     _print_step(replan, town)
 
@@ -371,6 +393,9 @@ def _print_step(result: dict, town: dict) -> None:
         else:
             print(f"  reports: {result['reports']}  blocked-road mentions: {result['blocked_mentions']}")
             print(f"  first: {result['sample']}")
+            kinds = result.get("constraint_kinds") or []
+            print(f"  constraints extracted: {len(result.get('constraints') or [])}"
+                  f"{' (' + ', '.join(kinds) + ')' if kinds else ' (none actionable)'}")
     elif result["name"] == "GRAPH":
         print("  fuel -> heart -> lungs -> organs")
         print("  order:", " -> ".join(result["order"]))
@@ -413,7 +438,26 @@ def _print_step(result: dict, town: dict) -> None:
             print(f"  spoken clips on disk: {len(spoken)}/{len(esc['languages'])} locales · "
                   f"artifacts/audio/voice/ · nothing dialled")
     elif result["name"] == "REPLAN":
-        if result["status"] == "guardrail_held":
+        if "route_after" in result:
+            # field report -> constraint -> replan: the loop, printed
+            print(f"  status: {result['status']}")
+            for c in result["constraints"]:
+                unit = f" {c['unit']}" if c.get("unit") else ""
+                print(f"  constraint {c['kind']} = {c['value']}{unit}  <- \"{c['span'][:64]}\"")
+            for ch in result["changes"]:
+                print(f"  changed {ch['kind']}: {ch['before']} -> {ch['after']}")
+            if result.get("allocation_after"):
+                print(f"  route    {result['route_km_before']} km -> {result['route_km_after']} km "
+                      f"({result['route_fuel_before']} L -> {result['route_fuel_after']} L)")
+                print(f"  reserve  {result['reserve_before']} L -> {result['reserve_after']} L")
+                print(f"  plan     {result['allocation_before']} -> {result['allocation_after']}")
+                print(f"  pump     {result['pump_hours_before']} h -> {result['pump_hours_after']} h, "
+                      f"{result['water_litres_lost']} L of water lost")
+                verdict = "pass" if not result["validator"] else result["validator"]
+                print(f"  validator: {verdict}")
+            if result.get("shortfall_litres"):
+                print(f"  shortfall: {result['shortfall_litres']} L the reserve cannot cover")
+        elif result["status"] == "guardrail_held":
             print(f"  human instruction {result['instruction']} rejected:")
             for reason in result["validator_rejected_because"]:
                 print(f"    - {reason}")
@@ -471,7 +515,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--mode", choices=["auto", "policy", "wonder", "openweight"], default="auto"
     )
-    parser.add_argument("--scenario", choices=["none", "pump-critical", "reserve-loss"], default="none")
+    parser.add_argument(
+        "--scenario", choices=["none", "pump-critical", "reserve-loss", "field-report"], default="none"
+    )
     parser.add_argument("--log-credit", action="store_true")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)

@@ -4,7 +4,7 @@
   "reserve_buffer_usd": 20.0,
   "alert_percent": 80.0,
   "critical_percent": 95.0,
-  "updated_utc": "2026-10-27T15:16:58+00:00",
+  "updated_utc": "2026-10-30T15:44:30+00:00",
   "totals": {
     "wonder": {
       "calls": 41,
@@ -17,8 +17,8 @@
       "budget_usd": 30.0
     },
     "voice": {
-      "calls": 29,
-      "spent_usd": 0.004198,
+      "calls": 31,
+      "spent_usd": 0.005036,
       "budget_usd": 30.0
     },
     "spark": {
@@ -912,6 +912,26 @@
       "cost_usd": 0.411765,
       "cumulative_usd": 23.424063,
       "note": "SERI GATE ta intent (APPROVE)"
+    },
+    {
+      "id": 87,
+      "timestamp_utc": "2026-10-30T15:43:44+00:00",
+      "model": "voice",
+      "calls": 1,
+      "unit_cost_usd": 0.000419,
+      "cost_usd": 0.000419,
+      "cumulative_usd": 23.424482,
+      "note": "Muse Voice Transcribe, 1 report(s), 8.4s"
+    },
+    {
+      "id": 88,
+      "timestamp_utc": "2026-10-30T15:44:30+00:00",
+      "model": "voice",
+      "calls": 1,
+      "unit_cost_usd": 0.000419,
+      "cost_usd": 0.000419,
+      "cumulative_usd": 23.424901,
+      "note": "Muse Voice Transcribe, report_02.wav, 8.4s (first attempt; log was lost to a relative-path bug in capture_voice.py, now fixed)"
     }
   ]
 }

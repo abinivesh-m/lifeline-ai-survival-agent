@@ -211,6 +211,34 @@ export type LifeLineData = {
     latest_at: string | null;
     note: string | null;
   };
+  field: {
+    available: boolean;
+    note: string | null;
+    runs: {
+      source: string;
+      transcript: string;
+      status: string;
+      synthetic: boolean;
+      constraints: { kind: string; value: string | number; unit: string | null; span: string | null }[];
+      route_km_before: number;
+      route_km_after: number;
+      route_fuel_before: number;
+      route_fuel_after: number;
+      allocation_before: Record<string, number>;
+      allocation_after: Record<string, number> | null;
+      pump_hours_before: number;
+      pump_hours_after: number;
+      water_litres_lost: number;
+      changes: {
+        kind: string;
+        before: string | number;
+        after: string | number;
+        detail: string;
+        span: string | null;
+      }[];
+      validator: string[];
+    }[];
+  };
   escalation: {
     tiers: { tier: number; window: string; action: string; detail: string }[];
     degraded: Record<string, number>;

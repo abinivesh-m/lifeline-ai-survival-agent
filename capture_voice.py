@@ -100,6 +100,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", default=str(OUT))
     parser.add_argument("--log-credit", action="store_true")
     args = parser.parse_args(argv)
+    # resolve so a relative --out still works for the relative_to(ROOT) print below
+    out = Path(args.out).resolve()
 
     allocator.load_env()
     if not os.environ.get("META_API_KEY"):
@@ -152,13 +154,12 @@ def main(argv: list[str] | None = None) -> int:
         "reports": reports,
         "failures": failures,
         "note": (
-            "Placeholder audio synthesised with edge-tts (ta-IN-ValluvarNeural) because "
-            "this machine has no Tamil voice installed. It is labelled synthetic in each "
-            "report. Replace artifacts/audio/report_01.wav with a real field recording and "
+            "Audio is labelled per report. report_01.wav is a placeholder capture; "
+            "report_02.wav is rendered locally with MMS-TTS (facebook/mms-tts-tam, CPU) "
+            "and carries synthetic: true. Replace both with real field recordings and "
             "re-run - nothing else changes."
         ),
     }
-    out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(artifact, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nwrote {out.relative_to(ROOT)}  ({len(reports)} reports, {seconds:.1f}s audio)")

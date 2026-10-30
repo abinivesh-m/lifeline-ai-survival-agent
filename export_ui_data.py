@@ -115,6 +115,7 @@ def build() -> dict:
             "brain": _latest_run_brain(),
         },
         "openweight": _openweight(),
+        "field": _field_reports(),
         "sam": {            "available": bool(sam),
             "model": sam.get("model") if sam else None,
             "prompt": sam.get("prompt") if sam else None,
@@ -445,6 +446,59 @@ def _openweight() -> dict:
         "latencies_s": [run["latency_s"] for run in valid],
         "latest_at": valid[-1]["at"] if valid else None,
         "note": data.get("note"),
+    }
+
+
+def _field_reports() -> dict:
+    """The field-report loop: transcript -> constraint -> replan, from the artefact."""
+    path = ROOT / "artifacts" / "field_replan.json"
+    if not path.exists():
+        return {
+            "available": False,
+            "note": "no artefact - run python field_reports.py --from-artifact --write",
+            "runs": [],
+        }
+
+    data = json.loads(path.read_text(encoding="utf-8"))
+    synthetic: dict[str, bool] = {}
+    reports_path = ROOT / "artifacts" / "voice_reports.json"
+    if reports_path.exists():
+        for report in json.loads(reports_path.read_text(encoding="utf-8")).get("reports", []):
+            synthetic[report.get("file", "")] = bool(report.get("synthetic"))
+
+    runs = []
+    for run in data.get("runs", []):
+        runs.append({
+            "source": run.get("source"),
+            "transcript": run.get("transcript"),
+            "status": run.get("status"),
+            "synthetic": synthetic.get(run.get("source"), True),
+            "constraints": [
+                {"kind": c.get("kind"), "value": c.get("value"),
+                 "unit": c.get("unit"), "span": c.get("span")}
+                for c in run.get("constraints", [])
+            ],
+            "route_km_before": run.get("route_km_before"),
+            "route_km_after": run.get("route_km_after"),
+            "route_fuel_before": run.get("route_fuel_before"),
+            "route_fuel_after": run.get("route_fuel_after"),
+            "allocation_before": run.get("allocation_before"),
+            "allocation_after": run.get("allocation_after"),
+            "pump_hours_before": run.get("pump_hours_before"),
+            "pump_hours_after": run.get("pump_hours_after"),
+            "water_litres_lost": run.get("water_litres_lost"),
+            "changes": run.get("changes", []),
+            "validator": run.get("validator", []),
+        })
+
+    return {
+        "available": bool(runs),
+        "runs": runs,
+        "note": (
+            "Extraction is regex over the verbatim transcript, so a misheard number "
+            "cannot move diesel. The replan uses the same A* search and the same "
+            "priority solver as the base plan, with no model call."
+        ),
     }
 
 

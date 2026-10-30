@@ -70,8 +70,16 @@ export const SECTIONS: SectionMeta[] = [
     tools: ["agent.py --yes", "8 steps", "replan"],
   },
   {
-    id: "world",
+    id: "field",
     n: "08",
+    kicker: "FIELD REPORT → REPLAN",
+    title: "A phone call moves the plan",
+    note: "The transcript becomes typed constraints, and the same A* and solver re-plan without a restart. No model call.",
+    tools: ["muse-voice-transcribe", "regex extraction", "A*", "no restart"],
+  },
+  {
+    id: "world",
+    n: "09",
     kicker: "WORKS ANYWHERE",
     title: "One point query, any point on Earth",
     note: "26 configured coordinates, one surveyed town, every template labelled as a template.",

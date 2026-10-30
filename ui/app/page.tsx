@@ -8,6 +8,7 @@ import BloodPanel from "@/components/BloodPanel";
 import AllocatorDashboard from "@/components/AllocatorDashboard";
 import OfflineProof3D from "@/components/OfflineProof3D";
 import AgenticTimeline3D from "@/components/AgenticTimeline3D";
+import FieldReport from "@/components/FieldReport";
 import WorldPanel from "@/components/WorldPanel";
 import TempleBell from "@/components/TempleBell";
 import VoiceAlerts from "@/components/VoiceAlerts";
@@ -143,7 +144,7 @@ export default function Page() {
                     .map((locale) => locale.code.toUpperCase())
                     .join(" ")}]`,
                   `ledger $${lifeline.credit.spent_usd.toFixed(4)}/$${lifeline.credit.budget_usd.toFixed(0)} live`,
-                  "79/79 pytest",
+                  "94/94 pytest",
                 ].map((chip) => (
                   <span
                     key={chip}
@@ -171,7 +172,7 @@ export default function Page() {
                   href="#contents"
                   className="rounded-md px-2 py-2.5 mono text-[10.5px] tracking-[0.12em] text-muted underline decoration-line underline-offset-4 transition hover:text-teal"
                 >
-                  ALL 8 SECTIONS ↓
+                  ALL {SECTIONS.length} SECTIONS ↓
                 </a>
               </div>
             </motion.div>
@@ -436,9 +437,17 @@ export default function Page() {
         <AgenticTimeline3D />
       </Section>
 
-      {/* ---------------------------------------------------------------- world */}
+      {/* --------------------------------------------------------------- field */}
       <Section
         meta={SECTIONS[7]}
+        lede="Two calls, recorded and transcribed. The first confirms what the town already knows and changes nothing — an agent that rewrites its plan on every call is not trustworthy. The second takes the village road away, and the detour costs the pump a block of diesel. Both re-plan without a restart."
+      >
+        <FieldReport />
+      </Section>
+
+      {/* ---------------------------------------------------------------- world */}
+      <Section
+        meta={SECTIONS[8]}
         lede="Built in Kottur because that is where the numbers are real. The same cascade exists in Manila, Jakarta, Nairobi and Khartoum — and the page says exactly which data is surveyed and which is a labelled template."
       >
         <WorldPanel />

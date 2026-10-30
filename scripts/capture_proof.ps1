@@ -90,7 +90,7 @@ for ($i = $CountdownSeconds; $i -gt 0; $i--) {
 $png = Join-Path $proof "gpu_6gb_taskmgr.png"
 Save-PrimaryScreen $png
 Write-Host "     wrote $png" -ForegroundColor Green
-Write-Host "     Check it by eye: header 'RTX 3050 6GB', dedicated memory '0.0/6.0 GB'."
+Write-Host "     Check it by eye: header 'RTX 3050 6GB', dedicated memory '0.x/6.0 GB'."
 Read-Host "     Press Enter once it looks right (Ctrl+C to abort and retake)"
 
 # --------------------------------------------------------- offline capture
@@ -101,6 +101,17 @@ Read-Host "     Press Enter when the network icon shows airplane mode"
 
 $env:LIFELINE_OFFLINE = "1"
 Push-Location $root
+
+# agent.py writes runs/latest.json on every run. The committed one holds the live
+# Baseten trace (4.44 s) that the dashboard's LIVE CALL badge reads, so keep it
+# and put it back - otherwise the recording leaves the tree dirty and loses the
+# only in-agent open-weight evidence.
+$latest = Join-Path $root "runs\latest.json"
+$latestBackup = Join-Path $env:TEMP "lifeline_latest_backup.json"
+if (Test-Path $latest) {
+    Copy-Item $latest $latestBackup -Force
+    Write-Host "     backed up runs/latest.json"
+}
 
 if (-not $SkipVideo) {
     $mp4 = Join-Path $proof "offline_proof.mp4"

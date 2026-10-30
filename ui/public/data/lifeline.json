@@ -699,8 +699,8 @@
       "burn_l_per_hour": 17.5,
       "hours": 4.0,
       "minutes": 240,
-      "dies_at": "2026-10-30T18:56:30+00:00",
-      "started_at": "2026-10-30T14:56:30+00:00",
+      "dies_at": "2026-10-30T19:48:04+00:00",
+      "started_at": "2026-10-30T15:48:04+00:00",
       "label": "4 h 00 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -711,8 +711,8 @@
       "burn_l_per_hour": 21.0,
       "hours": 3.33,
       "minutes": 200,
-      "dies_at": "2026-10-30T18:16:30+00:00",
-      "started_at": "2026-10-30T14:56:30+00:00",
+      "dies_at": "2026-10-30T19:08:04+00:00",
+      "started_at": "2026-10-30T15:48:04+00:00",
       "label": "3 h 20 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -898,6 +898,95 @@
     "latest_at": "2026-10-30T14:54:02+00:00",
     "note": "Every run below is a real HTTP request whose response text is stored verbatim. Validation is recomputed locally, never trusted from the model."
   },
+  "field": {
+    "available": true,
+    "runs": [
+      {
+        "source": "report_01.wav",
+        "transcript": "ஏனைச் செய்த நான்கு நான்கு km 42 மைனஸ் நிலச்சரிவு. சாலை ஆறு ஆறு மணி நேரத்திற்கும் மூடப்பட்டுள்ளது. மருத்துவமனைக்கு diesel தேவை..",
+        "status": "no_change",
+        "synthetic": true,
+        "constraints": [
+          {
+            "kind": "road_blocked",
+            "value": "NH-544 km 42",
+            "unit": null,
+            "span": "று ஆறு மணி நேரத்திற்கும் மூடப்பட்டுள்ளது. மருத்துவமனை"
+          },
+          {
+            "kind": "closure_hours",
+            "value": 6,
+            "unit": "h",
+            "span": "ஆறு மணி"
+          }
+        ],
+        "route_km_before": 7.8,
+        "route_km_after": 7.8,
+        "route_fuel_before": 2.73,
+        "route_fuel_after": 2.73,
+        "allocation_before": {
+          "hospital": 70,
+          "water_pump": 30
+        },
+        "allocation_after": {
+          "hospital": 70,
+          "water_pump": 30
+        },
+        "pump_hours_before": 6.0,
+        "pump_hours_after": 6.0,
+        "water_litres_lost": 0,
+        "changes": [],
+        "validator": []
+      },
+      {
+        "source": "report_02.wav",
+        "transcript": " கிராம சாலை வெள்ளத்தில் அடித்து செல்லப்பட்டது. ஏங்க வண்டி பம்பை அடைய முடியாது.",
+        "status": "replanned",
+        "synthetic": true,
+        "constraints": [
+          {
+            "kind": "road_blocked",
+            "value": "Kottur village road",
+            "unit": null,
+            "span": "ு. ஏங்க வண்டி பம்பை அடைய முடியாது."
+          }
+        ],
+        "route_km_before": 7.8,
+        "route_km_after": 13.0,
+        "route_fuel_before": 2.73,
+        "route_fuel_after": 4.55,
+        "allocation_before": {
+          "hospital": 70,
+          "water_pump": 30
+        },
+        "allocation_after": {
+          "hospital": 70,
+          "water_pump": 25
+        },
+        "pump_hours_before": 6.0,
+        "pump_hours_after": 5.0,
+        "water_litres_lost": 4000,
+        "changes": [
+          {
+            "kind": "road_blocked",
+            "before": "open",
+            "after": "blocked",
+            "detail": "2 edge(s) on Kottur village road",
+            "span": "ு. ஏங்க வண்டி பம்பை அடைய முடியாது."
+          },
+          {
+            "kind": "delivery_fuel",
+            "before": 100,
+            "after": 95,
+            "detail": "the detour burns 1.82 L more (4.55 vs 2.73 L); floored to the 5 L unit, that is 5 L off the organ budget",
+            "span": null
+          }
+        ],
+        "validator": []
+      }
+    ],
+    "note": "Extraction is regex over the verbatim transcript, so a misheard number cannot move diesel. The replan uses the same A* search and the same priority solver as the base plan, with no model call."
+  },
   "sam": {
     "available": true,
     "model": "sam-3.1",
@@ -983,18 +1072,18 @@
     "available": true,
     "model": "muse-voice-transcribe-1.0",
     "transcript": "ஏனைச் செய்த நான்கு நான்கு km 42 மைனஸ் நிலச்சரிவு. சாலை ஆறு ஆறு மணி நேரத்திற்கும் மூடப்பட்டுள்ளது. மருத்துவமனைக்கு diesel தேவை..",
-    "seconds": 10.78,
+    "seconds": 19.16,
     "synthetic": true,
-    "cost_usd": 0.000539
+    "cost_usd": 0.000958
   },
   "credit": {
     "budget_usd": 150.0,
-    "spent_usd": 23.424063,
+    "spent_usd": 23.424901,
     "percent": 15.61,
     "level": "ok",
     "remaining_usd": 126.58,
     "reserve_usd": 20.0,
-    "ledger_rows": 86,
+    "ledger_rows": 88,
     "by_model": {
       "wonder": {
         "calls": 41,
@@ -1007,8 +1096,8 @@
         "budget_usd": 30.0
       },
       "voice": {
-        "calls": 29,
-        "spent_usd": 0.004198,
+        "calls": 31,
+        "spent_usd": 0.005036,
         "budget_usd": 30.0
       },
       "spark": {

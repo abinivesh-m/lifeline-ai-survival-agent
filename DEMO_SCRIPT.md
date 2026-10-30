@@ -9,10 +9,14 @@ and every claim is one the page can prove.
 powershell -ExecutionPolicy Bypass -File scripts\refresh_demo.ps1
 ```
 
-- Delete `credit_usage.json` only if you want the badge to start at $0 — otherwise leave the real ledger.
-- Do **not** run `python openweight.py` after the badge is on screen: it appends a run and changes `x/y`.
+- `credit_usage.json` is committed — do **not** delete it. The badge on screen ($23.42 of $150) and the
+  file in the repo must agree, or the video contradicts the code a judge can open.
+- Do **not** run `python openweight.py` after the badge is on screen: it appends a run, so the panel would
+  say `4/5 valid` while the README and `artifacts/proof/README.md` say `3/4`.
 - Do **not** re-run `python seri_gate.py` before filming: it appends fresh approvals and changes the
   ledger seq shown on screen. Record the take with the sealed artefact that is already in the repo.
+- Do **not** re-run `python capture_voice.py` or `python field_reports.py --write` before filming: both
+  change the numbers on the field-report panel. They are already generated.
 - Close Chrome tabs, YouTube and Slack. The offline clip must show a quiet machine.
 - Browser at 1920x1080, 100% zoom, Review pane visible for Task Manager.
 
@@ -25,25 +29,25 @@ Open on section 01, scroll slowly.
 > "Kottur, Tamil Nadu. The road to the hospital is blocked at km 42. The generator has four hours of
 > diesel left, and there are two hundred people in the shelters. One hundred litres. One decision."
 
-## 0:10 — LIFEGRID (15 s)
+## 0:10 — LIFEGRID (12 s)
 
 Point at BLOOD → HEART → LUNGS → ORGANS.
 
 > "Fuel is blood. If the heart stops, the lungs and the organs follow. That is a dependency graph, not a
 > metaphor — the agent sorts it topologically before it spends a litre."
 
-## 0:25 — route (15 s)
+## 0:22 — route (14 s)
 
 > "The direct road is 4.2 kilometres and impassable. A* finds the 7.8 kilometre village road. Against the
 > 13 kilometre bypass a human would actually drive, that is 40% less diesel. Measured, and audited."
 
-## 0:40 — eyes (15 s)
+## 0:36 — eyes (12 s)
 
 Click the flood frame.
 
 > "SAM 3.1 measured 35.3% flood water in this frame. That is one input to the plan, not the product."
 
-## 0:55 — the brain (25 s)
+## 0:48 — the brain (22 s)
 
 Section 04. Toggle **OPEN WEIGHT** ↔ **OFFLINE POLICY**.
 
@@ -54,7 +58,19 @@ Section 04. Toggle **OPEN WEIGHT** ↔ **OFFLINE POLICY**.
 > "The model proposes. Code disposes: 70 litres to the hospital, 30 to the pump, 100 total, or the
 > validator rejects it and the deterministic solver takes over."
 
-## 1:20 — the ladder, out loud (25 s)
+## 1:10 — the phone call (22 s)
+
+Section 08, **FIELD REPORT → REPLAN**. Point at CALL 1, then CALL 2.
+
+> "Two calls came in. The first is the real one: km 42, closed six hours, hospital needs diesel. The
+> agent extracts that, checks it against the town, and changes nothing — because it already knew. An
+> agent that rewrites its plan on every phone call is not one you can trust."
+
+> "The second call takes the village road away. Same solver, no restart: 7.8 kilometres becomes 13. The
+> detour burns 1.8 litres more, so the pump loses a five-litre block — six hours of water becomes five,
+> and it says four thousand litres out loud instead of rounding it away."
+
+## 1:32 — the ladder, out loud (22 s)
 
 Section 05.
 
@@ -68,7 +84,7 @@ Click **தமிழ்**, then **▶ ALERT**.
 
 Click **▶ 70/30 DECISION** in section 04.
 
-## 1:45 — Seri gate (25 s)
+## 1:54 — Seri gate (22 s)
 
 > "The paper QR still needs someone who can read. This needs one word."
 
@@ -79,23 +95,23 @@ Click through two chips (**Español**, **Kiswahili**), then **▶ HEAR · தம
 > question, a cough or a maybe is a no. Seven languages are gated and sealed separately; Mandarin has
 > no released voice checkpoint, so it is labelled text-only."
 
-## 2:10 — offline (20 s)
+## 2:16 — offline (18 s)
 
 Section 06, run the prepared clip: airplane mode, `nvidia-smi`, `LIFELINE_OFFLINE=1 python agent.py --yes`.
 
 > "Graph, route, validator, ledger, gate: all of it runs with the network off. The model is the fast path,
 > not the only path."
 
-## 2:30 — the world (15 s)
+## 2:34 — the world (12 s)
 
-Section 07.
+Section 09.
 
 > "Twenty-six towns, nine regions. Only Kottur has a surveyed fuel scenario. Every other pin returns a
 > labelled generic template — never an invented litre count."
 
-## 2:45 — close (15 s)
+## 2:46 — close (14 s)
 
-> "Seventy-nine tests, one command to reproduce, and a ledger that shows every dollar: $23.42 of $150.
+> "Ninety-four tests, one command to reproduce, and a ledger that shows every dollar: $23.42 of $150.
 > No gateway is configured, so nothing here claims a message was sent. That is the product: a decision
 > that survives the wire going down, and a town that can still say yes."
 
@@ -108,10 +124,15 @@ Section 07.
 - Do not claim 8 spoken languages. Seven have clips; Mandarin has no released MMS-TTS checkpoint and
   ships text-only, on screen.
 - Do not call the seri clip a field recording. It is labelled synthetic until a real one replaces it.
+- Do not call the second field report a real recording. `report_02.wav` is MMS-TTS and the panel says
+  **SYNTHETIC CLIP**. The first report is the real capture.
+- Do not say a model extracts the constraints. It is regex over the verbatim transcript, on purpose: a
+  misheard number must not be able to move diesel.
 - Do not quote "3.5 billion at risk". No such figure exists in this repo.
 
 ## After recording
 
 1. Upload unlisted to YouTube, paste the link into the submission form.
 2. `git status` must be clean; push the commit that produced the take.
-3. Attach `artifacts/benchmark.json`, `artifacts/openweight_proof.json`, `artifacts/seri_gate.json`.
+3. Attach `artifacts/benchmark.json`, `artifacts/openweight_proof.json`, `artifacts/seri_gate.json`,
+   `artifacts/field_replan.json`.

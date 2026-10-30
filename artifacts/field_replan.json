@@ -1,0 +1,252 @@
+{
+  "schema": "lifeline.field_replan/1.0",
+  "runs": [
+    {
+      "status": "no_change",
+      "constraints": [
+        {
+          "kind": "road_blocked",
+          "value": "NH-544 km 42",
+          "unit": null,
+          "span": "று ஆறு மணி நேரத்திற்கும் மூடப்பட்டுள்ளது. மருத்துவமனை",
+          "source": "report_01.wav",
+          "confidence": 0.9
+        },
+        {
+          "kind": "closure_hours",
+          "value": 6,
+          "unit": "h",
+          "span": "ஆறு மணி",
+          "source": "report_01.wav",
+          "confidence": 0.85
+        }
+      ],
+      "changes": [],
+      "route_before": {
+        "start": "fuel_depot",
+        "goal": "hospital",
+        "path": [
+          "fuel_depot",
+          "village_jn",
+          "water_pump",
+          "hospital"
+        ],
+        "roads": [
+          "Kottur village road",
+          "Kottur village road",
+          "pump feeder road"
+        ],
+        "distance_km": 7.8,
+        "fuel_litres": 2.73,
+        "nodes_expanded": 5,
+        "blocked_corridors": [
+          "NH-544 km 42 (slide_gate -> hospital, 2.1 km)"
+        ],
+        "heuristic": "haversine to goal (admissible, audited)",
+        "baseline": {
+          "signposted_detour_km": 13.0,
+          "direct_corridor_km": 4.2,
+          "direct_corridor_status": "blocked",
+          "fuel_litres": 4.55
+        },
+        "saving": {
+          "km": 5.2,
+          "fuel_litres": 1.82,
+          "percent": 40.0,
+          "generator_minutes_bought": 6.2
+        },
+        "detour_vs_direct_km": 3.6,
+        "evidence": "road lengths and blocked status are surveyed fields in town.json; the path is computed, not generated"
+      },
+      "route_after": {
+        "start": "fuel_depot",
+        "goal": "hospital",
+        "path": [
+          "fuel_depot",
+          "village_jn",
+          "water_pump",
+          "hospital"
+        ],
+        "roads": [
+          "Kottur village road",
+          "Kottur village road",
+          "pump feeder road"
+        ],
+        "distance_km": 7.8,
+        "fuel_litres": 2.73,
+        "nodes_expanded": 5,
+        "blocked_corridors": [
+          "NH-544 km 42 (slide_gate -> hospital, 2.1 km)"
+        ],
+        "heuristic": "haversine to goal (admissible, audited)",
+        "baseline": {
+          "signposted_detour_km": 13.0,
+          "direct_corridor_km": 4.2,
+          "direct_corridor_status": "blocked",
+          "fuel_litres": 4.55
+        },
+        "saving": {
+          "km": 5.2,
+          "fuel_litres": 1.82,
+          "percent": 40.0,
+          "generator_minutes_bought": 6.2
+        },
+        "detour_vs_direct_km": 3.6,
+        "evidence": "road lengths and blocked status are surveyed fields in town.json; the path is computed, not generated"
+      },
+      "route_km_before": 7.8,
+      "route_km_after": 7.8,
+      "route_fuel_before": 2.73,
+      "route_fuel_after": 2.73,
+      "reserve_before": 100,
+      "reserve_after": 100,
+      "allocation_before": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "allocation_after": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "validator": [],
+      "pump_hours_before": 6.0,
+      "pump_hours_after": 6.0,
+      "water_litres_lost": 0,
+      "closure_hours_before": 6,
+      "closure_hours_after": 6,
+      "shortfall_litres": 0.0,
+      "fuel_accounting": "the base plan does not charge delivery fuel; the replan charges only the increase the new constraint introduced, rounded to the minimum unit",
+      "evidence": "same A* search and same priority solver as the base plan, no model call",
+      "transcript": "ஏனைச் செய்த நான்கு நான்கு km 42 மைனஸ் நிலச்சரிவு. சாலை ஆறு ஆறு மணி நேரத்திற்கும் மூடப்பட்டுள்ளது. மருத்துவமனைக்கு diesel தேவை..",
+      "source": "report_01.wav"
+    },
+    {
+      "status": "replanned",
+      "constraints": [
+        {
+          "kind": "road_blocked",
+          "value": "Kottur village road",
+          "unit": null,
+          "span": "ு. ஏங்க வண்டி பம்பை அடைய முடியாது.",
+          "source": "report_02.wav",
+          "confidence": 0.9
+        }
+      ],
+      "changes": [
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked",
+          "detail": "2 edge(s) on Kottur village road",
+          "span": "ு. ஏங்க வண்டி பம்பை அடைய முடியாது."
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 100,
+          "after": 95,
+          "detail": "the detour burns 1.82 L more (4.55 vs 2.73 L); floored to the 5 L unit, that is 5 L off the organ budget",
+          "span": null
+        }
+      ],
+      "route_before": {
+        "start": "fuel_depot",
+        "goal": "hospital",
+        "path": [
+          "fuel_depot",
+          "village_jn",
+          "water_pump",
+          "hospital"
+        ],
+        "roads": [
+          "Kottur village road",
+          "Kottur village road",
+          "pump feeder road"
+        ],
+        "distance_km": 7.8,
+        "fuel_litres": 2.73,
+        "nodes_expanded": 5,
+        "blocked_corridors": [
+          "NH-544 km 42 (slide_gate -> hospital, 2.1 km)"
+        ],
+        "heuristic": "haversine to goal (admissible, audited)",
+        "baseline": {
+          "signposted_detour_km": 13.0,
+          "direct_corridor_km": 4.2,
+          "direct_corridor_status": "blocked",
+          "fuel_litres": 4.55
+        },
+        "saving": {
+          "km": 5.2,
+          "fuel_litres": 1.82,
+          "percent": 40.0,
+          "generator_minutes_bought": 6.2
+        },
+        "detour_vs_direct_km": 3.6,
+        "evidence": "road lengths and blocked status are surveyed fields in town.json; the path is computed, not generated"
+      },
+      "route_after": {
+        "start": "fuel_depot",
+        "goal": "hospital",
+        "path": [
+          "fuel_depot",
+          "south_jn",
+          "bypass_jn",
+          "hospital"
+        ],
+        "roads": [
+          "Kottur south link",
+          "Kottur bypass",
+          "Kottur bypass"
+        ],
+        "distance_km": 13.0,
+        "fuel_litres": 4.55,
+        "nodes_expanded": 5,
+        "blocked_corridors": [
+          "NH-544 km 42 (slide_gate -> hospital, 2.1 km)",
+          "Kottur village road (fuel_depot -> village_jn, 2.6 km)",
+          "Kottur village road (village_jn -> water_pump, 3.4 km)"
+        ],
+        "heuristic": "haversine to goal (admissible, audited)",
+        "baseline": {
+          "signposted_detour_km": 13.0,
+          "direct_corridor_km": 4.2,
+          "direct_corridor_status": "blocked",
+          "fuel_litres": 4.55
+        },
+        "saving": {
+          "km": 0.0,
+          "fuel_litres": 0.0,
+          "percent": 0.0,
+          "generator_minutes_bought": 0.0
+        },
+        "detour_vs_direct_km": 8.8,
+        "evidence": "road lengths and blocked status are surveyed fields in town.json; the path is computed, not generated"
+      },
+      "route_km_before": 7.8,
+      "route_km_after": 13.0,
+      "route_fuel_before": 2.73,
+      "route_fuel_after": 4.55,
+      "reserve_before": 100,
+      "reserve_after": 95,
+      "allocation_before": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "allocation_after": {
+        "hospital": 70,
+        "water_pump": 25
+      },
+      "validator": [],
+      "pump_hours_before": 6.0,
+      "pump_hours_after": 5.0,
+      "water_litres_lost": 4000,
+      "closure_hours_before": 6,
+      "closure_hours_after": 6,
+      "shortfall_litres": 0.0,
+      "fuel_accounting": "the base plan does not charge delivery fuel; the replan charges only the increase the new constraint introduced, rounded to the minimum unit",
+      "evidence": "same A* search and same priority solver as the base plan, no model call",
+      "transcript": " கிராம சாலை வெள்ளத்தில் அடித்து செல்லப்பட்டது. ஏங்க வண்டி பம்பை அடைய முடியாது.",
+      "source": "report_02.wav"
+    }
+  ]
+}
