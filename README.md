@@ -348,7 +348,8 @@ same cascade in the Philippines, Indonesia, Kenya and Puerto Rico.
 to flood depths over 0.15 m in a 1-in-100-year event: Rentschler, Salhab & Jafino, "Flood exposure and
 poverty in 188 countries", *Nature Communications* 13, 3527 (2022). The figure is in `town.json`
 (`global.evidence_note`) with the citation, and it is the only population claim in the repository. An
-earlier "3.5 billion" was an uncited order-of-magnitude and was removed rather than sourced badly.
+earlier, uncited order-of-magnitude figure was removed rather than sourced badly - `test_claims.py`
+scans the README, the page and all eight locales to keep it removed.
 
 ## Use of Meta AI tooling
 
@@ -484,8 +485,8 @@ not of the demo path. Meta's free credits cover the spend; Open Weight calls on 
 MMS-TTS clip are not metered against this budget at all.
 
 > `credit_usage.json` is committed, so the $23.42 above is reproducible from a clean clone:
-> `python credit_tracker.py verify` re-derives all 86 rows and prints
-> `VERIFY OK - 86 entries, $23.42 spent, $126.58 remaining`. `artifacts/proof/credit_usage_live.json`
+> `python credit_tracker.py verify` re-derives all 88 rows and prints
+> `VERIFY OK - 88 entries, $23.42 spent, $126.58 remaining`. `artifacts/proof/credit_usage_live.json`
 > is the same ledger frozen at capture time. No API key, request header or prompt body is in either file.
 
 ## Run it
@@ -496,7 +497,7 @@ Core has **zero third-party dependencies** - Python 3.11+ standard library only.
 git clone https://github.com/abinivesh-m/lifeline-ai-survival-agent
 cd lifeline-ai-survival-agent
 
-python -m pytest -q                   # 94 acceptance tests
+python -m pytest -q                   # 100 acceptance tests
 python dependency_graph.py            # LIFEGRID + topological order + cascade
 python a_star.py                      # 4.2 blocked -> 7.8 km -> 40% fuel saved
 python a_star.py --audit              # prove the heuristic is admissible
@@ -564,6 +565,7 @@ field_reports.py        transcript -> typed constraints -> route + allocation re
 agent.py                the eight-step workflow, approval gate, replanning
 test_phase1.py          acceptance tests pinning every claim in this README
 test_field_reports.py   the loop: what it extracts, what it refuses to extract
+test_claims.py          the README as a fixture: every quoted number re-derived
 test_protocols.py       proof the relay refuses to invent a river, and the colony learns
 runs/latest.json        last agent run, as evidence
 artifacts/              captured model output (SAM frames, voice reports, proof)
@@ -576,7 +578,7 @@ solo entrant. No pre-existing product, no borrowed codebase.
 
 | Phase | Status | What exists |
 | --- | --- | --- |
-| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 94 tests |
+| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 100 tests |
 | Phase 2 - model capture | pending | SAM frames, Tamil transcripts, Wonder live calls, Baseten + Modal runs |
 | Phase 3 - demo | pending | 3-minute video, LIFEGRID visuals, X post |
 
