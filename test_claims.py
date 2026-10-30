@@ -85,13 +85,19 @@ def test_the_ledger_total_matches_every_document_that_quotes_it() -> None:
     proof = json.loads((ROOT / "artifacts" / "proof" / "credit_usage_live.json").read_text(encoding="utf-8"))
     assert round(sum(float(e["cost_usd"]) for e in proof["entries"]), 6) == total
 
+    # the proof folder is a document a judge reads too
+    proof_readme = (ROOT / "artifacts" / "proof" / "README.md").read_text(encoding="utf-8")
+    assert f"{len(entries)} rows, ${_money(total, 6)} spent" in proof_readme, (
+        "artifacts/proof/README.md quotes a ledger that is not this one"
+    )
+
     voice = ledger["totals"]["voice"]
     assert f"{voice['calls']} calls, ${_money(voice['spent_usd'], 6)}" in README, (
         "the Muse Voice Transcribe row in the README disagrees with the ledger"
     )
 
 
-def test_the_route_and_the_allocation_are_recomputed_not_quoted() -> None:
+def test_the_numbers_the_solver_and_the_models_produced_still_hold() -> None:
     town = allocator.load_town()
     _, nodes, edges = a_star.load_network()
     route = a_star.plan_route(town, nodes, edges)
@@ -106,6 +112,27 @@ def test_the_route_and_the_allocation_are_recomputed_not_quoted() -> None:
     assert "| Route to hospital | 13.0 km bypass | **7.8 km** village road | **-5.2 km** |" in README
     assert "| Trip fuel | 4.55 L | 2.73 L | **-40%** |" in README
     assert "| Diesel reaching the town | split 50/50 | **70 / 30 exact** | no waste |" in README
+
+    # the Baseten counts are a claim like any other: they change when a run lands
+    proof = json.loads((ROOT / "artifacts" / "openweight_proof.json").read_text(encoding="utf-8"))
+    runs = proof.get("runs", [])
+    valid = [run for run in runs if run.get("valid")]
+
+    # every stored valid run still passes the local validator on the same town
+    for run in valid:
+        assert run["allocation"] == {"hospital": 70, "water_pump": 30}
+        problems = allocator.validate_proposal(run["allocation"], town)
+        assert problems == [], f"a stored open-weight run no longer validates: {problems}"
+
+    latencies = " / ".join(f"{run['latency_s']}" for run in valid)
+    assert f"{len(valid)}/{len(runs)} valid, {latencies}" in README, (
+        "the open-weight row in the README disagrees with artifacts/openweight_proof.json - "
+        "run python scripts/proof_summary.py"
+    )
+
+    page = json.loads((ROOT / "ui" / "public" / "data" / "lifeline.json").read_text(encoding="utf-8"))
+    assert page["openweight"]["valid_runs"] == len(valid)
+    assert page["openweight"]["runs"] == len(runs)
 
 
 def test_the_field_replan_artefact_is_what_the_solver_still_produces() -> None:

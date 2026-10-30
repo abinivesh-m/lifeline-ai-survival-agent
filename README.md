@@ -554,8 +554,8 @@ Proof captures live in `artifacts/proof/`:
 | `nvidia_smi.txt` / `gpu_6gb_nvidia_smi.png` | real output: `NVIDIA GeForce RTX 3050 6GB Laptop GPU, 6144 MiB` |
 | `credit_usage_live.json` | snapshot of the live $150 ledger |
 | `gpu_6gb_taskmgr.png` | real capture: Task Manager > Performance > GPU, `0.6/6.0 GB` dedicated |
-| `offline_proof.mp4` | **capture needed** - airplane mode + `LIFELINE_OFFLINE=1 python agent.py --yes` |
-| `baseten_proof.mp4` | **capture needed** - `python openweight.py`, 3/4 valid, 5.41 / 6.73 / 6.05 s |
+| `offline_proof.mp4` | **capture needed** - `scripts/capture_proof.ps1`: airplane mode + `LIFELINE_OFFLINE=1 python agent.py --yes` |
+| `baseten_proof.mp4` | **capture needed** - `scripts/capture_baseten.ps1`: records the desktop while `python openweight.py` calls Baseten; counts are read back with `scripts/proof_summary.py` |
 
 The pending two need the desktop session that owns the GPU. They are labelled pending rather than
 generated, because a fabricated screenshot is the one artefact a judge can disprove in a minute.

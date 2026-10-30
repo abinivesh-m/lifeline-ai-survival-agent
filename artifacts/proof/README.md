@@ -7,12 +7,17 @@ something it is not.
 | --- | --- | --- |
 | `nvidia_smi.txt` | Raw `nvidia-smi` output from the demo laptop | real |
 | `gpu_6gb_nvidia_smi.png` | The same output rendered, titled as *not* Task Manager | real |
-| `credit_usage_live.json` | The live $150 ledger frozen at capture time: 86 rows, $23.424063 spent. Byte-identical to the repo-root `credit_usage.json` | real |
+| `credit_usage_live.json` | The live $150 ledger frozen at capture time: 88 rows, $23.424901 spent. Byte-identical to the repo-root `credit_usage.json` | real |
 | `offline_run.txt` | Full 8-step `LIFELINE_OFFLINE=1 python agent.py --yes` transcript | real |
 | `protocols.txt` | Snake-boat relay + ant-pheromone output | real |
 | `gpu_6gb_taskmgr.png` | Task Manager > Performance > GPU: `RTX 3050 6GB Laptop GPU`, `0.6/6.0 GB` dedicated, driver 32.0.15.9282 | real |
 | `offline_proof.mp4` | Task Manager + `nvidia-smi` + airplane mode + `LIFELINE_OFFLINE=1 python agent.py --yes` | **capture needed** |
 | `baseten_proof.mp4` | `python openweight.py` returning 70 L / 30 L from `muse-spark-open-1026` | **capture needed** |
+
+The open-weight run count and latencies are not written down here on purpose:
+`python scripts/proof_summary.py` prints them from
+`artifacts/openweight_proof.json`, and `test_claims.py` fails if the README
+disagrees with that file. A new capture changes the numbers by existing.
 
 ## Why two captures are not here yet
 
@@ -22,13 +27,13 @@ raw transcripts and labels the recordings as pending.
 
 ## How to capture them
 
-1. Close Chrome/YouTube first: the machine was at 94% RAM when this file was
-   written, and a stutter will read as a broken demo.
-2. Record `offline_proof.mp4` with the window visible:
-   `nvidia-smi` → airplane mode on → `set LIFELINE_OFFLINE=1` →
-   `python agent.py --yes` → all eight steps.
-3. Record `baseten_proof.mp4`:
-   `python openweight.py` → three valid runs, 5.41 s, 6.73 s and 6.05 s, 70 L / 30 L.
+1. Close Chrome/YouTube first: a stutter reads as a broken demo.
+2. `powershell -ExecutionPolicy Bypass -File scripts\capture_baseten.ps1`
+   records 45 s of the desktop while `python openweight.py` makes a real call.
+3. `powershell -ExecutionPolicy Bypass -File scripts\capture_proof.ps1`
+   captures Task Manager, then airplane mode, then 60 s of the offline agent.
+4. After either capture, `python export_ui_data.py` and `python -m pytest -q`:
+   the claim tests re-read every number the prose quotes.
 
-The `.gitignore` already allows `artifacts/proof/*.mp4` and
-`artifacts/audio/report_01.wav` once they exist.
+The `.gitignore` allows `artifacts/proof/*.mp4` and both field-report clips once
+they exist.
