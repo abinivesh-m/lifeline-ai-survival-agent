@@ -484,6 +484,20 @@ Gate passes are the cost of proving the gate refuses a misheard word as well as 
 not of the demo path. Meta's free credits cover the spend; Open Weight calls on Baseten and every
 MMS-TTS clip are not metered against this budget at all.
 
+**What the ledger is, exactly.** It is a budget instrument, not a copy of a provider invoice. Each row is
+priced one of two ways, and both are visible in `credit_tracker.py`:
+
+| Basis | Applies to | Where the rate comes from |
+| --- | --- | --- |
+| Plan unit cost | Wonder, SAM, Spark | `PLAN` in `credit_tracker.py`: the $150 split across the planned calls, e.g. 170 Wonder calls against $70 = $0.4118 each |
+| Computed rate | Voice Transcribe | the provider's per-hour rate times the audio seconds actually sent, e.g. 8.4 s = $0.000419 |
+
+So the total is deliberately conservative: the plan's unit costs are budget ceilings, and a call that is
+cheaper than its ceiling still books at the ceiling. The claim the repository makes is that every call is
+recorded with its basis, its running total and the bucket it came from, and that `verify()` re-derives
+the sum - not that the figure is what the provider billed. If the console disagrees, the console is the
+invoice and the ledger is the plan; both are here to be compared.
+
 > `credit_usage.json` is committed, so the $23.42 above is reproducible from a clean clone:
 > `python credit_tracker.py verify` re-derives all 88 rows and prints
 > `VERIFY OK - 88 entries, $23.42 spent, $126.58 remaining`. `artifacts/proof/credit_usage_live.json`
