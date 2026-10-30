@@ -65,6 +65,26 @@ CHANNELS = ("sms", "whatsapp", "voice_call")
 
 GENESIS = "0" * 64
 
+DRAFTED = ROOT / "artifacts" / "multilingual_payloads.json"
+VOICE_DIR = ROOT / "artifacts" / "audio" / "voice"
+
+
+def drafted_for(locale: str) -> dict | None:
+    """The model-drafted, validated payload for a locale, if one is on file.
+
+    Falls back to nothing: a caller that gets None keeps the hand-written
+    template, so a model outage can never empty the ladder.
+    """
+    try:
+        data = json.loads(DRAFTED.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    for record in data.get("locales", []):
+        if record.get("locale") == locale:
+            return record
+    return None
+
+
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -175,6 +195,21 @@ def notifications(tier: int, town: dict, locale: str = "en") -> list[dict[str, A
         )
         audience = [f"shelter_leader_{n}" for n in range(1, COMMUNITY_LEADERS + 1)]
 
+    # A model-drafted SMS replaces the template only when it passed both the
+    # code check and the reviewer. The audio is attached to voice_call only if
+    # the clip exists on disk - never advertised without the file.
+    drafted = drafted_for(locale) if tier == 2 else None
+    source = "template"
+    if drafted and (drafted.get("sms") or {}).get("valid"):
+        body = drafted["sms"]["body"]
+        source = "model-drafted"
+    clip = VOICE_DIR / f"tier2_{locale}.wav"
+    audio = (
+        f"artifacts/audio/voice/{clip.name}"
+        if drafted and (drafted.get("voice") or {}).get("valid") and clip.exists()
+        else None
+    )
+
     payloads = []
     for channel in CHANNELS:
         for recipient in audience:
@@ -184,8 +219,14 @@ def notifications(tier: int, town: dict, locale: str = "en") -> list[dict[str, A
                 "locale": locale,
                 "dir": i18n.direction(locale),
                 "body": body,
+                "source": source,
+                "audio": audio if channel == "voice_call" else None,
                 "status": "PENDING_CREDENTIALS",
-                "note": "no SMS/WhatsApp/voice gateway configured - payload generated and logged only",
+                "note": (
+                    "no SMS/WhatsApp/voice gateway configured - payload generated and "
+                    "logged only"
+                    + ("; spoken script rendered locally, nothing dialled" if channel == "voice_call" and audio else "")
+                ),
                 "litres_context": {"reserve": reserve, "hospital_demand": hospital["fuel_demand_litres"]},
             })
     return payloads

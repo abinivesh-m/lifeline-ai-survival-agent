@@ -54,13 +54,13 @@ def _wav_shape(path: Path) -> dict:
         }
 
 
-def transcribe(path: Path, timeout: float = 120.0) -> dict:
+def transcribe(path: Path, timeout: float = 120.0, languages: list[str] | None = None) -> dict:
     audio = path.read_bytes()
     settings = {
         "model": MODEL,
         "mode": "PUSH_TO_TALK",
         "audioEncoding": "WAV",
-        "languageBias": ["Tamil", "English"],
+        "languageBias": languages or ["Tamil", "English"],
         "keywords": KEYWORDS,
     }
     boundary = f"----lifeline{uuid.uuid4().hex}"

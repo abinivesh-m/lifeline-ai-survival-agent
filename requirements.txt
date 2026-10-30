@@ -25,3 +25,11 @@ openai>=1.40
 # Install these only when you actually run that step.
 # modal>=0.62
 # baseten>=0.9
+
+# Optional: speaking the 8-language payloads with MMS-TTS (open weight, local).
+# torch is a large download (~200 MB CPU wheel); the core demo does not need it.
+# The committed WAVs mean a judge can play the audio without installing any of this.
+torch>=2.2
+transformers>=4.40
+numpy
+scipy

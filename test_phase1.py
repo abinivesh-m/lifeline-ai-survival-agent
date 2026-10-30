@@ -14,10 +14,15 @@ import sys
 import tempfile
 from pathlib import Path
 
+import agent
 import a_star
 import allocator
 import credit_tracker
 import dependency_graph
+import escalation
+import export_ui_data
+import multilingual
+import seri_gate
 
 ROOT = Path(__file__).parent
 TOWN = json.loads((ROOT / "town.json").read_text(encoding="utf-8"))
@@ -380,7 +385,7 @@ def test_full_plan_verifies_and_persists() -> None:
 # --------------------------------------------------------------------------- #
 
 def test_end_to_end_story() -> None:
-    """The demo's four numbers, computed together, never hardcoded."""
+    """The demo's numbers, computed together, never hardcoded."""
     town, nodes, edges = a_star.load_network()
     route = a_star.plan_route(town, nodes, edges)
     allocation = allocator.allocate(town, mode="policy")
@@ -391,6 +396,127 @@ def test_end_to_end_story() -> None:
     eq(allocation["allocation"], {"hospital": 70, "water_pump": 30})
     eq(allocation["total"], 100)
     eq(order, ["fuel_depot", "hospital", "water_pump", "shelters"])
+
+    # Step 7 must arm the ladder for every locale and claim nothing was sent.
+    approval = agent.step_approve(allocation, town, auto=True)
+    ladder = approval["escalation"]
+    eq(ladder["tier"], 1)
+    eq(len(ladder["languages"]), 8)
+    eq(ladder["payloads_per_language"], 9)
+    eq(ladder["payloads_total"], 72)
+    eq(sorted(ladder["channels"]), ["sms", "voice_call", "whatsapp"])
+    eq(ladder["status"], "PENDING_CREDENTIALS")
+
+    # The tier-2 payload comes from the model-drafted artefact when one is on
+    # file. A spoken payload may only point at a clip that exists on disk.
+    payloads = escalation.notifications(2, town, "ta")
+    eq(len(payloads), 9)
+    eq({payload["channel"] for payload in payloads}, {"sms", "voice_call", "whatsapp"})
+    eq({payload["status"] for payload in payloads}, {"PENDING_CREDENTIALS"})
+    eq(len({payload["body"] for payload in payloads}), 1)
+    for payload in payloads:
+        if payload["audio"]:
+            eq((ROOT / payload["audio"]).exists(), True)
+            eq(payload["channel"], "voice_call")
+    drafted = escalation.drafted_for("ta")
+    if drafted and drafted["sms"]["valid"]:
+        eq(payloads[0]["body"], drafted["sms"]["body"])
+        eq(payloads[0]["source"], "model-drafted")
+
+    # The validator is the last word on numbers, not the reviewer model.
+    bad = multilingual.validate_body("Send 999 L, give 2 mg insulin at once", "ta")
+    eq(bad["ok"], False)
+    if multilingual.ARTIFACT.exists():
+        eq(multilingual.verify(), [])
+
+    # The Seri Gate: the word, the model and the code must agree. Denial wins,
+    # Tamil negation is a suffix (so "சரியில்லை" is one token, not a prefix),
+    # and an ASR echo ("சரிசரி") can only collapse when it is an exact double.
+    eq(seri_gate.token_intent("சரி"), "APPROVE")
+    eq(seri_gate.token_intent("sariசரி அனுமதிக்கிறேன்."), "APPROVE")
+    eq(seri_gate.token_intent("சரிசரி"), "APPROVE")
+    eq(seri_gate.token_intent("சரியில்லை"), "DENY")
+    eq(seri_gate.token_intent("not ok"), "DENY")
+    eq(seri_gate.token_intent("Ansari,"), "UNCLEAR")
+    eq(seri_gate.token_intent("maybe"), "UNCLEAR")
+    eq(seri_gate.token_intent("Yes, I approve.", "en"), "APPROVE")
+    eq(seri_gate.token_intent("Sí, apruebo.", "es"), "APPROVE")
+    eq(seri_gate.token_intent("Oui, j'approuve.", "fr"), "APPROVE")
+    eq(seri_gate.token_intent("نعم، أوافق.", "ar"), "APPROVE")
+    eq(seri_gate.token_intent("Sim, aprovo.", "pt"), "APPROVE")
+    eq(seri_gate.token_intent("Ndiyo, nakubali.", "sw"), "APPROVE")
+    # The real ASR spellings, not the textbook ones: native-name bias made the
+    # transcriber return these shortened/alternate forms, and the gate must
+    # recognise the word that was actually heard.
+    eq(seri_gate.token_intent("Ndio na kubali.", "sw"), "APPROVE")
+    eq(seri_gate.token_intent("أوفقوا", "ar"), "APPROVE")
+    eq(seri_gate.token_intent("Sim", "pt"), "APPROVE")
+    eq(seri_gate.token_intent("Sí", "es"), "APPROVE")
+    eq(seri_gate.token_intent("No, nunca.", "es"), "DENY")
+    eq(seri_gate.token_intent("Non, jamais.", "fr"), "DENY")
+    eq(seri_gate.token_intent("Hapana.", "sw"), "DENY")
+    heard = {"status": "answered", "intent": "APPROVE", "confidence": 0.99}
+    eq(seri_gate.decide("சரி", heard)["approved"], True)
+    eq(seri_gate.decide("Sí, apruebo.", heard, "es")["approved"], True)
+    eq(seri_gate.decide("சரி", {**heard, "confidence": 0.5})["approved"], False)
+    eq(seri_gate.decide("சரியில்லை", heard)["approved"], False)
+    eq(seri_gate.decide("maybe", heard)["approved"], False)
+    if seri_gate.ARTIFACT.exists():
+        artifact = json.loads(seri_gate.ARTIFACT.read_text(encoding="utf-8"))
+        locales = artifact.get("locales", [])
+        if locales:
+            eq(artifact["summary"]["languages"], len(locales))
+            eq(
+                artifact["summary"]["approved"],
+                sum(1 for entry in locales if entry["gate"]["approved"]),
+            )
+            for entry in locales:
+                if not entry["gate"]["approved"]:
+                    continue
+                eq(bool(entry["ledger"]), True)
+                eq(entry["ledger"]["detail"]["audio_sha256"], entry["audio"]["sha256"])
+                eq(entry["ledger"]["detail"]["locale"], entry["locale"])
+            eq(escalation.HashLedger().verify(), [])
+
+    # Trap 2: an offline run must not erase the open-weight evidence. When the
+    # latest run is policy-only, the exporter falls back to the newest valid
+    # proof, labelled STORED RUN - never LIVE CALL.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "runs").mkdir()
+        (root / "artifacts").mkdir()
+        (root / "runs" / "latest.json").write_text(json.dumps({
+            "generated_utc": "2026-10-27T00:00:00+00:00",
+            "steps": [{
+                "name": "ALLOCATE",
+                "source": "policy",
+                "allocation": {"hospital": 70, "water_pump": 30},
+                "trace": {},
+            }],
+        }), encoding="utf-8")
+        (root / "artifacts" / "openweight_proof.json").write_text(json.dumps({
+            "provider": "Baseten",
+            "model": "meta-models/muse-spark-open-1026",
+            "runs": [{
+                "valid": True,
+                "latency_s": 4.44,
+                "at": "2026-10-27T00:00:00+00:00",
+                "allocation": {"hospital": 70, "water_pump": 30},
+                "justification": "stored run",
+                "confidence": 0.99,
+                "model": "meta-models/muse-spark-open-1026",
+                "provider": "Baseten",
+            }],
+        }), encoding="utf-8")
+        original_root = export_ui_data.ROOT
+        export_ui_data.ROOT = root
+        try:
+            brain = export_ui_data._latest_run_brain()
+        finally:
+            export_ui_data.ROOT = original_root
+        eq(brain["source"], "openweight-stored")
+        eq(brain["status"], "stored")
+        eq(brain["valid"], True)
 
 
 def main() -> int:

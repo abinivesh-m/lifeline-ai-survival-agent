@@ -10,6 +10,8 @@ import OfflineProof3D from "@/components/OfflineProof3D";
 import AgenticTimeline3D from "@/components/AgenticTimeline3D";
 import WorldPanel from "@/components/WorldPanel";
 import TempleBell from "@/components/TempleBell";
+import VoiceAlerts from "@/components/VoiceAlerts";
+import SeriGate from "@/components/SeriGate";
 import LanguageBar from "@/components/LanguageBar";
 import SectionNav from "@/components/SectionNav";
 import RunningGridBackground from "@/components/RunningGridBackground";
@@ -355,7 +357,8 @@ export default function Page() {
             <div className="mono text-[10px] tracking-[0.18em] text-muted">NOTIFICATIONS</div>
             <p className="mt-1.5 text-[11px] leading-relaxed text-muted">
               Tier 2 and tier 4 compose SMS, WhatsApp and voice payloads in the reader's
-              language. They are generated, translated and logged.
+              language. The words are model-drafted and reviewer-checked; the spoken
+              ones are rendered to audio, so a reader who cannot read still hears it.
             </p>
             <div className="mt-2 rounded border border-amber/40 bg-amber/5 px-2 py-1.5 mono text-[9px] text-amber">
               DELIVERY:{" "}
@@ -370,6 +373,9 @@ export default function Page() {
             </p>
           </div>
         </div>
+
+        <VoiceAlerts />
+        <SeriGate />
 
         <div className="mt-3 rounded-xl border border-amber/30 bg-amber/[0.04] p-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">

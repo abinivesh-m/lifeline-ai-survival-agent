@@ -1,13 +1,13 @@
 {
   "schema": "lifeline.run/1.0",
-  "generated_utc": "2026-10-27T14:09:10+00:00",
+  "generated_utc": "2026-10-27T14:57:25+00:00",
   "town": {
     "name": "Kottur",
     "lat": 11.0168,
     "lon": 76.9558
   },
   "scenario": "none",
-  "duration_s": 4.85,
+  "duration_s": 4.5,
   "executed": true,
   "steps": [
     {
@@ -234,8 +234,8 @@
           "confidence": 1.0
         }
       ],
-      "justification": "Allocated full stated demand to priority 1 first then remaining reserve to priority 2 to satisfy exact sum and priority constraints.",
-      "confidence": 0.99,
+      "justification": "Allocated full demand to priority 1 first then remaining reserve to priority 2 to meet exact sum and demand constraints.",
+      "confidence": 1.0,
       "constraints": {
         "reserve_litres": 100,
         "caps_litres": {
@@ -268,8 +268,8 @@
           "provider": "Baseten",
           "model": "meta-models/muse-spark-open-1026",
           "status": "live",
-          "latency_s": 4.84,
-          "at": "2026-10-27T14:09:10+00:00"
+          "latency_s": 4.44,
+          "at": "2026-10-27T14:57:25+00:00"
         }
       },
       "human_approval_required": true,
@@ -280,9 +280,9 @@
       "step": 6,
       "name": "BUDGET",
       "status": "ok",
-      "spent_usd": 0.449804,
-      "remaining_usd": 149.55,
-      "percent_used": 0.3,
+      "spent_usd": 13.538564,
+      "remaining_usd": 136.46,
+      "percent_used": 9.03,
       "level": "ok",
       "alerts": [],
       "plan_usd": 150.0,
@@ -317,6 +317,25 @@
         ],
         "status": "PENDING_CREDENTIALS",
         "note": "generated and logged only - no SMS/WhatsApp/voice gateway configured",
+        "model_drafted_locales": [
+          "ar",
+          "en",
+          "es",
+          "fr",
+          "pt",
+          "sw",
+          "ta",
+          "zh"
+        ],
+        "spoken_locales": [
+          "ar",
+          "en",
+          "es",
+          "fr",
+          "pt",
+          "sw",
+          "ta"
+        ],
         "evidence": "escalation.notifications(tier 2) for every code in locales/index.json"
       }
     },

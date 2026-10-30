@@ -232,6 +232,102 @@ export type LifeLineData = {
   };
   world: { towns: WorldTown[]; note: string };
   locales: { code: string; native: string; language: string; dir: string }[];
+  multilingual: {
+    available: boolean;
+    note?: string;
+    generated_utc?: string;
+    generator?: { provider: string; model: string; cost_usd?: number };
+    reviewer?: { provider: string; model: string; cost_usd?: number };
+    totals?: {
+      locales: number;
+      valid: number;
+      model_drafted: number;
+      voice_scripts: number;
+      allocation_scripts: number;
+      cost_usd: number;
+      last_batch_usd?: number;
+    };
+    rules?: {
+      max_chars: Record<string, number>;
+      allowed_numbers: string[];
+      require_reply_codes: string[];
+      fallback: string;
+      speech: string;
+    };
+    speech?: {
+      engine: string;
+      licence: string;
+      device: string;
+      sample_rate_hz: number;
+      cost_usd: number;
+      clips: number;
+      seconds: number;
+      note: string;
+    };
+    locales: {
+      code: string;
+      language: string;
+      native: string;
+      sms: string;
+      voice: string;
+      allocation: string;
+      sms_source: string;
+      voice_source: string;
+      drafted: boolean;
+      valid: boolean;
+      audio: Record<
+        string,
+        { src: string; seconds: number; bytes: number; model: string; text_sha256: string }
+      >;
+    }[];
+  };
+  seri: {
+    available: boolean;
+    note?: string;
+    generated_utc?: string;
+    summary?: {
+      languages: number;
+      spoken: number;
+      approved: number;
+      withheld: number;
+      text_only: Record<string, string>;
+    };
+    locales: {
+      locale: string;
+      native: string;
+      language: string;
+      phrase: string;
+      transcript: string | null;
+      asr?: {
+        status: string;
+        model: string;
+        latency_s?: number;
+        language_bias?: string[];
+      };
+      model?: {
+        status: string;
+        intent: string;
+        confidence: number;
+        reason: string;
+        latency_s: number;
+      };
+      gate?: {
+        decision: string;
+        approved: boolean;
+        locale: string;
+        token_intent: string;
+        model_intent: string;
+        confidence: number;
+        threshold: number;
+        reasons: string[];
+        rule: string;
+      };
+      ledger?: { seq: number; action: string; hash: string; prev: string } | null;
+      cost_usd?: number;
+      audio: { src: string | null; sha256: string | null; seconds: number | null };
+    }[];
+    cost_usd?: number;
+  };
   messages: Record<string, Messages>;
   baseline: { manual_minutes: number; agent_minutes: number; note: string };
 };

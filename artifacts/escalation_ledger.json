@@ -1,0 +1,312 @@
+{
+  "schema": "lifeline.escalation_ledger/1.0",
+  "hash_algorithm": "sha256",
+  "note": "append-only hash chain - no blockchain, no network, no token",
+  "head": "e052803bb953c6a5a62ece811e349ee07db03b8775febb1e372fc82cba202424",
+  "entries": [
+    {
+      "seq": 1,
+      "ts": "2026-10-27T14:57:04+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "transcript": "sari अनुमति किरेन",
+        "audio_sha256": "7919d7c91b7ed48e429e4ca423060a2b6f0f4f36c8d5e494eca99acbea55c85a",
+        "intent": "APPROVE",
+        "confidence": 0.9,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "6ef72de680583f8e46d8e1c7c6a04cb0a4c62004fcf31f71ca42823da36350ca"
+    },
+    {
+      "seq": 2,
+      "ts": "2026-10-27T14:59:02+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "transcript": "சரிசரி அனுமதிக்கிறேன்.",
+        "audio_sha256": "7919d7c91b7ed48e429e4ca423060a2b6f0f4f36c8d5e494eca99acbea55c85a",
+        "intent": "APPROVE",
+        "confidence": 0.98,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "6ef72de680583f8e46d8e1c7c6a04cb0a4c62004fcf31f71ca42823da36350ca",
+      "hash": "3eb0b214e45ceceda2ee423f1ea842a68fb6f8076288ea17547d3e376e6b1437"
+    },
+    {
+      "seq": 3,
+      "ts": "2026-10-27T15:09:27+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "en",
+        "transcript": "Yes, I probe.",
+        "audio_sha256": "c993885d128c4da3430814741ac05339b8e0ecab3bd5e4c6dfa06a4db913180c",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "3eb0b214e45ceceda2ee423f1ea842a68fb6f8076288ea17547d3e376e6b1437",
+      "hash": "8e456feece862f3cbfb44dbca6e150bcfaeffb12487718e447be543d2398df68"
+    },
+    {
+      "seq": 4,
+      "ts": "2026-10-27T15:09:52+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "fr",
+        "transcript": "Oui j'approuve.'approuve.",
+        "audio_sha256": "2fd567e0a32dc60a3b8f75da4377a883a6803b6808d93ef38cc7c2001951d90c",
+        "intent": "APPROVE",
+        "confidence": 0.99,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "8e456feece862f3cbfb44dbca6e150bcfaeffb12487718e447be543d2398df68",
+      "hash": "93933e01fec0a8561e4c07f5e0f28dae6596f1f092e27f1e684daad23f1b5a53"
+    },
+    {
+      "seq": 5,
+      "ts": "2026-10-27T15:10:53+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "ta",
+        "transcript": "சரிசரி அனுமதிக்கிறேன்.",
+        "audio_sha256": "702acc257528f26a54d0a05bb6d8efa3cfb9e079ef4a94c55da0a83b3a32c74b",
+        "intent": "APPROVE",
+        "confidence": 0.98,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "93933e01fec0a8561e4c07f5e0f28dae6596f1f092e27f1e684daad23f1b5a53",
+      "hash": "13658b63fa8ee7bb8dc586964e8342b9b968f68eb246f935510c4e7289968fe1"
+    },
+    {
+      "seq": 6,
+      "ts": "2026-10-27T15:13:14+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "en",
+        "transcript": "Yes, I prove",
+        "audio_sha256": "c993885d128c4da3430814741ac05339b8e0ecab3bd5e4c6dfa06a4db913180c",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "13658b63fa8ee7bb8dc586964e8342b9b968f68eb246f935510c4e7289968fe1",
+      "hash": "da1862da565ee95ae54f52dd2f0d36d4d93f8dda6d5b221d3107622f67d236c8"
+    },
+    {
+      "seq": 7,
+      "ts": "2026-10-27T15:13:28+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "fr",
+        "transcript": "Oui j'approuve.",
+        "audio_sha256": "2fd567e0a32dc60a3b8f75da4377a883a6803b6808d93ef38cc7c2001951d90c",
+        "intent": "APPROVE",
+        "confidence": 1.0,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "da1862da565ee95ae54f52dd2f0d36d4d93f8dda6d5b221d3107622f67d236c8",
+      "hash": "afee666254bb19f4afcec8823284276615d27a8207cd0c52c1698d3ea33065fa"
+    },
+    {
+      "seq": 8,
+      "ts": "2026-10-27T15:13:34+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "ar",
+        "transcript": "Nam أوفقوا",
+        "audio_sha256": "f976c046c685c581fcb38a6bc345e94c874e46916f132a0101c4f12941377ea6",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "afee666254bb19f4afcec8823284276615d27a8207cd0c52c1698d3ea33065fa",
+      "hash": "04978133e2926570d14f1cf823da6a43c959fb0bc34ba166956fc77d1bbbd687"
+    },
+    {
+      "seq": 9,
+      "ts": "2026-10-27T15:13:40+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "pt",
+        "transcript": "Sim, provou.",
+        "audio_sha256": "bffee94fedfac1199188380858a53db4bad440e5d3a5e0c86325e157a448c011",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "04978133e2926570d14f1cf823da6a43c959fb0bc34ba166956fc77d1bbbd687",
+      "hash": "ba24e3348adf2370889d259a40ff2d90a592f2862e0a7fc854564477a5d68687"
+    },
+    {
+      "seq": 10,
+      "ts": "2026-10-27T15:13:46+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "sw",
+        "transcript": "Ndiyo na kubali.",
+        "audio_sha256": "77797052f9466b82df78f7f41087700d8ba195043d218c39abe3b5fdf4dd77eb",
+        "intent": "APPROVE",
+        "confidence": 1.0,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "ba24e3348adf2370889d259a40ff2d90a592f2862e0a7fc854564477a5d68687",
+      "hash": "1896405379587a17dea9602ebaf10bfe55050828d2134df6dd40354722cde84a"
+    },
+    {
+      "seq": 11,
+      "ts": "2026-10-27T15:13:52+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "ta",
+        "transcript": "சரி அனுமதிக்கிறேன்.",
+        "audio_sha256": "702acc257528f26a54d0a05bb6d8efa3cfb9e079ef4a94c55da0a83b3a32c74b",
+        "intent": "APPROVE",
+        "confidence": 0.98,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "1896405379587a17dea9602ebaf10bfe55050828d2134df6dd40354722cde84a",
+      "hash": "9affb0a6ee63d4fed42a797c49d570ace6950c89c782f6474b6f7a6d121782dd"
+    },
+    {
+      "seq": 12,
+      "ts": "2026-10-27T15:16:01+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "en",
+        "transcript": "yes I prove",
+        "audio_sha256": "c993885d128c4da3430814741ac05339b8e0ecab3bd5e4c6dfa06a4db913180c",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "9affb0a6ee63d4fed42a797c49d570ace6950c89c782f6474b6f7a6d121782dd",
+      "hash": "a05db4165743680ec25adac6bd6630c11c84ed8ac38a48202e9c486a800bd9f8"
+    },
+    {
+      "seq": 13,
+      "ts": "2026-10-27T15:16:27+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "es",
+        "transcript": "Sí apruebo.",
+        "audio_sha256": "8f1b64d0c544efb4e463a7ed57e08828a142e6cb97ef90b8f281e5d0352a6c4e",
+        "intent": "APPROVE",
+        "confidence": 1.0,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "a05db4165743680ec25adac6bd6630c11c84ed8ac38a48202e9c486a800bd9f8",
+      "hash": "b7d5ecf73dca8b0210b2ca4ed9c1dc76b9bfed887066391c48a6f9bb43a31103"
+    },
+    {
+      "seq": 14,
+      "ts": "2026-10-27T15:16:33+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "fr",
+        "transcript": "Oui j'approuve.",
+        "audio_sha256": "2fd567e0a32dc60a3b8f75da4377a883a6803b6808d93ef38cc7c2001951d90c",
+        "intent": "APPROVE",
+        "confidence": 1.0,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "b7d5ecf73dca8b0210b2ca4ed9c1dc76b9bfed887066391c48a6f9bb43a31103",
+      "hash": "a52f9664156f3112416fbf0afc706caff4459a95167e8f6b08a18a5eff0e86f1"
+    },
+    {
+      "seq": 15,
+      "ts": "2026-10-27T15:16:39+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "ar",
+        "transcript": "Nam أوفقوا",
+        "audio_sha256": "f976c046c685c581fcb38a6bc345e94c874e46916f132a0101c4f12941377ea6",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "a52f9664156f3112416fbf0afc706caff4459a95167e8f6b08a18a5eff0e86f1",
+      "hash": "ab294ff7e1190134ea318da26be4509f7cb1bd51785f2d219703a626b3fa8ada"
+    },
+    {
+      "seq": 16,
+      "ts": "2026-10-27T15:16:45+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "pt",
+        "transcript": "sim",
+        "audio_sha256": "bffee94fedfac1199188380858a53db4bad440e5d3a5e0c86325e157a448c011",
+        "intent": "APPROVE",
+        "confidence": 1.0,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "ab294ff7e1190134ea318da26be4509f7cb1bd51785f2d219703a626b3fa8ada",
+      "hash": "73172cc5b23b21ea76e6069063a6ad2ff923824f9c572130946bb21205385406"
+    },
+    {
+      "seq": 17,
+      "ts": "2026-10-27T15:16:51+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "sw",
+        "transcript": "Ndio na kubali.",
+        "audio_sha256": "77797052f9466b82df78f7f41087700d8ba195043d218c39abe3b5fdf4dd77eb",
+        "intent": "APPROVE",
+        "confidence": 0.99,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "73172cc5b23b21ea76e6069063a6ad2ff923824f9c572130946bb21205385406",
+      "hash": "ee7650f64c0845c485aa7b4b76c7de73d11b54885502496b2bf84b339eceef7a"
+    },
+    {
+      "seq": 18,
+      "ts": "2026-10-27T15:16:58+00:00",
+      "tier": 1,
+      "action": "VOICE_APPROVAL",
+      "detail": {
+        "locale": "ta",
+        "transcript": "சரி அனுமதிக்கிறேன்.",
+        "audio_sha256": "702acc257528f26a54d0a05bb6d8efa3cfb9e079ef4a94c55da0a83b3a32c74b",
+        "intent": "APPROVE",
+        "confidence": 0.98,
+        "model": "muse-wonder-1.0",
+        "asr_model": "muse-voice-transcribe-1.0"
+      },
+      "prev": "ee7650f64c0845c485aa7b4b76c7de73d11b54885502496b2bf84b339eceef7a",
+      "hash": "e052803bb953c6a5a62ece811e349ee07db03b8775febb1e372fc82cba202424"
+    }
+  ]
+}

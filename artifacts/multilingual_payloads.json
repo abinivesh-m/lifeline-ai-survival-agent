@@ -1,0 +1,578 @@
+{
+  "schema": "lifeline.multilingual/1.2",
+  "generated_utc": "2026-10-27T14:43:19+00:00",
+  "batches": [
+    {
+      "generated_utc": "2026-10-27T14:43:19+00:00",
+      "locales": [
+        "ar"
+      ],
+      "cost_usd": 0.911765
+    }
+  ],
+  "generator": {
+    "provider": "Meta Model API",
+    "model": "muse-spark-1.3"
+  },
+  "reviewer": {
+    "provider": "Meta Model API",
+    "model": "muse-wonder-1.0"
+  },
+  "rules": {
+    "max_chars": {
+      "sms": 160,
+      "voice": 300,
+      "allocation": 300
+    },
+    "allowed_numbers": [
+      "1",
+      "2",
+      "4",
+      "6",
+      "7.8",
+      "30",
+      "42",
+      "70",
+      "100",
+      "200",
+      "544"
+    ],
+    "require_reply_codes": [
+      "1",
+      "2"
+    ],
+    "fallback": "locales/*.json templates",
+    "speech": "the meta api exposes no text-to-speech endpoint; voice_synth.py renders these scripts with MMS-TTS, an open-weight model, on this laptop's CPU"
+  },
+  "totals": {
+    "locales": 8,
+    "valid": 8,
+    "model_drafted": 8,
+    "voice_scripts": 8,
+    "allocation_scripts": 8,
+    "cost_usd": 8.205885,
+    "last_batch_usd": 0.911765
+  },
+  "locales": [
+    {
+      "locale": "en",
+      "language": "English",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 14.54,
+        "usage": {
+          "completion_tokens": 3443,
+          "prompt_tokens": 344,
+          "total_tokens": 3787,
+          "completion_tokens_details": {
+            "reasoning_tokens": 3288
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 6.94,
+        "usage": {
+          "completion_tokens": 770,
+          "prompt_tokens": 348,
+          "total_tokens": 1118,
+          "completion_tokens_details": {
+            "reasoning_tokens": 713
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All numbers allowed, English, no medical advice or dispatch claim, voice speakable, allocation matches 70/30/100",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "Kottur diesel: NH-544 km 42 blocked, bypass 7.8 km. Hospital has 4 hours left. Plan 70 hospital, 30 pump, 100 total. Reply 1 approve, 2 deny.",
+        "template": "No reply yet. The hospital has 4 h of diesel. Reply 1 to approve, 2 to deny.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 141
+      },
+      "voice": {
+        "script": "Attention Kottur. NH 544 at kilometre forty two is blocked. Bypass is seven point eight kilometres. Hospital generator has four hours left. Plan seventy litres hospital, thirty litres pump, one hundred litres total. Press 1 to approve, press 2 to deny.",
+        "template": "No reply yet. The hospital has 4 h of diesel. Reply 1 to approve, 2 to deny.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 252
+      },
+      "allocation": {
+        "script": "The decided plan for Kottur is 70 litres to the hospital, 30 litres to the water pump, 100 litres in total.",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 107
+      }
+    },
+    {
+      "locale": "es",
+      "language": "Spanish",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 12.18,
+        "usage": {
+          "completion_tokens": 2958,
+          "prompt_tokens": 344,
+          "total_tokens": 3302,
+          "completion_tokens_details": {
+            "reasoning_tokens": 2790
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 9.41,
+        "usage": {
+          "completion_tokens": 916,
+          "prompt_tokens": 361,
+          "total_tokens": 1277,
+          "completion_tokens_details": {
+            "reasoning_tokens": 849
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All payloads are in Spanish, use only allowed numbers, contain no medical advice or dispatch claim, voice is speakable, and allocation matches 70-30-100.",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "Kottur: NH-544 km 42 bloqueada, hospital con 4 horas de diesel. Reparto 70-30-100. Responda 1 para aprobar, 2 para negar.",
+        "template": "Aún sin respuesta. El hospital tiene 4 h de diésel. Responda 1 para aprobar, 2 para rechazar.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 121
+      },
+      "voice": {
+        "script": "Atención Kottur: NH-544 kilómetro 42 bloqueada, desvío de 7.8 kilómetros. Hospital con 4 horas de diésel. Propuesta 70 litros hospital, 30 litros bomba de agua, 100 en total. Pulse 1 para aprobar o 2 para denegar.",
+        "template": "Aún sin respuesta. El hospital tiene 4 h de diésel. Responda 1 para aprobar, 2 para rechazar.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 213
+      },
+      "allocation": {
+        "script": "Decisión Kottur: 70 litros al hospital, 30 litros a la bomba de agua, 100 en total. NH-544 kilómetro 42 sigue bloqueada.",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 120
+      }
+    },
+    {
+      "locale": "fr",
+      "language": "French",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 10.33,
+        "usage": {
+          "completion_tokens": 2559,
+          "prompt_tokens": 344,
+          "total_tokens": 2903,
+          "completion_tokens_details": {
+            "reasoning_tokens": 2345
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 9.24,
+        "usage": {
+          "completion_tokens": 937,
+          "prompt_tokens": 407,
+          "total_tokens": 1344,
+          "completion_tokens_details": {
+            "reasoning_tokens": 875
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All payloads in French, allowed numbers only, no medical advice or dispatch claim, voice uses spoken units, allocation matches 70/30/100",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "Kottur: NH-544 km 42 bloque, deviation 7.8 km. Generateur hopital: 4 heures. Plan: 70 L hopital, 30 L pompe, 100 total. Repondez 1 oui, 2 non.",
+        "template": "Toujours sans réponse. L'hôpital a 4 h de gazole. Répondez 1 pour approuver, 2 pour refuser.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 142
+      },
+      "voice": {
+        "script": "Attention Kottur. Route NH-544 kilometre 42 bloque, deviation 7.8 kilometres. Generateur hopital: 4 heures de diesel. Proposition: 70 litres hopital, 30 litres pompe a eau, 100 au total. Pour approuver appuyez sur 1, pour refuser appuyez sur 2.",
+        "template": "Toujours sans réponse. L'hôpital a 4 h de gazole. Répondez 1 pour approuver, 2 pour refuser.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 244
+      },
+      "allocation": {
+        "script": "Decision proposee a Kottur: 70 litres pour hopital, 30 litres pour pompe a eau, 100 au total. Route NH-544 km 42 bloque, deviation 7.8 km. Generateur: 4 heures. Reponse attendue: 1 pour oui, 2 pour non.",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 202
+      }
+    },
+    {
+      "locale": "zh",
+      "language": "Chinese",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 10.02,
+        "usage": {
+          "completion_tokens": 2194,
+          "prompt_tokens": 344,
+          "total_tokens": 2538,
+          "completion_tokens_details": {
+            "reasoning_tokens": 2034
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 6.06,
+        "usage": {
+          "completion_tokens": 583,
+          "prompt_tokens": 354,
+          "total_tokens": 937,
+          "completion_tokens_details": {
+            "reasoning_tokens": 522
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All payloads in Chinese, only allowed numbers, no medical advice, not dispatched, voice speakable, allocation 70/30/100 matches",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "科图尔柴油告急：国道544在42公里处中断，备用路7.8公里。医院发电剩4小时。建议分70升医院，30升水泵，共100升。回复1同意，2拒绝。待批准，未派出。",
+        "template": "尚未回复。医院仅剩 4 小时柴油。回复 1 批准，回复 2 拒绝。",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 79
+      },
+      "voice": {
+        "script": "请注意，科图尔紧急通知。国道544在42公里处中断，备用路7.8公里。医院发电只剩4小时。建议分70升给医院，30升给水泵，共100升。请按1同意，按2拒绝。目前待批准，未派出。",
+        "template": "尚未回复。医院仅剩 4 小时柴油。回复 1 批准，回复 2 拒绝。",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 89
+      },
+      "allocation": {
+        "script": "决定如下：给医院70升，给水泵30升，共100升。目前待批准，未派出。",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 35
+      }
+    },
+    {
+      "locale": "ar",
+      "language": "Arabic",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 10.79,
+        "usage": {
+          "completion_tokens": 2622,
+          "prompt_tokens": 344,
+          "total_tokens": 2966,
+          "completion_tokens_details": {
+            "reasoning_tokens": 2384
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 241
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 7.36,
+        "usage": {
+          "completion_tokens": 745,
+          "prompt_tokens": 431,
+          "total_tokens": 1176,
+          "completion_tokens_details": {
+            "reasoning_tokens": 687
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All Arabic, allowed numbers only, no medical advice or dispatch claim, voice speakable, allocation 70/30/100 matches",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "أزمة ديزل كوتور: الطريق 544 كم 42 مغلق، البديل 7.8 كم. المستشفى 4 ساعات وقود. 70 مستشفى، 30 مضخة، 100 الكل. رد 1 موافقة، 2 رفض.",
+        "template": "لا رد بعد. لدى المستشفى 4 ساعات من الديزل. أرسل 1 للموافقة و2 للرفض.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 127
+      },
+      "voice": {
+        "script": "تنبيه كوتور: الطريق 544 عند الكيلومتر 42 مغلق، البديل 7.8 كيلومتر. وقود المستشفى يكفي 4 ساعات. المقترح 70 لتر للمستشفى و 30 لتر لمضخة الماء و 100 لتر المجموع. اضغط 1 للموافقة أو اضغط 2 للرفض.",
+        "template": "لا رد بعد. لدى المستشفى 4 ساعات من الديزل. أرسل 1 للموافقة و2 للرفض.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 191
+      },
+      "allocation": {
+        "script": "القرار المقترح في كوتور: 70 لتر للمستشفى و 30 لتر لمضخة الماء و 100 لتر في المجموع. لم يتم إرسال الوقود بعد. أجب 1 للموافقة أو 2 للرفض.",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 135
+      }
+    },
+    {
+      "locale": "pt",
+      "language": "Portuguese",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 10.52,
+        "usage": {
+          "completion_tokens": 2704,
+          "prompt_tokens": 344,
+          "total_tokens": 3048,
+          "completion_tokens_details": {
+            "reasoning_tokens": 2526
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 8.5,
+        "usage": {
+          "completion_tokens": 929,
+          "prompt_tokens": 372,
+          "total_tokens": 1301,
+          "completion_tokens_details": {
+            "reasoning_tokens": 867
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All payloads in Portuguese, allowed numbers only, no medical advice or dispatch claim; voice uses expanded units; allocation matches 70/30/100",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "Kottur: NH-544 km 42 bloqueada, desvio 7.8 km. Hospital com 4 horas de diesel. Proposta 70 L hospital, 30 L bomba. Responda 1 aprovar, 2 negar.",
+        "template": "Ainda sem resposta. O hospital tem 4 h de diesel. Responda 1 para aprovar, 2 para recusar.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 143
+      },
+      "voice": {
+        "script": "Atenção Kottur: estrada NH-544 no quilómetro 42 bloqueada, desvio de 7.8 quilómetros. Hospital com 4 horas de diesel. Proposta: 70 litros hospital, 30 litros bomba de água. Prima 1 para aprovar ou 2 para negar.",
+        "template": "Ainda sem resposta. O hospital tem 4 h de diesel. Responda 1 para aprovar, 2 para recusar.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 210
+      },
+      "allocation": {
+        "script": "Decisão proposta em Kottur: 70 litros para o hospital, 30 litros para a bomba de água, 100 litros no total. Aguardando aprovação, combustível ainda não enviado.",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 160
+      }
+    },
+    {
+      "locale": "sw",
+      "language": "Swahili",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 8.43,
+        "usage": {
+          "completion_tokens": 2212,
+          "prompt_tokens": 346,
+          "total_tokens": 2558,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1982
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 12.31,
+        "usage": {
+          "completion_tokens": 1258,
+          "prompt_tokens": 425,
+          "total_tokens": 1683,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1192
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All in Swahili, allowed numbers only, no medical advice or dispatch claim, voice speakable, allocation matches 70 hospital, 30 pump, 100 total",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "Kottur: NH-544 km 42 imefungwa, njia 7.8 km. Hospitali ina saa 4 za dizeli. Pendekezo: 70 hospitali, 30 pampu, 100 jumla. Jibu 1 kukubali, 2 kukataa.",
+        "template": "Hakuna jibu bado. Hospitali ina saa 4 za dizeli. Jibu 1 kuidhinisha, 2 kukataa.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 149
+      },
+      "voice": {
+        "script": "Tahadhari Kottur: Barabara NH-544 kilomita 42 imefungwa, njia mbadala kilomita 7.8. Hospitali ina saa 4 za dizeli. Pendekezo lita 70 hospitali, lita 30 pampu, lita 100 jumla. Bonyeza 1 kukubali au 2 kukataa.",
+        "template": "Hakuna jibu bado. Hospitali ina saa 4 za dizeli. Jibu 1 kuidhinisha, 2 kukataa.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 207
+      },
+      "allocation": {
+        "script": "Uamuzi Kottur: 70 lita kwa hospitali, 30 lita kwa pampu ya maji, 100 lita jumla. Bado haijasafirishwa, inasubiri idhini. Jibu 1 kukubali, 2 kukataa.",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 148
+      }
+    },
+    {
+      "locale": "ta",
+      "language": "Tamil",
+      "draft": {
+        "model": "muse-spark-1.3",
+        "provider": "Meta Model API",
+        "latency_s": 10.01,
+        "usage": {
+          "completion_tokens": 2976,
+          "prompt_tokens": 344,
+          "total_tokens": 3320,
+          "completion_tokens_details": {
+            "reasoning_tokens": 2656
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "review": {
+        "model": "muse-wonder-1.0",
+        "provider": "Meta Model API",
+        "status": "answered",
+        "latency_s": 10.97,
+        "usage": {
+          "completion_tokens": 1108,
+          "prompt_tokens": 514,
+          "total_tokens": 1622,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1049
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "reason": "All use allowed numbers, Tamil, no medical advice or dispatched claim; voice is speakable and allocation matches 70/30/100",
+        "sms_ok": true,
+        "voice_ok": true,
+        "allocation_ok": true
+      },
+      "sms": {
+        "body": "கொட்டூர் NH-544 km 42 அடைப்பு, மாற்று 7.8 km. டீசல் 4 மணி. திட்டம் 70, 30, 100. 1 சரி, 2 வேண்டாம்",
+        "template": "இன்னும் பதில் இல்லை. மருத்துவமனையில் 4 மணி நேர டீசல் மட்டுமே உள்ளது. அனுமதிக்க 1, மறுக்க 2 அனுப்புங்கள்.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 97
+      },
+      "voice": {
+        "script": "கொட்டூர் கவனம். NH-544 42 கிலோமீட்டரில் அடைப்பு. மாற்றுப்பாதை 7.8 கிலோமீட்டர். மருத்துவமனை டீசல் 4 மணி நேரம். திட்டம் மருத்துவமனைக்கு 70 லிட்டர், பம்புக்கு 30 லிட்டர், மொத்தம் 100 லிட்டர். சரி என 1 அழுத்தவும், வேண்டாம் என 2 அழுத்தவும்.",
+        "template": "இன்னும் பதில் இல்லை. மருத்துவமனையில் 4 மணி நேர டீசல் மட்டுமே உள்ளது. அனுமதிக்க 1, மறுக்க 2 அனுப்புங்கள்.",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 235
+      },
+      "allocation": {
+        "script": "திட்ட முடிவு: மருத்துவமனைக்கு 70 லிட்டர், தண்ணீர் பம்புக்கு 30 லிட்டர், மொத்தம் 100 லிட்டர். இன்னும் அனுப்பவில்லை.",
+        "template": "",
+        "source": "model",
+        "valid": true,
+        "problems": [],
+        "chars": 114
+      }
+    }
+  ]
+}

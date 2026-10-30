@@ -44,6 +44,7 @@ PLAN: dict[str, dict[str, float]] = {
     "spark": {"budget": 20.0, "planned_calls": 40, "unit_cost": 0.50},
     # $0 infrastructure: local GPU and partner-provided open weights
     "spark_open": {"budget": 0.0, "planned_calls": 0, "unit_cost": 0.0},
+    "voice_synth": {"budget": 0.0, "planned_calls": 16, "unit_cost": 0.0},
     "ollama": {"budget": 0.0, "planned_calls": 0, "unit_cost": 0.0},
     "modal": {"budget": 0.0, "planned_calls": 0, "unit_cost": 0.0},
     "muse_code": {"budget": 0.0, "planned_calls": 0, "unit_cost": 0.0},

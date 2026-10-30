@@ -94,7 +94,7 @@ def validate(allocation: dict, town: dict) -> tuple[bool, list[str]]:
     return not problems, problems
 
 
-def call(prompt: str, timeout: float = 90.0) -> dict:
+def call(prompt: str, timeout: float = 90.0, max_tokens: int | None = None) -> dict:
     base = os.environ.get("BASETEN_BASE_URL", "").rstrip("/")
     key = os.environ.get("BASETEN_API_KEY", "")
     model = os.environ.get("BASETEN_MODEL", REQUIRED_MODEL)
@@ -118,7 +118,7 @@ def call(prompt: str, timeout: float = 90.0) -> dict:
         # max_tokens. A 600-token cap produced finish_reason=length and null
         # content, with 2651 characters of reasoning and no answer. 3000 leaves
         # room for the trace plus the JSON.
-        "max_tokens": int(os.environ.get("BASETEN_MAX_TOKENS", "3000")),
+        "max_tokens": int(max_tokens or os.environ.get("BASETEN_MAX_TOKENS", "3000")),
     }
     request = urllib.request.Request(
         base + "/chat/completions",

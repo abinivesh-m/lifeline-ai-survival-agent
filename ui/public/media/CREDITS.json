@@ -79,6 +79,16 @@
     "status": "synthetic placeholder until the real Kottur voice note is supplied",
     "model": "muse-voice-transcribe-1.0"
   },
+  "speech": {
+    "engine": "MMS-TTS (facebook/mms-tts-*)",
+    "licence": "CC-BY-NC 4.0",
+    "device": "this laptop's CPU, no network at playback",
+    "model_card": "https://huggingface.co/facebook/mms-tts",
+    "files": "artifacts/audio/voice/*.wav",
+    "status": "synthetic speech, not a human recording; the words are model-drafted and code-validated",
+    "coverage": "7 of 8 locales - Mandarin has no released MMS-TTS checkpoint, so zh ships text-only",
+    "cost_usd": 0.0
+  },
   "sam": {
     "model": "sam-3.1",
     "featured_frame": "Flood_kerala_2018_3.jpg",

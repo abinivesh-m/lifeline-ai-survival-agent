@@ -1,0 +1,415 @@
+{
+  "schema": "lifeline.seri_gate/1.1",
+  "generated_utc": "2026-10-27T15:16:58+00:00",
+  "engine": {
+    "tts": "MMS-TTS (open weight, local CPU, $0.00)",
+    "asr": "muse-voice-transcribe-1.0",
+    "intent": "muse-wonder-1.0",
+    "threshold": 0.8
+  },
+  "summary": {
+    "languages": 7,
+    "spoken": 7,
+    "approved": 7,
+    "withheld": 0,
+    "text_only": {
+      "zh": "no released MMS-TTS checkpoint - text-only, not spoken"
+    }
+  },
+  "locales": [
+    {
+      "locale": "en",
+      "native": "English",
+      "language": "English",
+      "phrase": "Yes, I approve.",
+      "audio": {
+        "file": "artifacts\\audio\\seri_en.wav",
+        "sha256": "c993885d128c4da3430814741ac05339b8e0ecab3bd5e4c6dfa06a4db913180c",
+        "seconds": 2.34
+      },
+      "asr": {
+        "status": "answered",
+        "model": "muse-voice-transcribe-1.0",
+        "latency_s": 2.44,
+        "language_bias": [
+          "English"
+        ]
+      },
+      "transcript": "yes I prove",
+      "model": {
+        "status": "answered",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "reason": "Contains 'yes' indicating approval",
+        "latency_s": 3.53
+      },
+      "gate": {
+        "decision": "APPROVED",
+        "approved": true,
+        "locale": "en",
+        "token_intent": "APPROVE",
+        "model_intent": "APPROVE",
+        "confidence": 0.95,
+        "threshold": 0.8,
+        "reasons": [],
+        "rule": "approval needs an approval token, an agreeing model and confidence >= 0.80"
+      },
+      "ledger": {
+        "seq": 12,
+        "ts": "2026-10-27T15:16:01+00:00",
+        "tier": 1,
+        "action": "VOICE_APPROVAL",
+        "detail": {
+          "locale": "en",
+          "transcript": "yes I prove",
+          "audio_sha256": "c993885d128c4da3430814741ac05339b8e0ecab3bd5e4c6dfa06a4db913180c",
+          "intent": "APPROVE",
+          "confidence": 0.95,
+          "model": "muse-wonder-1.0",
+          "asr_model": "muse-voice-transcribe-1.0"
+        },
+        "prev": "9affb0a6ee63d4fed42a797c49d570ace6950c89c782f6474b6f7a6d121782dd",
+        "hash": "a05db4165743680ec25adac6bd6630c11c84ed8ac38a48202e9c486a800bd9f8"
+      },
+      "cost_usd": 0.411882
+    },
+    {
+      "locale": "es",
+      "native": "Español",
+      "language": "Spanish",
+      "phrase": "Sí, apruebo.",
+      "audio": {
+        "file": "artifacts\\audio\\seri_es.wav",
+        "sha256": "8f1b64d0c544efb4e463a7ed57e08828a142e6cb97ef90b8f281e5d0352a6c4e",
+        "seconds": 2.62
+      },
+      "asr": {
+        "status": "answered",
+        "model": "muse-voice-transcribe-1.0",
+        "latency_s": 2.24,
+        "language_bias": [
+          "Español"
+        ]
+      },
+      "transcript": "Sí apruebo.",
+      "model": {
+        "status": "answered",
+        "intent": "APPROVE",
+        "confidence": 1,
+        "reason": "Contains 'sí' and 'apruebo', both APPROVE words",
+        "latency_s": 4.11
+      },
+      "gate": {
+        "decision": "APPROVED",
+        "approved": true,
+        "locale": "es",
+        "token_intent": "APPROVE",
+        "model_intent": "APPROVE",
+        "confidence": 1.0,
+        "threshold": 0.8,
+        "reasons": [],
+        "rule": "approval needs an approval token, an agreeing model and confidence >= 0.80"
+      },
+      "ledger": {
+        "seq": 13,
+        "ts": "2026-10-27T15:16:27+00:00",
+        "tier": 1,
+        "action": "VOICE_APPROVAL",
+        "detail": {
+          "locale": "es",
+          "transcript": "Sí apruebo.",
+          "audio_sha256": "8f1b64d0c544efb4e463a7ed57e08828a142e6cb97ef90b8f281e5d0352a6c4e",
+          "intent": "APPROVE",
+          "confidence": 1.0,
+          "model": "muse-wonder-1.0",
+          "asr_model": "muse-voice-transcribe-1.0"
+        },
+        "prev": "a05db4165743680ec25adac6bd6630c11c84ed8ac38a48202e9c486a800bd9f8",
+        "hash": "b7d5ecf73dca8b0210b2ca4ed9c1dc76b9bfed887066391c48a6f9bb43a31103"
+      },
+      "cost_usd": 0.411896
+    },
+    {
+      "locale": "fr",
+      "native": "Français",
+      "language": "French",
+      "phrase": "Oui, j'approuve.",
+      "audio": {
+        "file": "artifacts\\audio\\seri_fr.wav",
+        "sha256": "2fd567e0a32dc60a3b8f75da4377a883a6803b6808d93ef38cc7c2001951d90c",
+        "seconds": 2.18
+      },
+      "asr": {
+        "status": "answered",
+        "model": "muse-voice-transcribe-1.0",
+        "latency_s": 1.98,
+        "language_bias": [
+          "Français"
+        ]
+      },
+      "transcript": "Oui j'approuve.",
+      "model": {
+        "status": "answered",
+        "intent": "APPROVE",
+        "confidence": 1.0,
+        "reason": "Contains 'oui' and 'approuve', both approve words",
+        "latency_s": 3.94
+      },
+      "gate": {
+        "decision": "APPROVED",
+        "approved": true,
+        "locale": "fr",
+        "token_intent": "APPROVE",
+        "model_intent": "APPROVE",
+        "confidence": 1.0,
+        "threshold": 0.8,
+        "reasons": [],
+        "rule": "approval needs an approval token, an agreeing model and confidence >= 0.80"
+      },
+      "ledger": {
+        "seq": 14,
+        "ts": "2026-10-27T15:16:33+00:00",
+        "tier": 1,
+        "action": "VOICE_APPROVAL",
+        "detail": {
+          "locale": "fr",
+          "transcript": "Oui j'approuve.",
+          "audio_sha256": "2fd567e0a32dc60a3b8f75da4377a883a6803b6808d93ef38cc7c2001951d90c",
+          "intent": "APPROVE",
+          "confidence": 1.0,
+          "model": "muse-wonder-1.0",
+          "asr_model": "muse-voice-transcribe-1.0"
+        },
+        "prev": "b7d5ecf73dca8b0210b2ca4ed9c1dc76b9bfed887066391c48a6f9bb43a31103",
+        "hash": "a52f9664156f3112416fbf0afc706caff4459a95167e8f6b08a18a5eff0e86f1"
+      },
+      "cost_usd": 0.411874
+    },
+    {
+      "locale": "ar",
+      "native": "العربية",
+      "language": "Arabic",
+      "phrase": "نعم، أوافق.",
+      "audio": {
+        "file": "artifacts\\audio\\seri_ar.wav",
+        "sha256": "f976c046c685c581fcb38a6bc345e94c874e46916f132a0101c4f12941377ea6",
+        "seconds": 3.06
+      },
+      "asr": {
+        "status": "answered",
+        "model": "muse-voice-transcribe-1.0",
+        "latency_s": 2.8,
+        "language_bias": [
+          "العربية"
+        ]
+      },
+      "transcript": "Nam أوفقوا",
+      "model": {
+        "status": "answered",
+        "intent": "APPROVE",
+        "confidence": 0.95,
+        "reason": "Contains أوفقوا, an approve word",
+        "latency_s": 3.69
+      },
+      "gate": {
+        "decision": "APPROVED",
+        "approved": true,
+        "locale": "ar",
+        "token_intent": "APPROVE",
+        "model_intent": "APPROVE",
+        "confidence": 0.95,
+        "threshold": 0.8,
+        "reasons": [],
+        "rule": "approval needs an approval token, an agreeing model and confidence >= 0.80"
+      },
+      "ledger": {
+        "seq": 15,
+        "ts": "2026-10-27T15:16:39+00:00",
+        "tier": 1,
+        "action": "VOICE_APPROVAL",
+        "detail": {
+          "locale": "ar",
+          "transcript": "Nam أوفقوا",
+          "audio_sha256": "f976c046c685c581fcb38a6bc345e94c874e46916f132a0101c4f12941377ea6",
+          "intent": "APPROVE",
+          "confidence": 0.95,
+          "model": "muse-wonder-1.0",
+          "asr_model": "muse-voice-transcribe-1.0"
+        },
+        "prev": "a52f9664156f3112416fbf0afc706caff4459a95167e8f6b08a18a5eff0e86f1",
+        "hash": "ab294ff7e1190134ea318da26be4509f7cb1bd51785f2d219703a626b3fa8ada"
+      },
+      "cost_usd": 0.411918
+    },
+    {
+      "locale": "pt",
+      "native": "Português",
+      "language": "Portuguese",
+      "phrase": "Sim, aprovo.",
+      "audio": {
+        "file": "artifacts\\audio\\seri_pt.wav",
+        "sha256": "bffee94fedfac1199188380858a53db4bad440e5d3a5e0c86325e157a448c011",
+        "seconds": 2.25
+      },
+      "asr": {
+        "status": "answered",
+        "model": "muse-voice-transcribe-1.0",
+        "latency_s": 2.43,
+        "language_bias": [
+          "Português"
+        ]
+      },
+      "transcript": "sim",
+      "model": {
+        "status": "answered",
+        "intent": "APPROVE",
+        "confidence": 1,
+        "reason": "sim is listed as APPROVE",
+        "latency_s": 3.23
+      },
+      "gate": {
+        "decision": "APPROVED",
+        "approved": true,
+        "locale": "pt",
+        "token_intent": "APPROVE",
+        "model_intent": "APPROVE",
+        "confidence": 1.0,
+        "threshold": 0.8,
+        "reasons": [],
+        "rule": "approval needs an approval token, an agreeing model and confidence >= 0.80"
+      },
+      "ledger": {
+        "seq": 16,
+        "ts": "2026-10-27T15:16:45+00:00",
+        "tier": 1,
+        "action": "VOICE_APPROVAL",
+        "detail": {
+          "locale": "pt",
+          "transcript": "sim",
+          "audio_sha256": "bffee94fedfac1199188380858a53db4bad440e5d3a5e0c86325e157a448c011",
+          "intent": "APPROVE",
+          "confidence": 1.0,
+          "model": "muse-wonder-1.0",
+          "asr_model": "muse-voice-transcribe-1.0"
+        },
+        "prev": "ab294ff7e1190134ea318da26be4509f7cb1bd51785f2d219703a626b3fa8ada",
+        "hash": "73172cc5b23b21ea76e6069063a6ad2ff923824f9c572130946bb21205385406"
+      },
+      "cost_usd": 0.411877
+    },
+    {
+      "locale": "sw",
+      "native": "Kiswahili",
+      "language": "Swahili",
+      "phrase": "Ndiyo, nakubali.",
+      "audio": {
+        "file": "artifacts\\audio\\seri_sw.wav",
+        "sha256": "77797052f9466b82df78f7f41087700d8ba195043d218c39abe3b5fdf4dd77eb",
+        "seconds": 2.79
+      },
+      "asr": {
+        "status": "answered",
+        "model": "muse-voice-transcribe-1.0",
+        "latency_s": 2.61,
+        "language_bias": [
+          "Kiswahili"
+        ]
+      },
+      "transcript": "Ndio na kubali.",
+      "model": {
+        "status": "answered",
+        "intent": "APPROVE",
+        "confidence": 0.99,
+        "reason": "Contains 'ndio' and 'kubali', both APPROVE words",
+        "latency_s": 3.45
+      },
+      "gate": {
+        "decision": "APPROVED",
+        "approved": true,
+        "locale": "sw",
+        "token_intent": "APPROVE",
+        "model_intent": "APPROVE",
+        "confidence": 0.99,
+        "threshold": 0.8,
+        "reasons": [],
+        "rule": "approval needs an approval token, an agreeing model and confidence >= 0.80"
+      },
+      "ledger": {
+        "seq": 17,
+        "ts": "2026-10-27T15:16:51+00:00",
+        "tier": 1,
+        "action": "VOICE_APPROVAL",
+        "detail": {
+          "locale": "sw",
+          "transcript": "Ndio na kubali.",
+          "audio_sha256": "77797052f9466b82df78f7f41087700d8ba195043d218c39abe3b5fdf4dd77eb",
+          "intent": "APPROVE",
+          "confidence": 0.99,
+          "model": "muse-wonder-1.0",
+          "asr_model": "muse-voice-transcribe-1.0"
+        },
+        "prev": "73172cc5b23b21ea76e6069063a6ad2ff923824f9c572130946bb21205385406",
+        "hash": "ee7650f64c0845c485aa7b4b76c7de73d11b54885502496b2bf84b339eceef7a"
+      },
+      "cost_usd": 0.411905
+    },
+    {
+      "locale": "ta",
+      "native": "தமிழ்",
+      "language": "Tamil",
+      "phrase": "சரி, அனுமதிக்கிறேன்.",
+      "audio": {
+        "file": "artifacts\\audio\\seri_ta.wav",
+        "sha256": "702acc257528f26a54d0a05bb6d8efa3cfb9e079ef4a94c55da0a83b3a32c74b",
+        "seconds": 2.86
+      },
+      "asr": {
+        "status": "answered",
+        "model": "muse-voice-transcribe-1.0",
+        "latency_s": 2.61,
+        "language_bias": [
+          "Tamil",
+          "English"
+        ]
+      },
+      "transcript": "சரி அனுமதிக்கிறேன்.",
+      "model": {
+        "status": "answered",
+        "intent": "APPROVE",
+        "confidence": 0.98,
+        "reason": "Contains சரி, a listed approve word",
+        "latency_s": 4.01
+      },
+      "gate": {
+        "decision": "APPROVED",
+        "approved": true,
+        "locale": "ta",
+        "token_intent": "APPROVE",
+        "model_intent": "APPROVE",
+        "confidence": 0.98,
+        "threshold": 0.8,
+        "reasons": [],
+        "rule": "approval needs an approval token, an agreeing model and confidence >= 0.80"
+      },
+      "ledger": {
+        "seq": 18,
+        "ts": "2026-10-27T15:16:58+00:00",
+        "tier": 1,
+        "action": "VOICE_APPROVAL",
+        "detail": {
+          "locale": "ta",
+          "transcript": "சரி அனுமதிக்கிறேன்.",
+          "audio_sha256": "702acc257528f26a54d0a05bb6d8efa3cfb9e079ef4a94c55da0a83b3a32c74b",
+          "intent": "APPROVE",
+          "confidence": 0.98,
+          "model": "muse-wonder-1.0",
+          "asr_model": "muse-voice-transcribe-1.0"
+        },
+        "prev": "ee7650f64c0845c485aa7b4b76c7de73d11b54885502496b2bf84b339eceef7a",
+        "hash": "e052803bb953c6a5a62ece811e349ee07db03b8775febb1e372fc82cba202424"
+      },
+      "cost_usd": 0.411908
+    }
+  ],
+  "note": "Voice approval, not delivery. Each clip is rendered locally by MMS-TTS, transcribed by Muse Voice Transcribe, classified by Muse Wonder, and decided in code. Nothing is dispatched - there is no gateway on this machine. A locale that cannot be heard is text-only rather than spoken in the wrong language."
+}

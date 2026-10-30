@@ -34,6 +34,9 @@ artifacts/shots/
 # proof clips and the labelled synthetic voice note are deliverables
 !artifacts/proof/*.mp4
 !artifacts/audio/report_01.wav
+!artifacts/audio/voice/*.wav
+# the 7 spoken approval clips are the evidence the Seri gate describes
+!artifacts/audio/seri_*.wav
 
 # --- node / next.js --------------------------------------------------------
 node_modules/

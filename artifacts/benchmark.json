@@ -1,0 +1,102 @@
+{
+  "schema": "lifeline.benchmark/1.0",
+  "generated_utc": "2026-10-27T14:57:31+00:00",
+  "machine": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.14.4",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 16
+  },
+  "local": {
+    "route_a_star": {
+      "repeat": 500,
+      "median_ms": 0.027,
+      "p95_ms": 0.031,
+      "min_ms": 0.017,
+      "max_ms": 0.119
+    },
+    "topological_order": {
+      "repeat": 2000,
+      "median_ms": 0.012,
+      "p95_ms": 0.014,
+      "min_ms": 0.007,
+      "max_ms": 0.082
+    },
+    "allocate_policy": {
+      "repeat": 1000,
+      "median_ms": 0.014,
+      "p95_ms": 0.017,
+      "min_ms": 0.009,
+      "max_ms": 0.077
+    },
+    "validate_allocation": {
+      "repeat": 1000,
+      "median_ms": 0.005,
+      "p95_ms": 0.006,
+      "min_ms": 0.003,
+      "max_ms": 0.066
+    },
+    "escalation_8_locales": {
+      "repeat": 50,
+      "median_ms": 3.021,
+      "p95_ms": 4.086,
+      "min_ms": 2.151,
+      "max_ms": 5.094
+    }
+  },
+  "recorded": {
+    "openweight_brain": {
+      "model": "meta-models/muse-spark-open-1026",
+      "latencies_s": [
+        5.41,
+        6.73
+      ],
+      "source": "artifacts/openweight_proof.json"
+    },
+    "asr": {
+      "model": "muse-voice-transcribe-1.0",
+      "audio_seconds": 10.78,
+      "source": "artifacts/voice_reports.json"
+    },
+    "tts": {
+      "engine": "MMS-TTS",
+      "device": "cpu",
+      "clips": 14,
+      "audio_seconds": 199.46,
+      "synth_seconds": 45.43,
+      "real_time_factor": 0.231,
+      "source": "artifacts/voice_synth.json"
+    },
+    "drafting": {
+      "model": "muse-spark-1.3",
+      "reviewer": "muse-wonder-1.0",
+      "locales": 8,
+      "draft_s": [
+        14.54,
+        12.18,
+        10.33,
+        10.02,
+        10.79,
+        10.52,
+        8.43,
+        10.01
+      ],
+      "review_s": [
+        6.94,
+        9.41,
+        9.24,
+        6.06,
+        7.36,
+        8.5,
+        12.31,
+        10.97
+      ],
+      "source": "artifacts/multilingual_payloads.json"
+    }
+  },
+  "ledger": {
+    "spent_usd": 13.538564,
+    "rows": 38,
+    "calls": 64
+  }
+}

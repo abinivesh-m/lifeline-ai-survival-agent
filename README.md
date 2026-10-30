@@ -142,6 +142,59 @@ PENDING_CREDENTIALS - generated and logged only - no SMS/WhatsApp/voice gateway 
 That is the honest state: 72 payloads (9 per language) are built and logged, none is claimed to have been
 sent. With a gateway configured the same call returns the gateway's status instead.
 
+### The spoken ladder
+
+A text ladder assumes the reader can read. The tier-2 SMS, the WhatsApp copy and the voice-call script are
+also **spoken**, in all eight locales, from committed WAV files:
+
+| Piece | Who does it | Cost |
+| --- | --- | --- |
+| Drafts the SMS, the spoken alert and the 70/30 decision sentence in one call | `muse-spark-1.3` | $0.50 per locale |
+| Reviews all three for invented numbers, clinical advice, wrong language, false dispatch claims | `muse-wonder-1.0` | $0.4118 per locale |
+| Re-checks every number in code (`multilingual.py`) | this repo, no model | $0 |
+| Renders the approved words to audio | **MMS-TTS** (`facebook/mms-tts-*`), open weight, local CPU | $0 |
+| Delivers the call | *nobody* - no gateway configured | $0, `PENDING_CREDENTIALS` |
+
+The Meta API exposes no text-to-speech endpoint (its model list is Wonder, Spark, SAM, Voice Transcribe and
+Image), so this repo does not pretend one exists. The model writes the words; the voice is an open-weight
+model running on this laptop. A payload ships only if the code check **and** the review pass - otherwise the
+hand-written template is kept and `artifacts/multilingual_payloads.json` records why. The artifact also
+stores a `text_sha256` per clip, so a stale WAV can never be played over a changed decision.
+
+```bash
+python multilingual.py            # draft + validate + review, 8 locales
+python voice_synth.py             # render the approved words with MMS-TTS
+python voice_synth.py --verify    # prove every clip still matches its text
+```
+
+### Seri gate: the yes that needs no reading
+
+A paper QR still needs a reader. `seri_gate.py` closes that last gap in **seven spoken languages**: one
+approval phrase is rendered locally by MMS-TTS, transcribed by Muse Voice Transcribe, classified by Muse
+Wonder, and then **code** decides:
+
+| Check | Why it exists |
+| --- | --- |
+| The transcript contains that locale's approval token (`சரி`, `sí`, `oui`, `نعم`, `sim`, `ndiyo`, `yes`) | the model cannot approve a word that was never said |
+| The model's intent agrees with the token | a misunderstood "no" must never dispatch fuel |
+| Confidence >= 0.80 | a guess is a no |
+| On approval only: append to the hash-chained ledger with the audio's sha256 and the locale | the word and the record cannot drift apart |
+
+Everything else - a question, a cough, silence, "maybe" - is `WITHHELD`, and the panel says which check
+failed. Denial wins over approval, Tamil negation is a suffix (`சரியில்லை` stays one token and is never
+read as `சரி`), and an ASR stutter (`சரிசரி`) only collapses when it is an exact double. Mandarin has no
+released MMS-TTS checkpoint, so `zh` is listed as **text-only** rather than spoken in the wrong language.
+
+The clips in `artifacts/audio/seri_*.wav` are synthetic (MMS-TTS) until real recordings replace them; the
+page labels them that way rather than implying a field recording. Swapping one in is a file drop:
+
+```bash
+python seri_gate.py                       # 7 locales: clip -> ASR -> intent -> gate -> ledger
+python seri_gate.py --locale ta           # one language
+python seri_gate.py --locale ta --file my-recording.wav
+python seri_gate.py --transcript "சரி"    # test the gate with no network
+```
+
 Step 8 is not a diagram. Two real replans ship today:
 
 ```bash
@@ -187,11 +240,12 @@ Seven Meta surfaces, each doing work a different surface cannot do:
 
 | Model | Role | Budget | Status |
 | --- | --- | --- | --- |
-| **Muse Wonder** `muse-wonder-1.0`, `reasoning_effort=high` | optional second opinion, cascade planning | $70 | 1 call, $0.411765 spent |
+| **Muse Wonder** `muse-wonder-1.0`, `reasoning_effort=high` | second opinion, cascade planning, 8-locale payload review, spoken-intent check | $70 | 20 calls, $8.235300 spent |
 | **SAM 3.1** `sam-3.1` | flood extent per frame, boxes + masks | $30 | stored: 9 frames, 35.3% featured |
-| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched | $30 | stored: 1 report, synthetic placeholder labelled |
-| **Muse Spark** `muse-spark-1.3` | coding helper + LIFEGRID/creative prompts | $20 | wired |
-| **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 2/3 valid, 5.41 s / 6.73 s, 70/30 |
+| **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched; Seri Gate ears | $30 | 8 calls, $0.001479 - one report + seven approval passes |
+| **Muse Spark** `muse-spark-1.3` | 8-locale SMS + spoken payload drafting; coding helper | $20 | 13 calls, $6.500000 spent |
+| **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 2/3 valid, 5.41 / 6.73 s stored, latest live 4.44 s, 70/30 |
+| **MMS-TTS** `facebook/mms-tts-*` | speaks the approved payloads, 7 locales, local CPU | $0 credits | 14 clips, 0 network at playback |
 | **Muse Glimmer 30B** | open-weight reasoner, Modal GPU | $0 credits | not deployed (18 GB does not fit) |
 | **Muse Code 1.4.13** | primary coding agent for this repo | $0 | used |
 
@@ -295,20 +349,23 @@ Alerts fire at **80% ($120)** and **95% ($142.50)**; a **$20 reserve** is tracke
 week keeps contingency. `python credit_tracker.py simulate` replays the whole plan and proves it lands on
 $150.00 exactly, with `verify()` passing.
 
-The table above is the *plan*. Actual live spend at build time, read from the four append-only rows in
+The table above is the *plan*. Actual live spend at build time, read from the append-only rows in
 `credit_usage.json` and shown on screen:
 
 | Bucket | Calls | Spent | Where it came from |
 | --- | --- | --- | --- |
-| Muse Wonder | 1 | $0.411765 | one allocation proposal, accepted by the validator |
+| Muse Wonder | 20 | $8.235300 | one allocation proposal, twelve 8-locale payload reviews, seven spoken-approval passes |
 | SAM 3.1 | 15 | $0.037500 | six capture images + nine flood frames |
-| Muse Voice Transcribe | 1 | $0.000539 | one Tamil report |
+| Muse Voice Transcribe | 8 | $0.001479 | one Tamil report + seven Seri Gate passes |
+| Muse Spark | 13 | $6.500000 | 8 locales x (SMS + spoken alert + decision), plus early retries |
+| MMS-TTS (local) | 14 | $0.000000 | spoken SMS and 70/30 decision in 7 locales |
 | Spark Open / Glimmer / Muse Code | 0 | $0 | partner inference at $0 |
-| **Total** | **17** | **$0.449804** | **$0.4498 of $150 - the badge on the page** |
+| **Total** | **70** | **$14.774279** | **$14.77 of $150 - the badge on the page** |
 
-The SAM bucket aggregates two rows (6 + 9 calls), which is why the panel says 15 calls and the ledger
-still has four rows. Meta's free credits cover the spend; Open Weight calls on Baseten are not metered
-against this budget at all.
+The SAM bucket aggregates two rows (6 + 9 calls), which is why the panel says 15 calls. The seven Seri
+Gate passes are the cost of proving the gate refuses a misheard word as well as it accepts a clear one,
+not of the demo path. Meta's free credits cover the spend; Open Weight calls on Baseten and every
+MMS-TTS clip are not metered against this budget at all.
 
 > `credit_usage.json` is git-ignored because it is generated at runtime. The submission attaches the
 > ledger produced by the real capture runs; `python credit_tracker.py verify` proves it.
@@ -328,6 +385,10 @@ python a_star.py --audit              # prove the heuristic is admissible
 python protocols.py                   # snake-boat relay + ant-pheromone learner
 python allocator.py --mode policy     # 70 L / 30 L, evidence vs inference
 python credit_tracker.py simulate     # replay the $150 plan
+python multilingual.py --verify       # 8-locale payloads still satisfy every rule
+python voice_synth.py --verify        # every spoken clip still matches its text
+python seri_gate.py                   # one spoken word -> gated approval -> ledger
+python benchmark.py                   # local medians + recorded model latencies
 python agent.py --yes --mode policy   # the eight steps, start to finish
 python agent.py --yes --scenario reserve-loss
 ```

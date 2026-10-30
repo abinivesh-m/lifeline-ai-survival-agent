@@ -193,6 +193,11 @@ def _escalation_state(town: dict, decision: str) -> dict:
     batches = [escalation.notifications(2, town, locale=code) for code in languages]
     payloads = [payload for batch in batches for payload in batch]
     statuses = sorted({payload["status"] for payload in payloads})
+    drafted = sorted({payload["locale"] for payload in payloads if payload.get("source") == "model-drafted"})
+    spoken = sorted({
+        payload["locale"] for payload in payloads
+        if payload["channel"] == "voice_call" and payload.get("audio")
+    })
     return {
         "tier": escalation.tier_for(0.0),
         "decision": decision,
@@ -204,6 +209,8 @@ def _escalation_state(town: dict, decision: str) -> dict:
         "channels": sorted({payload["channel"] for payload in payloads}),
         "status": statuses[0] if len(statuses) == 1 else statuses,
         "note": "generated and logged only - no SMS/WhatsApp/voice gateway configured",
+        "model_drafted_locales": drafted,
+        "spoken_locales": spoken,
         "evidence": "escalation.notifications(tier 2) for every code in locales/index.json",
     }
 
@@ -400,6 +407,11 @@ def _print_step(result: dict, town: dict) -> None:
                   f"{esc['payloads_total']} payloads / {len(esc['languages'])} languages / "
                   f"{' / '.join(esc['channels'])}")
             print(f"  {esc['status']} - {esc['note']}")
+            drafted = esc.get("model_drafted_locales") or []
+            spoken = esc.get("spoken_locales") or []
+            print(f"  payloads drafted by a model: {len(drafted)}/{len(esc['languages'])} locales")
+            print(f"  spoken clips on disk: {len(spoken)}/{len(esc['languages'])} locales · "
+                  f"artifacts/audio/voice/ · nothing dialled")
     elif result["name"] == "REPLAN":
         if result["status"] == "guardrail_held":
             print(f"  human instruction {result['instruction']} rejected:")

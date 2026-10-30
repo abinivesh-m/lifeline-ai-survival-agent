@@ -32,7 +32,7 @@ async function sha256(text: string) {
 }
 
 export default function AllocatorDashboard() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const [decision, setDecision] = useState<null | "approve" | "deny">(null);
   const [chain, setChain] = useState<{ seq: number; action: string; hash: string }[]>([]);
   const [busy, setBusy] = useState(false);
@@ -53,6 +53,31 @@ export default function AllocatorDashboard() {
   const policyJustification = lifeline.allocation.justification;
   const typedOpenweight = useTypewriter(brain?.justification ?? policyJustification);
   const typedPolicy = useTypewriter(policyJustification);
+
+  // The same decision, spoken in the language the reader chose. The clip only
+  // plays for the 70/30 split it was rendered for - a stale clip would be a
+  // false claim, so it is hidden. zh has no committed clip and says so.
+  const decisionClip = useMemo(() => {
+    const entry = lifeline.multilingual?.locales.find((item) => item.code === locale.code);
+    const clip = entry?.audio?.allocation;
+    const split = lifeline.allocation.policy;
+    const matches = split?.hospital === 70 && split?.water_pump === 30;
+    return matches && clip ? clip : null;
+  }, [locale.code]);
+  const decisionAudio = useRef<HTMLAudioElement | null>(null);
+  const [decisionSpeaking, setDecisionSpeaking] = useState(false);
+
+  const speakDecision = () => {
+    const audio = decisionAudio.current;
+    if (!audio || !decisionClip) return;
+    if (decisionSpeaking) {
+      audio.pause();
+      setDecisionSpeaking(false);
+      return;
+    }
+    audio.src = decisionClip.src;
+    void audio.play().then(() => setDecisionSpeaking(true)).catch(() => setDecisionSpeaking(false));
+  };
 
   const allocation =
     brainView === "openweight" && brain?.allocation
@@ -245,7 +270,35 @@ export default function AllocatorDashboard() {
               validator · {lifeline.allocation.validation?.ok ? "pass" : "fail"} 70L/30L ·{" "}
               {Math.round(lifeline.allocation.confidence * 100)}% conf
             </span>
+            {decisionClip && (
+              <button
+                onClick={speakDecision}
+                aria-pressed={decisionSpeaking}
+                title={`Spoken in ${locale.language} · ${decisionClip.seconds.toFixed(1)} s · MMS-TTS, rendered locally`}
+                className={`rounded border px-1.5 py-0.5 mono text-[8.5px] transition ${
+                  decisionSpeaking
+                    ? "border-amber/60 bg-amber/15 text-amber"
+                    : "border-line text-muted hover:border-teal/50 hover:text-teal"
+                }`}
+              >
+                {decisionSpeaking ? "■ STOP" : `▶ LISTEN · ${locale.native}`}
+              </button>
+            )}
+            {!decisionClip && (
+              <span
+                title="No committed clip for this locale - the decision ships as text"
+                className="cursor-default rounded border border-line/50 px-1.5 py-0.5 mono text-[8.5px] text-muted/50"
+              >
+                TEXT ONLY · {locale.native}
+              </span>
+            )}
           </div>
+          <audio
+            ref={decisionAudio}
+            onEnded={() => setDecisionSpeaking(false)}
+            onError={() => setDecisionSpeaking(false)}
+            preload="none"
+          />
           <p className="mt-1.5 mono text-[8px] leading-relaxed text-muted/70">
             {brainView === "openweight"
               ? "The model proposes; the validator re-checks every hard constraint in code. Nothing is trusted from the model."
