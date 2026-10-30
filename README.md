@@ -42,6 +42,7 @@ rebuild them as editable frames.
 - [What it does](#what-it-does)
 - [The LIFEGRID model](#the-lifegrid-model)
 - [The eight-step agent](#the-eight-step-agent)
+- [Agentic use-case](#agentic-use-case)
 - [Measured impact](#measured-impact)
 - [Use of Meta AI tooling](#use-of-meta-ai-tooling)
 - [Technical depth](#technical-depth)
@@ -120,7 +121,7 @@ pump runs 90 minutes on 30 L. That is the whole thesis in one number.
 | 7 | **Approve + escalate** - human gate, four-tier ladder | operator + `escalation.py` | human decides; silence escalates |
 | 8 | **Replan** when the world changes | `agent.py` | yes |
 
-**Six of eight steps need no human. One human touchpoint. Zero model calls are required for steps 3, 4,
+**Seven of eight steps need no human. One human touchpoint. Zero model calls are required for steps 3, 4,
 6 and 8**, which is why the agent still works in flight mode.
 
 ### Step 7 runs the ladder, it does not describe it
@@ -212,6 +213,74 @@ python agent.py --yes --scenario pump-critical
 ```
 
 The second one matters more than the first. The agent can refuse its operator.
+
+## Agentic use-case
+
+The Best Agentic Use-Case bonus asks for autonomy, effectiveness and practical usefulness. Here is where
+each one lives, and where it is deliberately absent.
+
+| Step | What the agent decides on its own | Human? | Where it is proven |
+| --- | --- | --- | --- |
+| 1 PERCEIVE | flood extent per frame, as masks and percentages | no | `agent.py:step_perceive` |
+| 2 LISTEN | which field report changes the route | no | `agent.py:step_listen` |
+| 3 GRAPH | dependency order, and what dies with the heart | no - no model call | `dependency_graph.py:kahn_order` |
+| 4 ROUTE | the 7.8 km detour around NH-544 km 42 | no - no model call | `a_star.py:plan_route` |
+| 5 ALLOCATE | 70 L heart / 30 L lungs, with evidence per litre | no - the validator overrules the model | `allocator.py:validate_proposal` |
+| 6 BUDGET | whether a call may be made at all | no - it refuses before writing | `credit_tracker.py:log` |
+| 7 APPROVE | when to escalate, to whom, and in which language | **yes - the only gate** | `agent.py:step_approve`, `escalation.py` |
+| 8 REPLAN | a new plan when the depot is damaged | no | `agent.py:step_replan` |
+
+**Seven of eight steps run unattended. One gate remains, and that is the design.**
+
+An agent that can move a town's last 100 litres of diesel without a person saying yes is not a product,
+it is a liability. The gate is why this is deployable in a panchayat office; it is not evidence of a
+missing capability.
+
+The gate is also not a prompt asking a model for permission. It is code, and its default is no:
+
+- interactive: `[y/N]`, and anything other than `y` / `yes` denies
+- no terminal and no `--yes`: `BLOCKED - no interactive terminal`, nothing executes
+- stdin closed mid-prompt: `BLOCKED - operator input closed`
+- `--yes` records a pre-approval in the run file, labelled `mode: pre-approved`, never as a human who was
+  actually there
+
+### It recovers without a restart
+
+Step 8 is the part most "agents" cannot do: the world changes after the plan is approved, and the plan
+moves without re-running the pipeline. Both scenarios below were run today and are computed by the same
+solver and validator - no model call.
+
+**Depot damaged, 80 L usable instead of 100 L** (`python agent.py --yes --mode policy --scenario reserve-loss`):
+
+```
+trigger:    depot integrity failure, 80 L usable instead of 100 L
+allocation: {'hospital': 70, 'water_pump': 10}
+hospital still at 70 L: True
+pump runtime 6.0 h -> 2.0 h, 16000 L of water lost
+```
+
+The heart is protected first, the cost is stated in litres of water rather than hidden, and the
+allocation still sums to the reserve.
+
+**A human insists the pump outranks the hospital** (`--scenario pump-critical`):
+
+```
+human instruction {'hospital': 60, 'water_pump': 40} rejected:
+  - water_pump: 40 L exceeds stated demand 30 L
+  - hospital is under-funded (60/70 L) while water_pump receives diesel
+applied instead: {'hospital': 70, 'water_pump': 30}
+```
+
+That is the one worth a judge's attention: the agent accepts a changed world but refuses a changed
+priority. It will not starve the heart because someone shouted louder.
+
+### It constrains itself
+
+`CreditTracker.log()` raises `BudgetError` **before** it writes if a call would break a per-model bucket
+or the total, so an agent looping on a model cannot quietly spend the town's budget. Every tier
+transition is appended to a hash-chained ledger, so editing a past entry breaks every hash after it. The
+Seri Gate is the same idea applied to the operator: approval needs the spoken token **and** an agreeing
+model **and** confidence >= 0.80, and the model never gets the last word.
 
 ## Measured impact
 
