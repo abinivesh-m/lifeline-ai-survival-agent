@@ -36,10 +36,10 @@
     },
     "global": {
       "tagline": "Built in Kottur, works anywhere",
-      "people_in_scope": "~3.5 billion people live in low-infrastructure, flood-exposed regions",
+      "people_in_scope": "1.81 billion people are directly exposed to 1-in-100-year floods",
       "pattern": "fuel depot = blood, hospital = heart, water pump = lungs, shelters = organs",
       "why_it_transfers": "The organ graph is data. Any blocked road becomes a new edge weight; the same A* search, the same topological order, the same constrained allocation runs unchanged.",
-      "evidence_note": "3.5B is an order-of-magnitude figure for people in low- and middle-income countries exposed to flood risk; cite the source in the submission form."
+      "evidence_note": "1.81 billion people (23% of world population) are directly exposed to flood depths over 0.15 m in a 1-in-100-year event - Rentschler, Salhab & Jafino, 'Flood exposure and poverty in 188 countries', Nature Communications 13, 3527 (2022). The earlier '3.5 billion' was an uncited order-of-magnitude and has been removed."
     },
     "crisis": {
       "id": "kottur-flood-nh544-km42",
@@ -699,8 +699,8 @@
       "burn_l_per_hour": 17.5,
       "hours": 4.0,
       "minutes": 240,
-      "dies_at": "2026-10-30T19:48:04+00:00",
-      "started_at": "2026-10-30T15:48:04+00:00",
+      "dies_at": "2026-10-30T19:58:02+00:00",
+      "started_at": "2026-10-30T15:58:02+00:00",
       "label": "4 h 00 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -711,8 +711,8 @@
       "burn_l_per_hour": 21.0,
       "hours": 3.33,
       "minutes": 200,
-      "dies_at": "2026-10-30T19:08:04+00:00",
-      "started_at": "2026-10-30T15:48:04+00:00",
+      "dies_at": "2026-10-30T19:18:02+00:00",
+      "started_at": "2026-10-30T15:58:02+00:00",
       "label": "3 h 20 m",
       "confidence": "arithmetic",
       "note": "Fuel-limited runtime, not a failure prediction. Mechanical failure, fuel contamination and overload tripping all shorten this and are not modelled - because no failure-sound dataset exists in this repo."
@@ -2199,7 +2199,7 @@
       "esc.vote": "Vote on diesel dispatch: hospital {hospital} L, water pump {pump} L.",
       "evidence.landslide": "NH-544 km 42 landslide, road closed about 6 h",
       "evidence.people": "{people} people in shelters have no water",
-      "world.scope": "3.5 billion people live in towns with this same cascade"
+      "world.scope": "1.81 billion people are directly exposed to 1-in-100-year floods (Rentschler et al., 2022)"
     },
     "es": {
       "language": "Spanish",
@@ -2240,7 +2240,7 @@
       "esc.vote": "Voto sobre el envío de diésel: hospital {hospital} L, bomba de agua {pump} L.",
       "evidence.landslide": "NH-544 km 42 deslizamiento, carretera cerrada unas 6 h",
       "evidence.people": "{people} personas en refugios no tienen agua",
-      "world.scope": "3.500 millones de personas viven en ciudades con esta misma cascada"
+      "world.scope": "1.810 millones de personas están directamente expuestas a inundaciones centenarias (Rentschler et al., 2022)"
     },
     "fr": {
       "language": "French",
@@ -2281,7 +2281,7 @@
       "esc.vote": "Vote sur l'envoi de gazole : hôpital {hospital} L, pompe à eau {pump} L.",
       "evidence.landslide": "NH-544 km 42 glissement de terrain, route fermée environ 6 h",
       "evidence.people": "{people} personnes dans les abris sont sans eau",
-      "world.scope": "3,5 milliards de personnes vivent dans des villes connaissant cette même cascade"
+      "world.scope": "1,81 milliard de personnes sont directement exposées aux crues centennales (Rentschler et al., 2022)"
     },
     "zh": {
       "language": "Chinese",
@@ -2322,7 +2322,7 @@
       "esc.vote": "柴油派送表决：医院 {hospital} 升，水泵 {pump} 升。",
       "evidence.landslide": "NH-544 公里42山体滑坡，道路封闭约 6 小时",
       "evidence.people": "避难所内 {people} 人断水",
-      "world.scope": "35 亿人生活在具有同样连锁风险的城镇"
+      "world.scope": "18.1 亿人直接暴露于百年一遇的洪水风险（Rentschler et al., 2022）"
     },
     "ar": {
       "language": "Arabic",
@@ -2363,7 +2363,7 @@
       "esc.vote": "تصويت على إرسال الديزل: المستشفى {hospital} لتر، مضخة المياه {pump} لتر.",
       "evidence.landslide": "NH-544 كم 42 انهيار أرضي، الطريق مغلق نحو 6 ساعات",
       "evidence.people": "{people} شخصاً في الملاجئ بلا ماء",
-      "world.scope": "3.5 مليار شخص يعيشون في بلدات تواجه هذا التسلسل نفسه"
+      "world.scope": "1.81 مليار شخص معرضون مباشرة لفيضانات مرة كل 100 عام (Rentschler et al., 2022)"
     },
     "pt": {
       "language": "Portuguese",
@@ -2404,7 +2404,7 @@
       "esc.vote": "Votação sobre o envio de diesel: hospital {hospital} L, bomba de água {pump} L.",
       "evidence.landslide": "NH-544 km 42 deslizamento, estrada fechada cerca de 6 h",
       "evidence.people": "{people} pessoas em abrigos sem água",
-      "world.scope": "3,5 bilhões de pessoas vivem em cidades com esta mesma cascata"
+      "world.scope": "1,81 bilhão de pessoas estão diretamente expostas a inundações centenárias (Rentschler et al., 2022)"
     },
     "sw": {
       "language": "Swahili",
@@ -2445,7 +2445,7 @@
       "esc.vote": "Kura kuhusu usafirishaji wa dizeli: hospitali {hospital} L, pampu ya maji {pump} L.",
       "evidence.landslide": "NH-544 km 42 maporomoko ya ardhi, barabara imefungwa takriban saa 6",
       "evidence.people": "watu {people} kwenye makazi hawana maji",
-      "world.scope": "watu bilioni 3.5 wanaishi katika miji yenye mfululizo huu huo"
+      "world.scope": "Watu bilioni 1.81 wanakabiliwa moja kwa moja na mafuriko ya miaka 100 (Rentschler et al., 2022)"
     },
     "ta": {
       "language": "Tamil",
@@ -2486,7 +2486,7 @@
       "esc.vote": "டீசல் அனுப்பீட்டு வாக்கெடுப்பு: மருத்துவமனை {hospital} லி, நீர் பம்ப் {pump} லி.",
       "evidence.landslide": "NH-544 கிமீ 42 நிலச்சரிவு, சாலை சுமார் 6 மணி நேரம் மூடல்",
       "evidence.people": "தங்குமிடங்களில் {people} பேருக்கு தண்ணீர் இல்லை",
-      "world.scope": "இதே தொடர் விளைவைக் கொண்ட நகரங்களில் 350 கோடி மக்கள் வாழ்கிறார்கள்"
+      "world.scope": "100 ஆண்டுகளுக்கு ஒருமுறை வரும் வெள்ளத்திற்கு 181 கோடி மக்கள் நேரடியாக ஆளாகியுள்ளனர் (Rentschler et al., 2022)"
     }
   },
   "baseline": {

@@ -283,7 +283,7 @@ and no model call. `python agent.py --yes --mode policy --scenario field-report`
 Two calls were captured. **The first changes nothing**, and that is the point:
 
 ```
-report_01.wav  (real capture, Tamil, Muse Voice Transcribe)
+report_01.wav  (Tamil, Muse Voice Transcribe; audio is a labelled placeholder)
 constraint road_blocked   = NH-544 km 42
 constraint closure_hours  = 6 h
 status: no_change   allocation {'hospital': 70, 'water_pump': 30} -> unchanged
@@ -343,6 +343,12 @@ network, the reserve and the demands are all data in `town.json`. Point it at an
 three algorithms run: any blocked road, any fuel reserve, any hospital-pump-shelter chain. Kottur is the
 proof, the pattern is the product - hill towns in Nilgiris, the Assam floodplain, coastal Kerala, and the
 same cascade in the Philippines, Indonesia, Kenya and Puerto Rico.
+
+**The size of the problem, with a source.** 1.81 billion people - 23% of the world - are directly exposed
+to flood depths over 0.15 m in a 1-in-100-year event: Rentschler, Salhab & Jafino, "Flood exposure and
+poverty in 188 countries", *Nature Communications* 13, 3527 (2022). The figure is in `town.json`
+(`global.evidence_note`) with the citation, and it is the only population claim in the repository. An
+earlier "3.5 billion" was an uncited order-of-magnitude and was removed rather than sourced badly.
 
 ## Use of Meta AI tooling
 

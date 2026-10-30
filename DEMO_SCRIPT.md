@@ -62,9 +62,10 @@ Section 04. Toggle **OPEN WEIGHT** ↔ **OFFLINE POLICY**.
 
 Section 08, **FIELD REPORT → REPLAN**. Point at CALL 1, then CALL 2.
 
-> "Two calls came in. The first is the real one: km 42, closed six hours, hospital needs diesel. The
-> agent extracts that, checks it against the town, and changes nothing — because it already knew. An
-> agent that rewrites its plan on every phone call is not one you can trust."
+> "Two calls came in. The first is the incident call: km 42, closed six hours, hospital needs diesel. The
+> transcript is real API output; the audio is a labelled placeholder. The agent extracts the constraint,
+> checks it against the town, and changes nothing — because it already knew. An agent that rewrites its
+> plan on every phone call is not one you can trust."
 
 > "The second call takes the village road away. Same solver, no restart: 7.8 kilometres becomes 13. The
 > detour burns 1.8 litres more, so the pump loses a five-litre block — six hours of water becomes five,
@@ -124,11 +125,14 @@ Section 09.
 - Do not claim 8 spoken languages. Seven have clips; Mandarin has no released MMS-TTS checkpoint and
   ships text-only, on screen.
 - Do not call the seri clip a field recording. It is labelled synthetic until a real one replaces it.
-- Do not call the second field report a real recording. `report_02.wav` is MMS-TTS and the panel says
-  **SYNTHETIC CLIP**. The first report is the real capture.
+- Do not call either field-report clip a real recording. Both audio files are labelled **SYNTHETIC CLIP**
+  on the panel; what is real is the Muse Voice Transcribe call that produced each transcript. Say it that
+  way and the panel agrees with you.
 - Do not say a model extracts the constraints. It is regex over the verbatim transcript, on purpose: a
   misheard number must not be able to move diesel.
-- Do not quote "3.5 billion at risk". No such figure exists in this repo.
+- The flood figure is **1.81 billion people directly exposed to 1-in-100-year floods** (Rentschler, Salhab
+  & Jafino, *Nature Communications* 13, 3527, 2022). If you cite a number, cite that one and its source.
+  Do not say "3.5 billion" - it was an uncited order-of-magnitude and it is no longer on the page.
 
 ## After recording
 

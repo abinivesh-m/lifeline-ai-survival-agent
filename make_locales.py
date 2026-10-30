@@ -3,9 +3,9 @@
     python make_locales.py            # write locales/*.json
     python make_locales.py --check    # validate coverage only
 
-Why eight: they cover the large majority of the ~3.5 billion people living in
-low-infrastructure, flood-exposed towns, and they include the one that matters
-personally - Tamil, the language this was built in.
+Why eight: they cover the large majority of the 1.81 billion people the World
+Bank estimates are directly exposed to 1-in-100-year floods, and they include
+the one that matters personally - Tamil, the language this was built in.
 
     en  English      global responders, judges
     es  Spanish      Mexico, Central America, Philippines, 500M+
@@ -70,7 +70,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "Vote on diesel dispatch: hospital {hospital} L, water pump {pump} L.",
         "evidence.landslide": "NH-544 km 42 landslide, road closed about 6 h",
         "evidence.people": "{people} people in shelters have no water",
-        "world.scope": "3.5 billion people live in towns with this same cascade",
+        "world.scope": "1.81 billion people are directly exposed to 1-in-100-year floods (Rentschler et al., 2022)",
     },
     "es": {
         "language": "Spanish",
@@ -111,7 +111,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "Voto sobre el envío de diésel: hospital {hospital} L, bomba de agua {pump} L.",
         "evidence.landslide": "NH-544 km 42 deslizamiento, carretera cerrada unas 6 h",
         "evidence.people": "{people} personas en refugios no tienen agua",
-        "world.scope": "3.500 millones de personas viven en ciudades con esta misma cascada",
+        "world.scope": "1.810 millones de personas están directamente expuestas a inundaciones centenarias (Rentschler et al., 2022)",
     },
     "fr": {
         "language": "French",
@@ -152,7 +152,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "Vote sur l'envoi de gazole : hôpital {hospital} L, pompe à eau {pump} L.",
         "evidence.landslide": "NH-544 km 42 glissement de terrain, route fermée environ 6 h",
         "evidence.people": "{people} personnes dans les abris sont sans eau",
-        "world.scope": "3,5 milliards de personnes vivent dans des villes connaissant cette même cascade",
+        "world.scope": "1,81 milliard de personnes sont directement exposées aux crues centennales (Rentschler et al., 2022)",
     },
     "zh": {
         "language": "Chinese",
@@ -193,7 +193,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "柴油派送表决：医院 {hospital} 升，水泵 {pump} 升。",
         "evidence.landslide": "NH-544 公里42山体滑坡，道路封闭约 6 小时",
         "evidence.people": "避难所内 {people} 人断水",
-        "world.scope": "35 亿人生活在具有同样连锁风险的城镇",
+        "world.scope": "18.1 亿人直接暴露于百年一遇的洪水风险（Rentschler et al., 2022）",
     },
     "ar": {
         "language": "Arabic",
@@ -234,7 +234,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "تصويت على إرسال الديزل: المستشفى {hospital} لتر، مضخة المياه {pump} لتر.",
         "evidence.landslide": "NH-544 كم 42 انهيار أرضي، الطريق مغلق نحو 6 ساعات",
         "evidence.people": "{people} شخصاً في الملاجئ بلا ماء",
-        "world.scope": "3.5 مليار شخص يعيشون في بلدات تواجه هذا التسلسل نفسه",
+        "world.scope": "1.81 مليار شخص معرضون مباشرة لفيضانات مرة كل 100 عام (Rentschler et al., 2022)",
     },
     "pt": {
         "language": "Portuguese",
@@ -275,7 +275,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "Votação sobre o envio de diesel: hospital {hospital} L, bomba de água {pump} L.",
         "evidence.landslide": "NH-544 km 42 deslizamento, estrada fechada cerca de 6 h",
         "evidence.people": "{people} pessoas em abrigos sem água",
-        "world.scope": "3,5 bilhões de pessoas vivem em cidades com esta mesma cascata",
+        "world.scope": "1,81 bilhão de pessoas estão diretamente expostas a inundações centenárias (Rentschler et al., 2022)",
     },
     "sw": {
         "language": "Swahili",
@@ -316,7 +316,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "Kura kuhusu usafirishaji wa dizeli: hospitali {hospital} L, pampu ya maji {pump} L.",
         "evidence.landslide": "NH-544 km 42 maporomoko ya ardhi, barabara imefungwa takriban saa 6",
         "evidence.people": "watu {people} kwenye makazi hawana maji",
-        "world.scope": "watu bilioni 3.5 wanaishi katika miji yenye mfululizo huu huo",
+        "world.scope": "Watu bilioni 1.81 wanakabiliwa moja kwa moja na mafuriko ya miaka 100 (Rentschler et al., 2022)",
     },
     "ta": {
         "language": "Tamil",
@@ -357,7 +357,7 @@ LOCALES: dict[str, dict[str, str]] = {
         "esc.vote": "டீசல் அனுப்பீட்டு வாக்கெடுப்பு: மருத்துவமனை {hospital} லி, நீர் பம்ப் {pump} லி.",
         "evidence.landslide": "NH-544 கிமீ 42 நிலச்சரிவு, சாலை சுமார் 6 மணி நேரம் மூடல்",
         "evidence.people": "தங்குமிடங்களில் {people} பேருக்கு தண்ணீர் இல்லை",
-        "world.scope": "இதே தொடர் விளைவைக் கொண்ட நகரங்களில் 350 கோடி மக்கள் வாழ்கிறார்கள்",
+        "world.scope": "100 ஆண்டுகளுக்கு ஒருமுறை வரும் வெள்ளத்திற்கு 181 கோடி மக்கள் நேரடியாக ஆளாகியுள்ளனர் (Rentschler et al., 2022)",
     },
 }
 

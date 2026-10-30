@@ -245,9 +245,9 @@ def build_fuel(seconds: float = 12.0) -> Path:
         _node(draw, heart, 68, RED, "HEART  70 L", "4 h runtime", mid, tiny, beat * 0.5)
         _node(draw, lungs, 54, BLUE, "LUNGS  30 L", "fed by the heart", mid, tiny, breath * 0.4)
 
-        draw.text((depot[0] - 76, depot[1] + 176), "3.5 billion people",
+        draw.text((depot[0] - 76, depot[1] + 176), "1.81 billion people are",
                   font=tiny, fill=MUTED)
-        draw.text((depot[0] - 76, depot[1] + 202), "live in towns like Kottur",
+        draw.text((depot[0] - 76, depot[1] + 202), "exposed to 100-year floods",
                   font=tiny, fill=MUTED)
 
         # the two numbers that matter
