@@ -26,7 +26,7 @@ powershell -ExecutionPolicy Bypass -File scripts\refresh_demo.ps1
 
 Open on section 01, scroll slowly.
 
-> "Kottur, Tamil Nadu. The road to the hospital is blocked at km 42. The generator has four hours of
+> "Kottur, Tamil Nadu. The road to the hospital is blocked at 4.2 kilometres. The generator has four hours of
 > diesel left, and there are two hundred people in the shelters. One hundred litres. One decision."
 
 ## 0:10 — LIFEGRID (12 s)
