@@ -7,7 +7,7 @@ Paste-ready text for the submission form. Every number here is also in `README.m
 | --- | --- |
 | **Track** | Indie developer |
 | **Theme** | Build for Your World |
-| **Live demo** | https://ui-abinivesh-m.vercel.app |
+| **Live demo** | https://lifeline-ai-meta.vercel.app |
 | **Repository** | https://github.com/abinivesh-m/lifeline-ai-survival-agent |
 | **Demo video** | *to be added — 3:00, script in `DEMO_SCRIPT.md`* |
 

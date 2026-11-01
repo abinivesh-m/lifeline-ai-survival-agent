@@ -140,66 +140,141 @@ function Bloodflow({ count = 320 }: { count?: number }) {
   );
 }
 
-/** Beating heart: pulsing sphere with emissive glow and a halo. */
+/** Beating heart: two lobes + apex, fleshy subsurface material, pulse ring. */
 function Heart({ position }: { position: [number, number, number] }) {
-  const mesh = useRef<THREE.Mesh>(null);
-  const halo = useRef<THREE.Mesh>(null);
+  const group = useRef<THREE.Group>(null);
+  const lobeL = useRef<THREE.Mesh>(null);
+  const lobeR = useRef<THREE.Mesh>(null);
+  const apex = useRef<THREE.Mesh>(null);
+  const ring = useRef<THREE.Mesh>(null);
   const t = useRef(0);
 
   useFrame((_, delta) => {
     t.current += delta;
-    const beat = 1 + Math.sin(t.current * Math.PI * 2.2) * 0.08 + Math.sin(t.current * Math.PI * 4.4) * 0.025;
-    if (mesh.current) mesh.current.scale.setScalar(beat);
-    if (halo.current) {
-      halo.current.scale.setScalar(1.35 + Math.sin(t.current * Math.PI * 2.2) * 0.06);
-      const m = halo.current.material as THREE.MeshBasicMaterial;
-      m.opacity = 0.18 + Math.sin(t.current * Math.PI * 2.2) * 0.06;
+    const beat = 1 + Math.sin(t.current * Math.PI * 2.2) * 0.09 + Math.sin(t.current * Math.PI * 4.4) * 0.03;
+    if (group.current) group.current.scale.setScalar(beat);
+    if (ring.current) {
+      const pulse = (t.current * 0.6) % 1;
+      ring.current.scale.setScalar(1 + pulse * 0.9);
+      const m = ring.current.material as THREE.MeshBasicMaterial;
+      m.opacity = 0.35 * (1 - pulse);
     }
   });
 
+  const flesh = (
+    <meshPhysicalMaterial
+      color="#8b1a2b"
+      emissive="#5a0f1a"
+      emissiveIntensity={0.6}
+      roughness={0.35}
+      metalness={0.05}
+      clearcoat={1.0}
+      clearcoatRoughness={0.25}
+      transmission={0.12}
+      thickness={0.6}
+      attenuationColor="#6b0f1a"
+      attenuationDistance={0.4}
+      ior={1.4}
+    />
+  );
+
   return (
-    <group position={position}>
-      <mesh ref={mesh}>
-        <sphereGeometry args={[0.55, 48, 48]} />
-        <meshStandardMaterial
-          color={COLORS.blood}
-          emissive={COLORS.blood}
-          emissiveIntensity={1.6}
-          roughness={0.25}
-          metalness={0.1}
-        />
+    <group ref={group} position={position}>
+      {/* left lobe */}
+      <mesh ref={lobeL} position={[-0.22, 0.18, 0.05]}>
+        <sphereGeometry args={[0.34, 48, 48]} />
+        {flesh}
       </mesh>
-      <mesh ref={halo}>
-        <sphereGeometry args={[0.55, 32, 32]} />
-        <meshBasicMaterial color={COLORS.blood} transparent opacity={0.18} side={THREE.BackSide} />
+      {/* right lobe */}
+      <mesh ref={lobeR} position={[0.22, 0.18, -0.05]}>
+        <sphereGeometry args={[0.34, 48, 48]} />
+        {flesh}
       </mesh>
-      <pointLight color={COLORS.blood} intensity={1.6} distance={4} decay={2} />
+      {/* body */}
+      <mesh position={[0, -0.05, 0]}>
+        <sphereGeometry args={[0.4, 48, 48]} />
+        {flesh}
+      </mesh>
+      {/* apex */}
+      <mesh ref={apex} position={[0, -0.55, 0.05]} rotation={[Math.PI, 0, 0]}>
+        <coneGeometry args={[0.22, 0.45, 32]} />
+        {flesh}
+      </mesh>
+      {/* aorta */}
+      <mesh position={[0.05, 0.55, 0.05]} rotation={[0.3, 0, 0.2]}>
+        <cylinderGeometry args={[0.07, 0.09, 0.45, 16]} />
+        {flesh}
+      </mesh>
+      {/* pulse ring */}
+      <mesh ref={ring} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.7, 0.025, 12, 64]} />
+        <meshBasicMaterial color="#ff4d6d" transparent opacity={0.35} />
+      </mesh>
+      <pointLight color="#ff4d6d" intensity={1.8} distance={4.5} decay={2} />
     </group>
   );
 }
 
-/** Breathing lungs: two lobes. */
+/** Breathing lungs: three lobes each, fleshy material. */
 function Lungs({ position }: { position: [number, number, number] }) {
-  const left = useRef<THREE.Mesh>(null);
-  const right = useRef<THREE.Mesh>(null);
+  const group = useRef<THREE.Group>(null);
   const t = useRef(0);
 
   useFrame((_, delta) => {
     t.current += delta;
     const breath = 1 + Math.sin(t.current * 1.4) * 0.05;
-    if (left.current) left.current.scale.setScalar(breath);
-    if (right.current) right.current.scale.setScalar(breath);
+    if (group.current) group.current.scale.setScalar(breath);
   });
 
+  const flesh = (color: string) => (
+    <meshPhysicalMaterial
+      color={color}
+      emissive={color}
+      emissiveIntensity={0.5}
+      roughness={0.4}
+      metalness={0.05}
+      clearcoat={0.8}
+      clearcoatRoughness={0.3}
+      transmission={0.08}
+      thickness={0.5}
+      attenuationColor={color}
+      attenuationDistance={0.4}
+      ior={1.35}
+    />
+  );
+
   return (
-    <group position={position}>
-      <mesh ref={left} position={[-0.32, 0.05, 0.1]}>
-        <sphereGeometry args={[0.42, 32, 32]} />
-        <meshStandardMaterial color={COLORS.lung} emissive={COLORS.lung} emissiveIntensity={1.2} roughness={0.3} metalness={0.05} />
+    <group ref={group} position={position}>
+      {/* left lung lobes */}
+      <mesh position={[-0.3, 0.15, 0.15]}>
+        <sphereGeometry args={[0.32, 32, 32]} />
+        {flesh(COLORS.lung)}
       </mesh>
-      <mesh ref={right} position={[0.32, -0.05, -0.1]}>
-        <sphereGeometry args={[0.38, 32, 32]} />
-        <meshStandardMaterial color={COLORS.lung} emissive={COLORS.lung} emissiveIntensity={1.2} roughness={0.3} metalness={0.05} />
+      <mesh position={[-0.15, -0.15, 0.05]} scale={[1, 0.85, 1]}>
+        <sphereGeometry args={[0.28, 32, 32]} />
+        {flesh(COLORS.lung)}
+      </mesh>
+      <mesh position={[-0.4, -0.05, -0.1]}>
+        <sphereGeometry args={[0.26, 32, 32]} />
+        {flesh(COLORS.lung)}
+      </mesh>
+      {/* right lung lobes */}
+      <mesh position={[0.3, 0.1, -0.1]}>
+        <sphereGeometry args={[0.34, 32, 32]} />
+        {flesh(COLORS.lung)}
+      </mesh>
+      <mesh position={[0.15, -0.2, 0.05]} scale={[1, 0.8, 1]}>
+        <sphereGeometry args={[0.28, 32, 32]} />
+        {flesh(COLORS.lung)}
+      </mesh>
+      <mesh position={[0.4, -0.05, 0.15]}>
+        <sphereGeometry args={[0.24, 32, 32]} />
+        {flesh(COLORS.lung)}
+      </mesh>
+      {/* trachea */}
+      <mesh position={[0, 0.55, 0]} rotation={[0, 0, 0]}>
+        <cylinderGeometry args={[0.05, 0.06, 0.5, 12]} />
+        {flesh("#a8d8e8")}
       </mesh>
       <pointLight color={COLORS.lung} intensity={1.0} distance={3.5} decay={2} />
     </group>
