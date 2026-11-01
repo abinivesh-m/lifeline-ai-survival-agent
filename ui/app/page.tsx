@@ -164,6 +164,12 @@ export default function Page() {
                   SEE THE ALLOCATION →
                 </a>
                 <a
+                  href="#field"
+                  className="rounded-md border border-line px-4 py-2.5 text-[12.5px] font-semibold text-muted transition hover:border-muted/60 hover:text-ink"
+                >
+                  MOVE THE WORLD YOURSELF
+                </a>
+                <a
                   href="#cascade"
                   className="rounded-md border border-line px-4 py-2.5 text-[12.5px] font-semibold text-muted transition hover:border-muted/60 hover:text-ink"
                 >

@@ -74,8 +74,8 @@ export const SECTIONS: SectionMeta[] = [
     n: "08",
     kicker: "FIELD REPORT → REPLAN",
     title: "A phone call moves the plan",
-    note: "The transcript becomes typed constraints, and the same A* and solver re-plan without a restart. No model call.",
-    tools: ["muse-voice-transcribe", "regex extraction", "A*", "no restart"],
+    note: "The transcript becomes typed constraints, and the same A* and solver re-plan without a restart. Then move the reserve or close the road yourself: 60 real solver runs, no model call.",
+    tools: ["muse-voice-transcribe", "regex extraction", "A*", "60 counterfactuals"],
   },
   {
     id: "world",
