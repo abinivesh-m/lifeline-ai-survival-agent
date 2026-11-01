@@ -1,10 +1,17 @@
 @import "lenis/dist/lenis.css";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   --ink: #e8f3f6;
   --bg: #060d11;
+  --line: #1f3540;
+  --teal: #2dd4bf;
+  --blood: #f87171;
+  --lung: #60a5fa;
+  --amber: #f5b942;
 }
 
 * {
@@ -13,39 +20,41 @@
 
 html {
   background: var(--bg);
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background: transparent;
+  background: var(--bg);
   color: var(--ink);
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: "Segoe UI", system-ui, sans-serif;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
   background: #2dd4bf44;
+  color: #fff;
 }
 
-/* the film grain that keeps flat dark panels from looking dead */
 .grain::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 1;
 }
 
 .glass {
-  background: linear-gradient(180deg, rgba(16, 31, 39, 0.92), rgba(9, 18, 23, 0.94));
-  border: 1px solid var(--line, #1f3540);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(16, 31, 39, 0.85), rgba(9, 18, 23, 0.92));
+  border: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(45, 212, 191, 0.06);
 }
 
 .hairline {
@@ -54,7 +63,7 @@ body {
 }
 
 .mono {
-  font-family: "Cascadia Mono", Consolas, monospace;
+  font-family: "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
   font-variant-numeric: tabular-nums;
 }
 
@@ -78,35 +87,40 @@ body {
 .scan {
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(45, 212, 191, 0.06) 0px,
-    rgba(45, 212, 191, 0.06) 1px,
-    transparent 1px,
-    transparent 4px
+    transparent,
+    transparent 2px,
+    rgba(45, 212, 191, 0.015) 2px,
+    rgba(45, 212, 191, 0.015) 4px
   );
 }
 
-/* scrollbars, because a demo laptop will be at 1920x1080 with a mouse */
-::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
-}
-::-webkit-scrollbar-track {
-  background: #0a141a;
-}
-::-webkit-scrollbar-thumb {
-  background: #23414d;
-  border-radius: 6px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #2dd4bf;
+.hero-glow {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45, 212, 191, 0.08) 0%, transparent 70%);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
+section {
+  position: relative;
+}
+
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px -8px rgba(45, 212, 191, 0.12);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #060d11;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f3540;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf44;
 }

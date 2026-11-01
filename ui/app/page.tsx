@@ -45,7 +45,7 @@ function Section({
         raised ? "bg-[#08141b]/70" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto w-full max-w-[1800px] px-5 py-12">
+      <div className="mx-auto w-full max-w-[1800px] px-5 py-16">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -102,7 +102,7 @@ export default function Page() {
       <LanguageBar />
 
       {/* ---------------------------------------------------------------- hero */}
-      <section className="relative min-h-[100vh] overflow-hidden pt-14">
+      <section className="relative min-h-[100vh] overflow-hidden pt-14 hero-glow">
         <video
           className="absolute inset-0 h-full w-full object-cover opacity-[0.22]"
           src="/videos/flood.mp4"
