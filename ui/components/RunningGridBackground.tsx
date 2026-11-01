@@ -476,20 +476,19 @@ function FloatingNebula({ count = 350 }: { count?: number }) {
 
 function SmoothRig({ mousePos }: { mousePos: React.MutableRefObject<{ x: number; y: number }> }) {
   const { camera } = useThree();
-  const target = useRef({ x: 9.0, y: 7.2, z: 12.0 });
+  const target = useRef({ x: 1.5, y: 5.8, z: 11.0 });
 
   useEffect(() => {
-    camera.lookAt(0, 0.4, 0);
+    camera.lookAt(0, 0.2, 0);
   }, [camera]);
 
   useFrame((_, delta) => {
     const dt = Math.min(delta, 0.05);
-    // Smooth camera orbit tilt based on mouse
-    target.current.x = 9.0 + mousePos.current.x * 2.2;
-    target.current.y = 7.2 - mousePos.current.y * 1.5;
+    target.current.x = 1.5 + mousePos.current.x * 2.8;
+    target.current.y = 5.8 - mousePos.current.y * 1.8;
     camera.position.x += (target.current.x - camera.position.x) * dt * 2.8;
     camera.position.y += (target.current.y - camera.position.y) * dt * 2.8;
-    camera.lookAt(0, 0.4, 0);
+    camera.lookAt(0, 0.2, 0);
   });
 
   return null;
@@ -607,11 +606,11 @@ export default function RunningGridBackground() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       {/* 3D Canvas with enhanced opacity & vibrancy */}
-      <div className="absolute inset-0 opacity-[0.55] transition-opacity duration-700">
+      <div className="absolute inset-0 opacity-[0.82] transition-opacity duration-700">
         <Canvas
           style={{ width: "100%", height: "100%", display: "block" }}
           dpr={[1, 1.5]}
-          camera={{ position: [9.0, 7.2, 12.0], fov: 38, near: 0.1, far: 70 }}
+          camera={{ position: [1.5, 5.8, 11.0], fov: 42, near: 0.1, far: 70 }}
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         >
           <ClampDelta />
@@ -620,10 +619,10 @@ export default function RunningGridBackground() {
         </Canvas>
       </div>
 
-      {/* Modern cinematic vignette: focused dark core with glowing cyber horizon */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,transparent_0%,rgba(4,9,13,0.35)_50%,rgba(4,9,13,0.85)_100%)]" />
+      {/* Modern cinematic vignette */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,transparent_0%,rgba(4,9,13,0.2)_55%,rgba(4,9,13,0.75)_100%)]" />
       {/* Ethereal floor glow */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(45,212,191,0.08),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(45,212,191,0.09),transparent_60%)]" />
     </div>
   );
 }

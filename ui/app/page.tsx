@@ -103,17 +103,8 @@ export default function Page() {
 
       {/* ---------------------------------------------------------------- hero */}
       <section className="relative min-h-[100vh] overflow-hidden pt-14 hero-glow">
-        <video
-          className="absolute inset-0 h-full w-full object-cover opacity-[0.22]"
-          src="/videos/flood.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#060d11]/75 via-[#060d11]/85 to-[#060d11]/40" />
-        <div className="scan absolute inset-0 opacity-40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#060d11]/25 to-[#060d11]/60" />
+        <div className="scan absolute inset-0 opacity-20" />
 
         <div className="relative mx-auto grid w-full max-w-[1800px] items-center gap-6 px-5 py-8 lg:grid-cols-[1.05fr_1fr]">
           <div>
