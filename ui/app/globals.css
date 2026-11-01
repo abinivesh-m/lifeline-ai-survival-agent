@@ -126,6 +126,8 @@ section {
   background: #1f3540;
   border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #2dd4bf44;
+canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }

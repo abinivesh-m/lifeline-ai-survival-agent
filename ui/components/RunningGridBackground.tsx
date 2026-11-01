@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html, Line } from "@react-three/drei";
@@ -38,14 +38,14 @@ const NODES: NodeSpec[] = [
   {
     id: "blood",
     title: `BLOOD ${BLOOD_L}L`,
-    sub: "DEPOT · FUEL",
+    sub: "DEPOT Â· FUEL",
     position: [-4.2, 0.55, 0.5],
     color: COLORS.teal,
   },
   {
     id: "heart",
     title: `HEART ${HEART_L}L`,
-    sub: "HOSPITAL · 4H",
+    sub: "HOSPITAL Â· 4H",
     position: [-1.9, 0.55, 0.1],
     color: PURPLE,
     beat: true,
@@ -67,7 +67,7 @@ const NODES: NodeSpec[] = [
   {
     id: "blocked",
     title: "NH-544 BLOCKED",
-    sub: "km 42 · 5x5 RISK / TDR LOG",
+    sub: "km 42 Â· 5x5 RISK / TDR LOG",
     position: [2.0, 0.42, 2.0],
     color: RED,
     pulse: true,
@@ -75,7 +75,7 @@ const NODES: NodeSpec[] = [
   },
   {
     id: "bypass",
-    title: `A* ${ROUTE_KM} km · ${SAVE_PCT}% SAVE`,
+    title: `A* ${ROUTE_KM} km Â· ${SAVE_PCT}% SAVE`,
     sub: "TRACEABILITY MATRIX / B3",
     position: [4.0, 0.42, 3.0],
     color: GREEN,

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -7,17 +7,17 @@ import { lifeline, STEPS } from "@/lib/lifeline";
 const DETAIL: Record<number, string[]> = {
   1: [
     `${lifeline.sam.frames.length} flood photographs sent to SAM 3.1`,
-    `prompt: "${lifeline.sam.prompt}" — a bare noun phrase, no instructions`,
+    `prompt: "${lifeline.sam.prompt}" â€” a bare noun phrase, no instructions`,
     `masks decoded and measured: ${lifeline.sam.worst}% worst frame`,
   ],
   2: [
     "Tamil voice note, 24 kHz mono",
-    `transcript: ${lifeline.voice.transcript?.slice(0, 64)}…`,
+    `transcript: ${lifeline.voice.transcript?.slice(0, 64)}â€¦`,
     "language bias Tamil + English, domain keywords in the request",
   ],
   3: [
     "Kahn topological sort over town.json",
-    `order: ${lifeline.graph.order.join(" → ")}`,
+    `order: ${lifeline.graph.order.join(" â†’ ")}`,
     `if the heart fails, ${lifeline.graph.cascade.people_affected} people lose water`,
   ],
   4: [
@@ -27,7 +27,7 @@ const DETAIL: Record<number, string[]> = {
   ],
   5: [
     lifeline.allocation.brain?.model
-      ? `${lifeline.allocation.brain.model} · ${lifeline.allocation.brain.status} · ${lifeline.allocation.brain.latency_s} s`
+      ? `${lifeline.allocation.brain.model} Â· ${lifeline.allocation.brain.status} Â· ${lifeline.allocation.brain.latency_s} s`
       : "deterministic policy brain",
     `proposal ${JSON.stringify(lifeline.allocation.policy)} = ${lifeline.allocation.total} L, validator re-checks every cap`,
     "offline: same validator, no model call, no API key",
@@ -39,9 +39,9 @@ const DETAIL: Record<number, string[]> = {
   ],
   7: lifeline.escalation.run
     ? [
-        `tier ${lifeline.escalation.run.tier} (${lifeline.escalation.run.window}) · gate ${lifeline.escalation.run.gate}: ${lifeline.escalation.run.decision}`,
-        `ladder armed — tier 2 at T+${Math.round(lifeline.escalation.run.tier2_at_s / 60)} min: ${lifeline.escalation.run.payloads_total} payloads / ${lifeline.escalation.run.languages.length} languages / ${lifeline.escalation.run.channels.join(" / ")}`,
-        `${Array.isArray(lifeline.escalation.run.status) ? lifeline.escalation.run.status.join(" · ") : lifeline.escalation.run.status} — generated and logged, nothing sent`,
+        `tier ${lifeline.escalation.run.tier} (${lifeline.escalation.run.window}) Â· gate ${lifeline.escalation.run.gate}: ${lifeline.escalation.run.decision}`,
+        `ladder armed â€” tier 2 at T+${Math.round(lifeline.escalation.run.tier2_at_s / 60)} min: ${lifeline.escalation.run.payloads_total} payloads / ${lifeline.escalation.run.languages.length} languages / ${lifeline.escalation.run.channels.join(" / ")}`,
+        `${Array.isArray(lifeline.escalation.run.status) ? lifeline.escalation.run.status.join(" Â· ") : lifeline.escalation.run.status} â€” generated and logged, nothing sent`,
       ]
     : [
         "nothing is dispatched until a person decides",
@@ -51,7 +51,7 @@ const DETAIL: Record<number, string[]> = {
   8: [
     "--scenario reserve-loss: reserve cut from 100 L to 80 L",
     "same solver, new constraint, heart still protected",
-    "pump runtime 6.0 h → 2.0 h, and the agent says so out loud",
+    "pump runtime 6.0 h â†’ 2.0 h, and the agent says so out loud",
   ],
 };
 
@@ -78,16 +78,16 @@ export default function AgenticTimeline3D() {
             {playing ? "PAUSE" : "AUTOPLAY"}
           </button>
           <span className="mono text-[10px] text-muted">
-            step {active} / 8 · click any card
+            step {active} / 8 Â· click any card
           </span>
         </div>
         <div className="flex items-center gap-3 rounded-md border border-line bg-panel/70 px-3 py-1.5">
-          <span className="mono text-[9px] text-muted">baseline · documented assumption</span>
+          <span className="mono text-[9px] text-muted">baseline Â· documented assumption</span>
           <div className="flex items-center gap-2">
             <span className="mono text-[11px] text-blood line-through decoration-1">
               {lifeline.baseline.manual_minutes} min
             </span>
-            <span className="text-muted">→</span>
+            <span className="text-muted">â†’</span>
             <span className="mono text-[13px] font-bold text-teal">
               {lifeline.baseline.agent_minutes} min
             </span>
@@ -110,7 +110,7 @@ export default function AgenticTimeline3D() {
               {item.phase} <span className="text-muted">{item.at}</span>
             </span>
             <span className="mono text-[8px] text-muted/50">
-              {index === all.length - 1 ? "↻" : "→"}
+              {index === all.length - 1 ? "â†»" : "â†’"}
             </span>
           </span>
         ))}
@@ -153,7 +153,7 @@ export default function AgenticTimeline3D() {
                     <span className={`mono text-[10px] ${on ? "text-teal" : "text-muted"}`}>
                       {String(item.n).padStart(2, "0")}
                     </span>
-                    {done && <span className="text-[9px] text-teal/70">✓</span>}
+                    {done && <span className="text-[9px] text-teal/70">âœ“</span>}
                   </div>
                   <div className={`mt-1 text-[10.5px] font-bold tracking-wide ${on ? "text-ink" : "text-ink/70"}`}>
                     {item.key}
@@ -175,7 +175,7 @@ export default function AgenticTimeline3D() {
       >
         <div>
           <div className="mono text-[9px] tracking-[0.2em] text-teal">
-            STEP {String(step.n).padStart(2, "0")} · {step.tool.toUpperCase()}
+            STEP {String(step.n).padStart(2, "0")} Â· {step.tool.toUpperCase()}
           </div>
           <h3 className="mt-1 text-xl font-semibold">{step.key}</h3>
           <p className="mt-1 text-[12px] text-muted">{step.detail}</p>

@@ -181,7 +181,7 @@ export default function OfflineProof3D() {
         className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#050c10]"
       >
         <Canvas
-          frameloop={visible ? "always" : "never"}
+          frameloop={visible ? "always" : "demand"}
           dpr={[1, 1.6]}
           camera={{ position: [0, 1.2, 6.4], fov: 42 }}
         >

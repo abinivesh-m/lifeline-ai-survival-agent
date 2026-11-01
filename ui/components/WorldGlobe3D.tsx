@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
@@ -207,7 +207,7 @@ export default function WorldGlobe3D({
   return (
     <div ref={frameRef} className={`relative ${className}`}>
       <Canvas
-        frameloop={visible ? "always" : "never"}
+        frameloop={visible ? "always" : "demand"}
         dpr={[1, 2]}
         camera={{ position: [0, 0, 3.05], fov: 42 }}
         gl={{ antialias: true, alpha: true }}
@@ -226,7 +226,7 @@ export default function WorldGlobe3D({
         />
       </Canvas>
       <div className="pointer-events-none absolute bottom-1 left-2 mono text-[8px] tracking-[0.14em] text-muted/70">
-        DRAG TO ROTATE · CLICK A PIN
+        DRAG TO ROTATE Â· CLICK A PIN
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Html, OrbitControls } from "@react-three/drei";
@@ -218,7 +218,7 @@ export default function DependencyGraph3D() {
         className="relative h-[420px] overflow-hidden rounded-xl border border-line bg-[#071016]"
       >
         <Canvas
-          frameloop={visible ? "always" : "never"}
+          frameloop={visible ? "always" : "demand"}
           dpr={[1, 1.6]}
           camera={{ position: [0, 1.4, 9.4], fov: 40 }}
         >
@@ -271,10 +271,10 @@ export default function DependencyGraph3D() {
         </Canvas>
 
         <div className="pointer-events-none absolute left-4 top-4 mono text-[9px] tracking-[0.2em] text-muted">
-          KAHN TOPOLOGICAL ORDER · {order.join(" → ")}
+          KAHN TOPOLOGICAL ORDER Â· {order.join(" â†’ ")}
         </div>
         <div className="absolute bottom-3 right-3 rounded border border-line bg-black/55 px-2 py-1 mono text-[9px] text-muted">
-          click a node · drag to orbit
+          click a node Â· drag to orbit
         </div>
       </div>
 
@@ -322,12 +322,12 @@ export default function DependencyGraph3D() {
               className="mt-3 rounded border border-blood/40 bg-blood/5 p-2.5"
             >
               <div className="mono text-[10px] text-blood">
-                CASCADE · {stage >= 3 ? "complete" : "propagating"}
+                CASCADE Â· {stage >= 3 ? "complete" : "propagating"}
               </div>
               <div className="mt-1 text-[12px] text-ink">
                 {stage >= 3
                   ? `${people} people lose water. The pump cannot run without the heart.`
-                  : "Warning propagating downstream…"}
+                  : "Warning propagating downstreamâ€¦"}
               </div>
             </motion.div>
           )}

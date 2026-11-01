@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Html, OrbitControls } from "@react-three/drei";
@@ -223,7 +223,7 @@ export default function AStarMap3D() {
         className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#061017]"
       >
         <Canvas
-          frameloop={visible ? "always" : "never"}
+          frameloop={visible ? "always" : "demand"}
           dpr={[1, 1.6]}
           camera={{ position: [0, 12, 13], fov: 40 }}
         >
@@ -278,15 +278,15 @@ export default function AStarMap3D() {
 
         <div className="pointer-events-none absolute left-4 top-4 space-y-1">
           <div className="mono rounded border border-blood/40 bg-black/60 px-2 py-1 text-[10px] text-blood">
-            NH-544 km 42 · 4.2 km BLOCKED
+            NH-544 km 42 Â· 4.2 km BLOCKED
           </div>
           <div className="mono rounded border border-teal/40 bg-black/60 px-2 py-1 text-[10px] text-teal">
-            A* BYPASS · {km} km
+            A* BYPASS Â· {km} km
           </div>
         </div>
 
         <div className="absolute bottom-3 left-3 rounded border border-line bg-black/60 px-2 py-1 mono text-[9px] text-muted">
-          terrain schematic · distances from repo graph · no weather API
+          terrain schematic Â· distances from repo graph Â· no weather API
         </div>
       </div>
 
@@ -298,7 +298,7 @@ export default function AStarMap3D() {
               <div className="mono text-[10px] text-muted">direct</div>
               <div className="text-xl font-semibold text-blood line-through decoration-2">4.2 km</div>
             </div>
-            <div className="pb-1 text-muted">→</div>
+            <div className="pb-1 text-muted">â†’</div>
             <div>
               <div className="mono text-[10px] text-muted">A* heapq</div>
               <div className="text-2xl font-semibold text-teal">{km} km</div>
@@ -379,7 +379,7 @@ export default function AStarMap3D() {
                   SNAKE BOAT RELAY
                 </span>
                 <span className="mono text-[8px] text-muted">
-                  {relay.armed ? "ARMED" : "SWITCHED"} · {relay.water_edges} water edges
+                  {relay.armed ? "ARMED" : "SWITCHED"} Â· {relay.water_edges} water edges
                 </span>
               </div>
               <p className="mt-1 text-[10.5px] leading-relaxed text-muted">
@@ -396,13 +396,13 @@ export default function AStarMap3D() {
                   ANT PHEROMONE
                 </span>
                 <span className="mono text-[8px] text-muted">
-                  {ants.runs} runs · seed {ants.seed}
+                  {ants.runs} runs Â· seed {ants.seed}
                 </span>
               </div>
               <p className="mt-1 text-[10.5px] leading-relaxed text-muted">
                 A seeded colony walks the graph. The blocked corridor cannot be
                 reinforced, so its trail falls below 1% after{" "}
-                <span className="text-amber">{ants.learned_after ?? "—"} iterations</span>{" "}
+                <span className="text-amber">{ants.learned_after ?? "â€”"} iterations</span>{" "}
                 while the {ants.best_km} km bypass hardens.
               </p>
             </div>

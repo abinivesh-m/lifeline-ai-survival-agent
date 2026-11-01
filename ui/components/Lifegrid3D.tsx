@@ -360,7 +360,7 @@ export default function Lifegrid3D() {
       <Canvas
         dpr={[1, 2]}
         camera={{ position: [0, 0.4, 7.2], fov: 46 }}
-        frameloop={visible ? "always" : "never"}
+        frameloop={visible ? "always" : "demand"}
         gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
       >
         <ClampDelta />
