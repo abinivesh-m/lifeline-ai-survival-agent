@@ -207,7 +207,6 @@ export default function WorldGlobe3D({
   return (
     <div ref={frameRef} className={`relative ${className}`}>
       <Canvas
-        frameloop={visible ? "always" : "demand"}
         dpr={[1, 2]}
         camera={{ position: [0, 0, 3.05], fov: 42 }}
         gl={{ antialias: true, alpha: true }}

@@ -223,7 +223,6 @@ export default function AStarMap3D() {
         className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#061017]"
       >
         <Canvas
-          frameloop={visible ? "always" : "demand"}
           dpr={[1, 1.6]}
           camera={{ position: [0, 12, 13], fov: 40 }}
         >

@@ -218,7 +218,6 @@ export default function DependencyGraph3D() {
         className="relative h-[420px] overflow-hidden rounded-xl border border-line bg-[#071016]"
       >
         <Canvas
-          frameloop={visible ? "always" : "demand"}
           dpr={[1, 1.6]}
           camera={{ position: [0, 1.4, 9.4], fov: 40 }}
         >
