@@ -19,6 +19,7 @@ import SectionNav from "@/components/SectionNav";
 import RunningGridBackground from "@/components/RunningGridBackground";
 import { useLocale } from "@/components/LocaleProvider";
 import { COLORS, lifeline } from "@/lib/lifeline";
+import { ReactLenis } from "lenis/react";
 import { SECTIONS, type SectionMeta } from "@/lib/sections";
 
 /**
@@ -92,7 +93,8 @@ export default function Page() {
   ];
 
   return (
-    <main className="relative min-h-screen pb-10">
+    <ReactLenis root options={{ lerp: 0.09, duration: 1.3, smoothWheel: true, wheelMultiplier: 0.9 }}>
+      <main className="relative min-h-screen pb-10">
       <div className="fixed inset-0 -z-10">
         <RunningGridBackground />
       </div>
@@ -505,6 +507,7 @@ export default function Page() {
         </div>
       </footer>
     </main>
+    </ReactLenis>
   );
 }
 
