@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import Lifegrid3D from "@/components/Lifegrid3D";
@@ -41,8 +41,8 @@ function Section({
   return (
     <section
       id={meta.id}
-      className={`relative scroll-mt-28 border-t border-line/70 ${
-        raised ? "bg-[#08141b]/70" : "bg-transparent"
+      className={`relative scroll-mt-28 border-t border-line/70 transition-colors duration-300 ${
+        raised ? "bg-[#08141b]/45 backdrop-blur-md" : "bg-transparent backdrop-blur-[2px]"
       }`}
     >
       <div className="mx-auto w-full max-w-[1800px] px-5 py-16">

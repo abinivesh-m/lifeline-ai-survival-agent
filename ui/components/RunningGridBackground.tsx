@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html, Line } from "@react-three/drei";
@@ -7,14 +7,16 @@ import * as THREE from "three";
 import { COLORS, lifeline } from "@/lib/lifeline";
 import { ClampDelta } from "./ClampDelta";
 
-/* Palette: lifeline colours where they exist, the three extra accents the
-   scene needs (router red / bypass green / flow orange) declared once. */
-const GRID = "#94a3b8";
+/* ------------------------------------------------------------------ palette */
+const GRID_COLOR = "#0ea5e9";
+const GRID_DEEP = "#042f2e";
 const RED = "#ef4444";
-const GREEN = "#22c55e";
-const ORANGE = "#fb923c";
-const PURPLE = "#a78bfa";
-const BG = "#0a0a0f";
+const GREEN = "#10b981";
+const ORANGE = "#f97316";
+const PURPLE = "#c084fc";
+const TEAL = "#2dd4bf";
+const AMBER = "#fbbf24";
+const BG = "#04090d";
 
 type NodeSpec = {
   id: string;
@@ -38,15 +40,15 @@ const NODES: NodeSpec[] = [
   {
     id: "blood",
     title: `BLOOD ${BLOOD_L}L`,
-    sub: "DEPOT Â· FUEL",
-    position: [-4.2, 0.55, 0.5],
-    color: COLORS.teal,
+    sub: "DEPOT · FUEL",
+    position: [-4.6, 0.75, 0.4],
+    color: TEAL,
   },
   {
     id: "heart",
     title: `HEART ${HEART_L}L`,
-    sub: "HOSPITAL Â· 4H",
-    position: [-1.9, 0.55, 0.1],
+    sub: "HOSPITAL · 4H",
+    position: [-1.8, 0.85, 0.1],
     color: PURPLE,
     beat: true,
   },
@@ -54,30 +56,30 @@ const NODES: NodeSpec[] = [
     id: "lungs",
     title: `LUNGS ${LUNGS_L}L`,
     sub: "WATER PUMP",
-    position: [0.5, 0.55, -0.2],
-    color: COLORS.teal,
+    position: [1.1, 0.75, -0.3],
+    color: TEAL,
   },
   {
     id: "organs",
     title: `ORGANS ${ORGANS_N}`,
     sub: "SHELTERS",
-    position: [3.3, 0.55, 0.6],
-    color: COLORS.amber,
+    position: [4.2, 0.75, 0.6],
+    color: AMBER,
   },
   {
     id: "blocked",
     title: "NH-544 BLOCKED",
-    sub: "km 42 Â· 5x5 RISK / TDR LOG",
-    position: [2.0, 0.42, 2.0],
+    sub: "km 42 · 5x5 RISK / TDR LOG",
+    position: [2.2, 0.55, 2.2],
     color: RED,
     pulse: true,
     labelOffset: [-1.05, -0.5, 0.3],
   },
   {
     id: "bypass",
-    title: `A* ${ROUTE_KM} km Â· ${SAVE_PCT}% SAVE`,
+    title: `A* ${ROUTE_KM} km · ${SAVE_PCT}% SAVE`,
     sub: "TRACEABILITY MATRIX / B3",
-    position: [4.0, 0.42, 3.0],
+    position: [4.4, 0.55, 3.2],
     color: GREEN,
     labelOffset: [0.95, 0.7, 0],
   },
@@ -89,120 +91,210 @@ const at = (id: string, y?: number): [number, number, number] => {
   return [x, y ?? cy, z];
 };
 
-/* ------------------------------------------------------------------ grid */
+/* ------------------------------------------------ interactive cyber terrain */
 
-function useGrid() {
-  return useMemo(() => {
-    const span = 7;
-    const step = 0.5;
-    const minor: number[] = [];
-    const major: number[] = [];
+function UndulatingTerrain({ mousePos }: { mousePos: React.MutableRefObject<{ x: number; y: number }> }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const segments = 44;
+  const size = 26;
 
-    for (let value = -span; value <= span; value += step) {
-      const target = Math.abs(value % 2.5) < 0.001 ? major : minor;
-      target.push(-span, 0, value, span, 0, value);
-      target.push(value, 0, -span, value, 0, span);
+  const originalPositions = useMemo(() => {
+    const geom = new THREE.PlaneGeometry(size, size, segments, segments);
+    return new Float32Array(geom.attributes.position.array);
+  }, []);
+
+  useFrame(({ clock }) => {
+    const mesh = meshRef.current;
+    if (!mesh) return;
+
+    const attr = mesh.geometry.attributes.position as THREE.BufferAttribute;
+    const pos = attr.array as Float32Array;
+    const t = clock.getElapsedTime() * 0.85;
+
+    // Convert mouse screen coordinates to approximate 3D ground world range
+    const mx = mousePos.current.x * 6;
+    const my = -mousePos.current.y * 6;
+
+    const vertexCount = (segments + 1) * (segments + 1);
+    for (let i = 0; i < vertexCount; i++) {
+      const idx = i * 3;
+      const ox = originalPositions[idx];
+      const oy = originalPositions[idx + 1];
+
+      // Base undulating ripples
+      const wave1 = Math.sin(ox * 0.35 + t * 1.1) * Math.cos(oy * 0.35 + t * 0.9) * 0.28;
+      const wave2 = Math.sin((ox + oy) * 0.2 + t * 0.6) * 0.16;
+
+      // Interactive mouse ripple: elevates dynamically near cursor
+      const dx = ox - mx;
+      const dy = oy - my;
+      const distSq = dx * dx + dy * dy;
+      const mouseInfluence = Math.exp(-distSq / 14) * 0.65;
+
+      pos[idx + 2] = wave1 + wave2 + mouseInfluence;
     }
 
-    const build = (points: number[]) => {
-      const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
-      return geometry;
-    };
+    attr.needsUpdate = true;
+  });
 
-    return { minor: build(minor), major: build(major) };
-  }, []);
+  return (
+    <group position={[0, -0.95, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh ref={meshRef}>
+        <planeGeometry args={[size, size, segments, segments]} />
+        <meshStandardMaterial
+          color={GRID_DEEP}
+          emissive={GRID_COLOR}
+          emissiveIntensity={0.25}
+          wireframe
+          transparent
+          opacity={0.42}
+          roughness={0.6}
+          metalness={0.2}
+        />
+      </mesh>
+    </group>
+  );
 }
 
-/* --------------------------------------------------------------- nodes */
+/* ------------------------------------------------ interactive mouse light */
 
-function Diamond({ node }: { node: NodeSpec }) {
-  const core = useRef<THREE.Group>(null);
-  const halo = useRef<THREE.Mesh>(null);
+function InteractiveMouseLight({ mousePos }: { mousePos: React.MutableRefObject<{ x: number; y: number }> }) {
+  const lightRef = useRef<THREE.PointLight>(null);
+
+  useFrame(() => {
+    if (!lightRef.current) return;
+    const targetX = mousePos.current.x * 7;
+    const targetZ = -mousePos.current.y * 5 + 1;
+    lightRef.current.position.x += (targetX - lightRef.current.position.x) * 0.1;
+    lightRef.current.position.z += (targetZ - lightRef.current.position.z) * 0.1;
+  });
+
+  return (
+    <pointLight
+      ref={lightRef}
+      position={[0, 1.2, 0]}
+      color={TEAL}
+      intensity={7}
+      distance={11}
+      decay={2}
+    />
+  );
+}
+
+/* ------------------------------------------------ kinetic orbital node */
+
+function KineticNode({ node }: { node: NodeSpec }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const coreRef = useRef<THREE.Mesh>(null);
+  const ring1Ref = useRef<THREE.Mesh>(null);
+  const ring2Ref = useRef<THREE.Mesh>(null);
+  const [hovered, setHovered] = useState(false);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    if (core.current) {
-      const beat = node.beat ? 0.8 + 0.2 * (1 + Math.sin(t * 3.4)) : 1;
-      const pulse = node.pulse ? 1 + Math.sin(t * 4.2) * 0.08 : 1;
-      core.current.scale.setScalar(beat * pulse);
+
+    if (coreRef.current) {
+      coreRef.current.rotation.y = t * 0.8;
+      coreRef.current.rotation.x = t * 0.4;
+      const beat = node.beat ? 0.82 + 0.28 * Math.pow(Math.sin(t * 3.4), 2) : 1;
+      const pulse = node.pulse ? 1 + Math.sin(t * 4.2) * 0.14 : 1;
+      const hoverScale = hovered ? 1.35 : 1;
+      coreRef.current.scale.setScalar(beat * pulse * hoverScale);
     }
-    if (halo.current) {
-      const material = halo.current.material as THREE.MeshBasicMaterial;
-      material.opacity = node.pulse
-        ? 0.06 + 0.09 * (0.5 + 0.5 * Math.sin(t * 4.2))
-        : 0.12;
+
+    if (ring1Ref.current) {
+      ring1Ref.current.rotation.x = t * 1.2;
+      ring1Ref.current.rotation.y = t * 0.7;
+    }
+    if (ring2Ref.current) {
+      ring2Ref.current.rotation.z = -t * 1.0;
+      ring2Ref.current.rotation.y = -t * 0.5;
     }
   });
 
   const [x, y, z] = node.position;
 
   return (
-    <group>
-      {/* blueprint stem from the grid to the floating node */}
+    <group ref={groupRef}>
+      {/* Vertical beam connecting to terrain */}
       <Line
         points={[
-          [x, 0.001, z],
-          [x, y - 0.16, z],
+          [x, -0.95, z],
+          [x, y - 0.2, z],
         ]}
         color={node.color}
-        lineWidth={0.7}
+        lineWidth={1.2}
         transparent
-        opacity={0.22}
+        opacity={0.35}
       />
 
-      <group position={node.position}>
-        <group ref={core}>
-          <mesh>
-            <octahedronGeometry args={[0.19, 0]} />
-            <meshStandardMaterial
-              color={node.color}
-              emissive={node.color}
-              emissiveIntensity={node.pulse ? 1.1 : 1.4}
-              flatShading
-              roughness={0.35}
-              metalness={0.15}
-            />
-          </mesh>
-          <mesh scale={1.35}>
-            <octahedronGeometry args={[0.19, 0]} />
-            <meshBasicMaterial
-              color={node.color}
-              wireframe
-              transparent
-              opacity={0.3}
-              depthWrite={false}
-            />
-          </mesh>
-        </group>
+      <group
+        position={node.position}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
+        {/* Central Core Octahedron */}
+        <mesh ref={coreRef}>
+          <octahedronGeometry args={[0.22, 0]} />
+          <meshStandardMaterial
+            color={node.color}
+            emissive={node.color}
+            emissiveIntensity={hovered ? 2.5 : node.pulse ? 1.6 : 1.3}
+            roughness={0.2}
+            metalness={0.8}
+          />
+        </mesh>
 
-        {/* additive shell instead of a post-process bloom: no extra package */}
-        <mesh ref={halo} scale={2.0}>
-          <sphereGeometry args={[0.19, 12, 12]} />
+        {/* Inner Gyro Ring */}
+        <mesh ref={ring1Ref}>
+          <torusGeometry args={[0.34, 0.012, 16, 32]} />
           <meshBasicMaterial
             color={node.color}
             transparent
-            opacity={0.12}
+            opacity={0.65}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+
+        {/* Outer Gyro Ring */}
+        <mesh ref={ring2Ref}>
+          <torusGeometry args={[0.42, 0.009, 16, 32]} />
+          <meshBasicMaterial
+            color={node.color}
+            transparent
+            opacity={0.45}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+
+        {/* Soft volumetric glow aura */}
+        <mesh scale={2.4}>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshBasicMaterial
+            color={node.color}
+            transparent
+            opacity={hovered ? 0.35 : 0.16}
             blending={THREE.AdditiveBlending}
             depthWrite={false}
           />
         </mesh>
 
+        {/* Label */}
         <Html
           center
-          position={node.labelOffset ?? [0, 0.5, 0]}
-          zIndexRange={[12, 0]}
+          position={node.labelOffset ?? [0, 0.65, 0]}
+          zIndexRange={[20, 0]}
           style={{ pointerEvents: "none" }}
         >
-          <div className="w-max whitespace-nowrap text-center">
+          <div className="w-max whitespace-nowrap rounded-md border border-line/70 bg-[#060d11]/85 px-2 py-1 backdrop-blur-md transition-all duration-200">
             <div
-              className="mono text-[8.5px] font-semibold tracking-[0.12em]"
-              style={{ color: node.color, textShadow: `0 0 8px ${node.color}55` }}
+              className="mono text-[9px] font-bold tracking-[0.14em]"
+              style={{ color: node.color, textShadow: `0 0 10px ${node.color}88` }}
             >
               {node.title}
             </div>
             {node.sub && (
-              <div className="mono mt-0.5 text-[6.5px] tracking-[0.14em] text-ink/60">
+              <div className="mono mt-0.5 text-[7px] tracking-[0.12em] text-ink/70">
                 {node.sub}
               </div>
             )}
@@ -213,14 +305,14 @@ function Diamond({ node }: { node: NodeSpec }) {
   );
 }
 
-/* ------------------------------------------------------------- particles */
+/* ------------------------------------------------ high-velocity energy flows */
 
-function Flow({
+function EnergyStream({
   from,
   to,
-  count = 14,
+  count = 18,
   color = "#ffffff",
-  speed = 0.18,
+  speed = 0.25,
 }: {
   from: [number, number, number];
   to: [number, number, number];
@@ -245,8 +337,10 @@ function Flow({
     const t0 = clock.getElapsedTime();
     for (let index = 0; index < count; index += 1) {
       const t = (t0 * speed + phases[index]) % 1;
+      // Parabolic arc for energy leaping
+      const arc = Math.sin(t * Math.PI) * 0.45;
       array[index * 3] = from[0] + (to[0] - from[0]) * t;
-      array[index * 3 + 1] = from[1] + (to[1] - from[1]) * t;
+      array[index * 3 + 1] = from[1] + (to[1] - from[1]) * t + arc;
       array[index * 3 + 2] = from[2] + (to[2] - from[2]) * t;
     }
     attribute.needsUpdate = true;
@@ -258,10 +352,10 @@ function Flow({
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.055}
+        size={0.075}
         color={color}
         transparent
-        opacity={0.9}
+        opacity={0.95}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
@@ -270,193 +364,13 @@ function Flow({
   );
 }
 
-/* ------------------------------------------------------- drifting dots */
+/* ------------------------------------------------ radar ground heartbeat */
 
-function DriftingDots({ count = 20 }: { count?: number }) {
-  const points = useRef<THREE.Points>(null);
-
-  const { positions, colors, velocities } = useMemo(() => {
-    const position = new Float32Array(count * 3);
-    const colour = new Float32Array(count * 3);
-    const velocity = new Float32Array(count * 3);
-    const palette = [RED, PURPLE, COLORS.teal];
-
-    for (let index = 0; index < count; index += 1) {
-      position[index * 3] = (Math.random() - 0.5) * 11;
-      position[index * 3 + 1] = 0.25 + Math.random() * 2.4;
-      position[index * 3 + 2] = (Math.random() - 0.5) * 8;
-
-      const swatch = new THREE.Color(palette[index % palette.length]);
-      colour[index * 3] = swatch.r;
-      colour[index * 3 + 1] = swatch.g;
-      colour[index * 3 + 2] = swatch.b;
-
-      velocity[index * 3] = (Math.random() - 0.5) * 0.05;
-      velocity[index * 3 + 1] = 0.02 + Math.random() * 0.05;
-      velocity[index * 3 + 2] = (Math.random() - 0.5) * 0.05;
-    }
-
-    return { positions: position, colors: colour, velocities: velocity };
-  }, [count]);
-
-  useFrame((_, delta) => {
-    const attribute = points.current?.geometry.getAttribute("position") as
-      | THREE.BufferAttribute
-      | undefined;
-    if (!attribute) return;
-    const array = attribute.array as Float32Array;
-
-    for (let index = 0; index < count; index += 1) {
-      array[index * 3] += velocities[index * 3] * delta;
-      array[index * 3 + 1] += velocities[index * 3 + 1] * delta;
-      array[index * 3 + 2] += velocities[index * 3 + 2] * delta;
-
-      if (array[index * 3 + 1] > 2.9) {
-        array[index * 3] = (Math.random() - 0.5) * 11;
-        array[index * 3 + 1] = 0.2;
-        array[index * 3 + 2] = (Math.random() - 0.5) * 8;
-      }
-    }
-    attribute.needsUpdate = true;
-  });
-
-  return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.07}
-        vertexColors
-        transparent
-        opacity={0.75}
-        sizeAttenuation
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
-  );
-}
-
-/* ----------------------------------------------------------- the scene */
-
-function Rig() {
-  const { camera } = useThree();
-  const mouse = useRef({ x: 0, y: 0 });
-  const target = useRef({ x: 9.5, y: 7.5, z: 12.5 });
-
-  useEffect(() => {
-    camera.lookAt(0, 0.6, 0);
-    const onMove = (e: MouseEvent) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouse.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [camera]);
-
-  useFrame((_, delta) => {
-    const dt = Math.min(delta, 0.05);
-    target.current.x = 9.5 + mouse.current.x * 1.2;
-    target.current.y = 7.5 - mouse.current.y * 0.8;
-    camera.position.x += (target.current.x - camera.position.x) * dt * 3;
-    camera.position.y += (target.current.y - camera.position.y) * dt * 3;
-    camera.lookAt(0, 0.6, 0);
-  });
-
-  return null;
-}
-
-function Scene({ drift }: { drift: boolean }) {
-  const world = useRef<THREE.Group>(null);
-  const grid = useGrid();
-
-  useFrame((_, delta) => {
-    if (!drift || !world.current) return;
-    world.current.rotation.y += 0.0005 * Math.min(delta, 0.05) * 60;
-  });
-
-  return (
-    <>
-      <fog attach="fog" args={[BG, 16, 34]} />
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[5, 8, 6]} intensity={1.3} />
-      <pointLight position={[-3, 2, 1]} intensity={6} distance={9} color={COLORS.teal} />
-      <pointLight position={[3, 2, 2]} intensity={5} distance={9} color={COLORS.amber} />
-
-      <ParticleField />
-
-      <group ref={world} position={[0, -0.9, 0]}>
-        <lineSegments geometry={grid.minor}>
-          <lineBasicMaterial color={GRID} transparent opacity={0.55} />
-        </lineSegments>
-        <lineSegments geometry={grid.major}>
-          <lineBasicMaterial color={GRID} transparent opacity={0.95} />
-        </lineSegments>
-
-        {/* fuel cascade: blood -> heart -> lungs -> organs */}
-        {[
-          ["blood", "heart"],
-          ["heart", "lungs"],
-          ["lungs", "organs"],
-        ].map(([a, b]) => (
-          <group key={`${a}-${b}`}>
-            <Line
-              points={[at(a), at(b)]}
-              color={ORANGE}
-              lineWidth={1.2}
-              transparent
-              opacity={0.7}
-            />
-            <Flow from={at(a)} to={at(b)} count={14} color="#ffffff" speed={0.18} />
-          </group>
-        ))}
-
-        {/* the corridor that cannot be driven */}
-        <Line
-          points={[at("lungs"), at("organs")]}
-          color={RED}
-          lineWidth={1}
-          dashed
-          dashSize={0.16}
-          gapSize={0.12}
-          transparent
-          opacity={0.55}
-        />
-
-        {/* the route A* actually found */}
-        <Line
-          points={[at("lungs"), at("bypass"), at("organs")]}
-          color={GREEN}
-          lineWidth={1.2}
-          transparent
-          opacity={0.55}
-        />
-        <Flow from={at("lungs")} to={at("bypass")} count={8} color={GREEN} speed={0.22} />
-        <Flow from={at("bypass")} to={at("organs")} count={8} color={GREEN} speed={0.22} />
-
-        {NODES.map((node) => (
-          <Diamond key={node.id} node={node} />
-        ))}
-
-        {/* heartbeat and blocked-corridor echoes on the floor */}
-        <GroundPulse at={at("heart")} color={PURPLE} speed={0.5} />
-        <GroundPulse at={at("blocked")} color={RED} speed={0.85} reach={1.1} />
-
-        <DriftingDots count={20} />
-      </group>
-    </>
-  );
-}
-
-/* ------------------------------------------------------- ground pulses */
-
-function GroundPulse({
+function RadarPulse({
   at,
   color,
-  speed = 0.45,
-  reach = 1.4,
+  speed = 0.5,
+  reach = 2.4,
 }: {
   at: [number, number, number];
   color: string;
@@ -469,18 +383,18 @@ function GroundPulse({
     const mesh = ring.current;
     if (!mesh) return;
     const t = (clock.getElapsedTime() * speed) % 1;
-    mesh.scale.setScalar(0.25 + t * reach);
+    mesh.scale.setScalar(0.2 + t * reach);
     const material = mesh.material as THREE.MeshBasicMaterial;
-    material.opacity = (1 - t) * 0.22;
+    material.opacity = Math.pow(1 - t, 1.8) * 0.45;
   });
 
   return (
-    <mesh ref={ring} position={[at[0], 0.012, at[2]]} rotation={[-Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[0.86, 1, 48]} />
+    <mesh ref={ring} position={[at[0], -0.93, at[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[0.92, 1, 64]} />
       <meshBasicMaterial
         color={color}
         transparent
-        opacity={0.2}
+        opacity={0.4}
         side={THREE.DoubleSide}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
@@ -489,44 +403,68 @@ function GroundPulse({
   );
 }
 
-/* ------------------------------------------------------------- particles */
+/* ------------------------------------------------ interactive star nebula */
 
-function ParticleField() {
-  const ref = useRef<THREE.Points>(null);
-  const count = 200;
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3);
+function FloatingNebula({ count = 350 }: { count?: number }) {
+  const points = useRef<THREE.Points>(null);
+
+  const { positions, colors, velocities } = useMemo(() => {
+    const position = new Float32Array(count * 3);
+    const colour = new Float32Array(count * 3);
+    const velocity = new Float32Array(count * 3);
+    const palette = [TEAL, PURPLE, AMBER, GREEN, "#38bdf8"];
+
     for (let i = 0; i < count; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * 20;
-      arr[i * 3 + 1] = Math.random() * 6 - 1;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 20;
+      position[i * 3] = (Math.random() - 0.5) * 24;
+      position[i * 3 + 1] = Math.random() * 7 - 1;
+      position[i * 3 + 2] = (Math.random() - 0.5) * 16;
+
+      const swatch = new THREE.Color(palette[i % palette.length]);
+      colour[i * 3] = swatch.r;
+      colour[i * 3 + 1] = swatch.g;
+      colour[i * 3 + 2] = swatch.b;
+
+      velocity[i * 3] = (Math.random() - 0.5) * 0.04;
+      velocity[i * 3 + 1] = 0.03 + Math.random() * 0.08;
+      velocity[i * 3 + 2] = (Math.random() - 0.5) * 0.04;
     }
-    return arr;
-  }, []);
+
+    return { positions: position, colors: colour, velocities: velocity };
+  }, [count]);
 
   useFrame((_, delta) => {
-    if (!ref.current) return;
-    const attr = ref.current.geometry.getAttribute("position") as THREE.BufferAttribute;
+    const attr = points.current?.geometry.getAttribute("position") as
+      | THREE.BufferAttribute
+      | undefined;
+    if (!attr) return;
+    const array = attr.array as Float32Array;
+
     for (let i = 0; i < count; i++) {
-      let y = attr.getY(i);
-      y += delta * (0.05 + Math.random() * 0.1);
-      if (y > 5) y = -1;
-      attr.setY(i, y);
+      array[i * 3] += velocities[i * 3] * delta;
+      array[i * 3 + 1] += velocities[i * 3 + 1] * delta;
+      array[i * 3 + 2] += velocities[i * 3 + 2] * delta;
+
+      if (array[i * 3 + 1] > 6) {
+        array[i * 3] = (Math.random() - 0.5) * 24;
+        array[i * 3 + 1] = -0.8;
+        array[i * 3 + 2] = (Math.random() - 0.5) * 16;
+      }
     }
     attr.needsUpdate = true;
   });
 
   return (
-    <points ref={ref}>
+    <points ref={points}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.04}
-        sizeAttenuation
-        color="#2dd4bf"
+        size={0.065}
+        vertexColors
         transparent
-        opacity={0.35}
+        opacity={0.8}
+        sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -534,37 +472,158 @@ function ParticleField() {
   );
 }
 
-/* -------------------------------------------------------------- export */
+/* ------------------------------------------------ camera rig with inertia */
+
+function SmoothRig({ mousePos }: { mousePos: React.MutableRefObject<{ x: number; y: number }> }) {
+  const { camera } = useThree();
+  const target = useRef({ x: 9.0, y: 7.2, z: 12.0 });
+
+  useEffect(() => {
+    camera.lookAt(0, 0.4, 0);
+  }, [camera]);
+
+  useFrame((_, delta) => {
+    const dt = Math.min(delta, 0.05);
+    // Smooth camera orbit tilt based on mouse
+    target.current.x = 9.0 + mousePos.current.x * 2.2;
+    target.current.y = 7.2 - mousePos.current.y * 1.5;
+    camera.position.x += (target.current.x - camera.position.x) * dt * 2.8;
+    camera.position.y += (target.current.y - camera.position.y) * dt * 2.8;
+    camera.lookAt(0, 0.4, 0);
+  });
+
+  return null;
+}
+
+/* ------------------------------------------------ scene composition */
+
+function Scene({
+  mousePos,
+  drift,
+}: {
+  mousePos: React.MutableRefObject<{ x: number; y: number }>;
+  drift: boolean;
+}) {
+  const worldRef = useRef<THREE.Group>(null);
+
+  useFrame((_, delta) => {
+    if (!drift || !worldRef.current) return;
+    worldRef.current.rotation.y += 0.0004 * Math.min(delta, 0.05) * 60;
+  });
+
+  return (
+    <>
+      <fog attach="fog" args={[BG, 14, 38]} />
+      <ambientLight intensity={1.4} />
+      <directionalLight position={[6, 9, 7]} intensity={1.8} color="#e0f2fe" />
+      <pointLight position={[-4, 2.5, 1]} intensity={8} distance={12} color={TEAL} />
+      <pointLight position={[4, 2.5, 2]} intensity={7} distance={12} color={AMBER} />
+      <pointLight position={[0, 3, -2]} intensity={6} distance={10} color={PURPLE} />
+
+      <InteractiveMouseLight mousePos={mousePos} />
+      <FloatingNebula count={350} />
+
+      <group ref={worldRef}>
+        <UndulatingTerrain mousePos={mousePos} />
+
+        {/* Dependency arteries: blood -> heart -> lungs -> organs */}
+        {[
+          ["blood", "heart"],
+          ["heart", "lungs"],
+          ["lungs", "organs"],
+        ].map(([a, b]) => (
+          <group key={`${a}-${b}`}>
+            <Line
+              points={[at(a), at(b)]}
+              color={ORANGE}
+              lineWidth={1.8}
+              transparent
+              opacity={0.8}
+            />
+            <EnergyStream from={at(a)} to={at(b)} count={18} color="#ffffff" speed={0.24} />
+          </group>
+        ))}
+
+        {/* Impassable corridor */}
+        <Line
+          points={[at("lungs"), at("organs")]}
+          color={RED}
+          lineWidth={1.4}
+          dashed
+          dashSize={0.2}
+          gapSize={0.14}
+          transparent
+          opacity={0.65}
+        />
+
+        {/* A* Optimal detour */}
+        <Line
+          points={[at("lungs"), at("bypass"), at("organs")]}
+          color={GREEN}
+          lineWidth={1.8}
+          transparent
+          opacity={0.85}
+        />
+        <EnergyStream from={at("lungs")} to={at("bypass")} count={12} color={GREEN} speed={0.28} />
+        <EnergyStream from={at("bypass")} to={at("organs")} count={12} color={GREEN} speed={0.28} />
+
+        {/* Nodes */}
+        {NODES.map((node) => (
+          <KineticNode key={node.id} node={node} />
+        ))}
+
+        {/* Radar heartbeat & hazard pulses */}
+        <RadarPulse at={at("heart")} color={PURPLE} speed={0.45} reach={2.6} />
+        <RadarPulse at={at("blocked")} color={RED} speed={0.8} reach={1.8} />
+      </group>
+    </>
+  );
+}
+
+/* ------------------------------------------------ export default */
 
 export default function RunningGridBackground() {
   const [reduced, setReduced] = useState(false);
+  const mousePos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(query.matches);
     const onChange = () => setReduced(query.matches);
     query.addEventListener?.("change", onChange);
-    return () => query.removeEventListener?.("change", onChange);
+
+    const onMouseMove = (e: MouseEvent) => {
+      mousePos.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      mousePos.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener("mousemove", onMouseMove);
+
+    return () => {
+      query.removeEventListener?.("change", onChange);
+      window.removeEventListener("mousemove", onMouseMove);
+    };
   }, []);
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      <div className="absolute inset-0 opacity-[0.08]">
-        <Canvas style={{ width: "100%", height: "100%", display: "block", pointerEvents: "none" }}
+      {/* 3D Canvas with enhanced opacity & vibrancy */}
+      <div className="absolute inset-0 opacity-[0.55] transition-opacity duration-700">
+        <Canvas
+          style={{ width: "100%", height: "100%", display: "block" }}
           dpr={[1, 1.5]}
-          camera={{ position: [9.5, 7.5, 12.5], fov: 36, near: 0.1, far: 60 }}
-          gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
+          camera={{ position: [9.0, 7.2, 12.0], fov: 38, near: 0.1, far: 70 }}
+          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         >
           <ClampDelta />
-          <Rig />
-          <Scene drift={!reduced} />
+          <SmoothRig mousePos={mousePos} />
+          <Scene mousePos={mousePos} drift={!reduced} />
         </Canvas>
       </div>
 
-      {/* vignette: keeps the grid dense in the middle, invisible at the edges */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_60%,transparent_0%,rgba(6,13,17,0.25)_55%,rgba(6,13,17,0.78)_100%)]" />
-      {/* faint teal floor glow, so the grid reads as a horizon rather than a texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(45,212,191,0.05),transparent_55%)]" />
+      {/* Modern cinematic vignette: focused dark core with glowing cyber horizon */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,transparent_0%,rgba(4,9,13,0.35)_50%,rgba(4,9,13,0.85)_100%)]" />
+      {/* Ethereal floor glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(45,212,191,0.08),transparent_60%)]" />
     </div>
   );
 }
