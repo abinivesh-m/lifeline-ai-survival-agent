@@ -593,11 +593,13 @@ solo entrant. No pre-existing product, no borrowed codebase.
 | Phase | Status | What exists |
 | --- | --- | --- |
 | Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 100 tests |
-| Phase 2 - model capture | pending | SAM frames, Tamil transcripts, Wonder live calls, Baseten + Modal runs |
-| Phase 3 - demo | pending | 3-minute video, LIFEGRID visuals, X post |
+| Phase 2 - model capture | **done** | SAM flood frames, Tamil transcripts, Wonder live calls, Baseten Spark Open runs and the 8-locale payloads - all committed under `artifacts/` |
+| Phase 3 - demo | **in progress** | the LIFEGRID page and all nine sections are live; the 3-minute video is the last item |
 
-Pending means pending: the adapters are written and the runs above are real, but the model-capture files
-are not committed yet. They land in Phase 2.
+Phase 2 is not a promise in this revision: every file it names is in the repository and `test_claims.py`
+re-derives the numbers the prose quotes from them. Phase 3 is the only open item, and the two screen
+recordings in the proof folder stay labelled `capture needed` until they are actually recorded - a
+generated video would be the one artefact a judge could disprove in a minute.
 
 ## Three-minute demo
 
