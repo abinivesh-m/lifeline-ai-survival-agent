@@ -343,9 +343,28 @@ function DriftingDots({ count = 20 }: { count?: number }) {
 
 function Rig() {
   const { camera } = useThree();
+  const mouse = useRef({ x: 0, y: 0 });
+  const target = useRef({ x: 9.5, y: 7.5, z: 12.5 });
+
   useEffect(() => {
     camera.lookAt(0, 0.6, 0);
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouse.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
   }, [camera]);
+
+  useFrame((_, delta) => {
+    const dt = Math.min(delta, 0.05);
+    target.current.x = 9.5 + mouse.current.x * 1.2;
+    target.current.y = 7.5 - mouse.current.y * 0.8;
+    camera.position.x += (target.current.x - camera.position.x) * dt * 3;
+    camera.position.y += (target.current.y - camera.position.y) * dt * 3;
+    camera.lookAt(0, 0.6, 0);
+  });
+
   return null;
 }
 
@@ -365,6 +384,8 @@ function Scene({ drift }: { drift: boolean }) {
       <directionalLight position={[5, 8, 6]} intensity={1.3} />
       <pointLight position={[-3, 2, 1]} intensity={6} distance={9} color={COLORS.teal} />
       <pointLight position={[3, 2, 2]} intensity={5} distance={9} color={COLORS.amber} />
+
+      <ParticleField />
 
       <group ref={world} position={[0, -0.9, 0]}>
         <lineSegments geometry={grid.minor}>
@@ -465,6 +486,51 @@ function GroundPulse({
         blending={THREE.AdditiveBlending}
       />
     </mesh>
+  );
+}
+
+/* ------------------------------------------------------------- particles */
+
+function ParticleField() {
+  const ref = useRef<THREE.Points>(null);
+  const count = 200;
+  const positions = useMemo(() => {
+    const arr = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      arr[i * 3] = (Math.random() - 0.5) * 20;
+      arr[i * 3 + 1] = Math.random() * 6 - 1;
+      arr[i * 3 + 2] = (Math.random() - 0.5) * 20;
+    }
+    return arr;
+  }, []);
+
+  useFrame((_, delta) => {
+    if (!ref.current) return;
+    const attr = ref.current.geometry.getAttribute("position") as THREE.BufferAttribute;
+    for (let i = 0; i < count; i++) {
+      let y = attr.getY(i);
+      y += delta * (0.05 + Math.random() * 0.1);
+      if (y > 5) y = -1;
+      attr.setY(i, y);
+    }
+    attr.needsUpdate = true;
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.04}
+        sizeAttenuation
+        color="#2dd4bf"
+        transparent
+        opacity={0.35}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
   );
 }
 

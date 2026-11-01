@@ -4,6 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { COLORS, lifeline } from "@/lib/lifeline";
 import { useVisible } from "@/lib/useVisible";
 import { ClampDelta } from "./ClampDelta";
@@ -140,14 +141,55 @@ function Bloodflow({ count = 320 }: { count?: number }) {
   );
 }
 
-/** Beating heart: two lobes + apex, fleshy subsurface material, pulse ring. */
+/** Beating heart: merged organic geometry with subsurface material and pulse ring. */
 function Heart({ position }: { position: [number, number, number] }) {
   const group = useRef<THREE.Group>(null);
-  const lobeL = useRef<THREE.Mesh>(null);
-  const lobeR = useRef<THREE.Mesh>(null);
-  const apex = useRef<THREE.Mesh>(null);
+  const mesh = useRef<THREE.Mesh>(null);
   const ring = useRef<THREE.Mesh>(null);
   const t = useRef(0);
+
+  const geometry = useMemo(() => {
+    // Build from multiple primitives, then merge into one seamless mesh
+    const lobes: THREE.BufferGeometry[] = [];
+    // left lobe
+    const g1 = new THREE.SphereGeometry(0.34, 32, 32);
+    g1.translate(-0.22, 0.18, 0.05);
+    lobes.push(g1);
+    // right lobe
+    const g2 = new THREE.SphereGeometry(0.34, 32, 32);
+    g2.translate(0.22, 0.18, -0.05);
+    lobes.push(g2);
+    // body
+    const g3 = new THREE.SphereGeometry(0.4, 32, 32);
+    g3.translate(0, -0.05, 0);
+    g3.scale(1, 0.9, 1);
+    lobes.push(g3);
+    // apex (cone)
+    const g4 = new THREE.ConeGeometry(0.22, 0.45, 32);
+    g4.rotateX(Math.PI);
+    g4.translate(0, -0.55, 0.05);
+    lobes.push(g4);
+    // aorta
+    const g5 = new THREE.CylinderGeometry(0.07, 0.09, 0.45, 16);
+    g5.rotateZ(0.2);
+    g5.translate(0.05, 0.55, 0.05);
+    lobes.push(g5);
+
+    const merged = BufferGeometryUtils.mergeGeometries(lobes, false);
+    if (!merged) return new THREE.SphereGeometry(0.5, 32, 32);
+
+    // Organic noise displacement
+    const pos = merged.attributes.position as THREE.BufferAttribute;
+    const v = new THREE.Vector3();
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i);
+      const n = Math.sin(v.x * 4.3 + v.y * 3.7) * Math.cos(v.z * 5.1 + v.x * 2.9) * 0.025;
+      v.normalize().multiplyScalar(v.length() + n);
+      pos.setXYZ(i, v.x, v.y, v.z);
+    }
+    merged.computeVertexNormals();
+    return merged;
+  }, []);
 
   useFrame((_, delta) => {
     t.current += delta;
@@ -161,51 +203,24 @@ function Heart({ position }: { position: [number, number, number] }) {
     }
   });
 
-  const flesh = (
-    <meshPhysicalMaterial
-      color="#8b1a2b"
-      emissive="#5a0f1a"
-      emissiveIntensity={0.6}
-      roughness={0.35}
-      metalness={0.05}
-      clearcoat={1.0}
-      clearcoatRoughness={0.25}
-      transmission={0.12}
-      thickness={0.6}
-      attenuationColor="#6b0f1a"
-      attenuationDistance={0.4}
-      ior={1.4}
-    />
-  );
-
   return (
     <group ref={group} position={position}>
-      {/* left lobe */}
-      <mesh ref={lobeL} position={[-0.22, 0.18, 0.05]}>
-        <sphereGeometry args={[0.34, 48, 48]} />
-        {flesh}
+      <mesh ref={mesh} geometry={geometry}>
+        <meshPhysicalMaterial
+          color="#8b1a2b"
+          emissive="#5a0f1a"
+          emissiveIntensity={0.6}
+          roughness={0.35}
+          metalness={0.05}
+          clearcoat={1.0}
+          clearcoatRoughness={0.25}
+          transmission={0.12}
+          thickness={0.6}
+          attenuationColor="#6b0f1a"
+          attenuationDistance={0.4}
+          ior={1.4}
+        />
       </mesh>
-      {/* right lobe */}
-      <mesh ref={lobeR} position={[0.22, 0.18, -0.05]}>
-        <sphereGeometry args={[0.34, 48, 48]} />
-        {flesh}
-      </mesh>
-      {/* body */}
-      <mesh position={[0, -0.05, 0]}>
-        <sphereGeometry args={[0.4, 48, 48]} />
-        {flesh}
-      </mesh>
-      {/* apex */}
-      <mesh ref={apex} position={[0, -0.55, 0.05]} rotation={[Math.PI, 0, 0]}>
-        <coneGeometry args={[0.22, 0.45, 32]} />
-        {flesh}
-      </mesh>
-      {/* aorta */}
-      <mesh position={[0.05, 0.55, 0.05]} rotation={[0.3, 0, 0.2]}>
-        <cylinderGeometry args={[0.07, 0.09, 0.45, 16]} />
-        {flesh}
-      </mesh>
-      {/* pulse ring */}
       <mesh ref={ring} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[0.7, 0.025, 12, 64]} />
         <meshBasicMaterial color="#ff4d6d" transparent opacity={0.35} />
@@ -215,10 +230,46 @@ function Heart({ position }: { position: [number, number, number] }) {
   );
 }
 
-/** Breathing lungs: three lobes each, fleshy material. */
+/** Breathing lungs: merged organic geometry with subsurface material. */
 function Lungs({ position }: { position: [number, number, number] }) {
   const group = useRef<THREE.Group>(null);
   const t = useRef(0);
+
+  const geometry = useMemo(() => {
+    const parts: THREE.BufferGeometry[] = [];
+    const addSphere = (x: number, y: number, z: number, r: number, sx = 1, sy = 1, sz = 1) => {
+      const g = new THREE.SphereGeometry(r, 28, 28);
+      g.scale(sx, sy, sz);
+      g.translate(x, y, z);
+      parts.push(g);
+    };
+    // left lung lobes
+    addSphere(-0.3, 0.15, 0.15, 0.32);
+    addSphere(-0.15, -0.15, 0.05, 0.28, 1, 0.85, 1);
+    addSphere(-0.4, -0.05, -0.1, 0.26);
+    // right lung lobes
+    addSphere(0.3, 0.1, -0.1, 0.34);
+    addSphere(0.15, -0.2, 0.05, 0.28, 1, 0.8, 1);
+    addSphere(0.4, -0.05, 0.15, 0.24);
+    // trachea
+    const tr = new THREE.CylinderGeometry(0.05, 0.06, 0.5, 12);
+    tr.translate(0, 0.55, 0);
+    parts.push(tr);
+
+    const merged = BufferGeometryUtils.mergeGeometries(parts, false);
+    if (!merged) return new THREE.SphereGeometry(0.5, 32, 32);
+
+    const pos = merged.attributes.position as THREE.BufferAttribute;
+    const v = new THREE.Vector3();
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i);
+      const n = Math.sin(v.x * 5.1 + v.y * 4.3) * Math.cos(v.z * 4.7 + v.x * 3.1) * 0.018;
+      v.normalize().multiplyScalar(v.length() + n);
+      pos.setXYZ(i, v.x, v.y, v.z);
+    }
+    merged.computeVertexNormals();
+    return merged;
+  }, []);
 
   useFrame((_, delta) => {
     t.current += delta;
@@ -226,55 +277,23 @@ function Lungs({ position }: { position: [number, number, number] }) {
     if (group.current) group.current.scale.setScalar(breath);
   });
 
-  const flesh = (color: string) => (
-    <meshPhysicalMaterial
-      color={color}
-      emissive={color}
-      emissiveIntensity={0.5}
-      roughness={0.4}
-      metalness={0.05}
-      clearcoat={0.8}
-      clearcoatRoughness={0.3}
-      transmission={0.08}
-      thickness={0.5}
-      attenuationColor={color}
-      attenuationDistance={0.4}
-      ior={1.35}
-    />
-  );
-
   return (
     <group ref={group} position={position}>
-      {/* left lung lobes */}
-      <mesh position={[-0.3, 0.15, 0.15]}>
-        <sphereGeometry args={[0.32, 32, 32]} />
-        {flesh(COLORS.lung)}
-      </mesh>
-      <mesh position={[-0.15, -0.15, 0.05]} scale={[1, 0.85, 1]}>
-        <sphereGeometry args={[0.28, 32, 32]} />
-        {flesh(COLORS.lung)}
-      </mesh>
-      <mesh position={[-0.4, -0.05, -0.1]}>
-        <sphereGeometry args={[0.26, 32, 32]} />
-        {flesh(COLORS.lung)}
-      </mesh>
-      {/* right lung lobes */}
-      <mesh position={[0.3, 0.1, -0.1]}>
-        <sphereGeometry args={[0.34, 32, 32]} />
-        {flesh(COLORS.lung)}
-      </mesh>
-      <mesh position={[0.15, -0.2, 0.05]} scale={[1, 0.8, 1]}>
-        <sphereGeometry args={[0.28, 32, 32]} />
-        {flesh(COLORS.lung)}
-      </mesh>
-      <mesh position={[0.4, -0.05, 0.15]}>
-        <sphereGeometry args={[0.24, 32, 32]} />
-        {flesh(COLORS.lung)}
-      </mesh>
-      {/* trachea */}
-      <mesh position={[0, 0.55, 0]} rotation={[0, 0, 0]}>
-        <cylinderGeometry args={[0.05, 0.06, 0.5, 12]} />
-        {flesh("#a8d8e8")}
+      <mesh geometry={geometry}>
+        <meshPhysicalMaterial
+          color="#4a9fc4"
+          emissive="#1a4a6b"
+          emissiveIntensity={0.4}
+          roughness={0.4}
+          metalness={0.05}
+          clearcoat={0.8}
+          clearcoatRoughness={0.3}
+          transmission={0.1}
+          thickness={0.5}
+          attenuationColor="#4a9fc4"
+          attenuationDistance={0.4}
+          ior={1.35}
+        />
       </mesh>
       <pointLight color={COLORS.lung} intensity={1.0} distance={3.5} decay={2} />
     </group>
