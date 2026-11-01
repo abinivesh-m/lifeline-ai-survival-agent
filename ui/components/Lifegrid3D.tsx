@@ -149,15 +149,15 @@ function Heart({ position }: { position: [number, number, number] }) {
 
   useFrame((_, delta) => {
     t.current += delta;
-    const beat = 1 + Math.sin(t.current * Math.PI * 2.2) * 0.09 + Math.sin(t.current * Math.PI * 4.4) * 0.03;
+    const beat = 1 + Math.sin(t.current * Math.PI * 1.05) * 0.055 + Math.sin(t.current * Math.PI * 2.1) * 0.015;
     if (mesh.current) mesh.current.scale.setScalar(beat);
     if (halo.current) {
-      halo.current.scale.setScalar(1.35 + Math.sin(t.current * Math.PI * 2.2) * 0.06);
+      halo.current.scale.setScalar(1.25 + Math.sin(t.current * Math.PI * 1.05) * 0.035);
       const m = halo.current.material as THREE.MeshBasicMaterial;
-      m.opacity = 0.18 + Math.sin(t.current * Math.PI * 2.2) * 0.06;
+      m.opacity = 0.16 + Math.sin(t.current * Math.PI * 1.05) * 0.035;
     }
     if (ring.current) {
-      const pulse = (t.current * 0.6) % 1;
+      const pulse = (t.current * 0.3) % 1;
       ring.current.scale.setScalar(1 + pulse * 0.9);
       const m = ring.current.material as THREE.MeshBasicMaterial;
       m.opacity = 0.35 * (1 - pulse);
@@ -204,7 +204,7 @@ function Lungs({ position }: { position: [number, number, number] }) {
 
   useFrame((_, delta) => {
     t.current += delta;
-    const breath = 1 + Math.sin(t.current * 1.4) * 0.05;
+    const breath = 1 + Math.sin(t.current * 0.75) * 0.04;
     if (left.current) left.current.scale.setScalar(breath);
     if (right.current) right.current.scale.setScalar(breath);
   });
