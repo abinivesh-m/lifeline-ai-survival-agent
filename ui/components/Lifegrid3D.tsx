@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { COLORS, lifeline } from "@/lib/lifeline";
 import { useVisible } from "@/lib/useVisible";
 import { ClampDelta } from "./ClampDelta";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 
 type NodeId = "depot" | "heart" | "lungs" | "organs";
 
@@ -329,6 +330,10 @@ export default function Lifegrid3D() {
       >
         <ClampDelta />
         <Scene />
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.25} luminanceSmoothing={0.85} intensity={1.1} mipmapBlur />
+          <Vignette eskil={false} offset={0.12} darkness={0.55} />
+        </EffectComposer>
       </Canvas>
     </div>
   );
