@@ -222,7 +222,7 @@ export default function AStarMap3D() {
         ref={frameRef}
         className="relative h-[430px] overflow-hidden rounded-xl border border-line bg-[#061017]"
       >
-        <Canvas
+        <Canvas style={{ width: "100%", height: "100%", display: "block" }}
           dpr={[1, 1.6]}
           camera={{ position: [0, 12, 13], fov: 40 }}
         >

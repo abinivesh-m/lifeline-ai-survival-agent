@@ -206,7 +206,7 @@ export default function WorldGlobe3D({
 
   return (
     <div ref={frameRef} className={`relative ${className}`}>
-      <Canvas
+      <Canvas style={{ width: "100%", height: "100%", display: "block" }}
         dpr={[1, 2]}
         camera={{ position: [0, 0, 3.05], fov: 42 }}
         gl={{ antialias: true, alpha: true }}

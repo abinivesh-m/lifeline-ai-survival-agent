@@ -357,7 +357,7 @@ export default function Lifegrid3D() {
   const { ref, visible } = useVisible<HTMLDivElement>("260px");
   return (
     <div ref={ref} className="h-full w-full">
-      <Canvas
+      <Canvas style={{ width: "100%", height: "100%", display: "block" }}
         dpr={[1, 2]}
         camera={{ position: [0, 0.4, 7.2], fov: 46 }}
         gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
