@@ -18,7 +18,7 @@ a different road number.
 
 > Meta Global AI Developer Hackathon 2026 - Theme: **Build for Your World**
 > Solo indie entry by [@abinivesh-m](https://github.com/abinivesh-m)
-> **Live:** https://lifeline-ai-meta.vercel.app
+> **Live:** https://ui-abinivesh-m.vercel.app
 > _Built in Kottur. Works anywhere._
 
 **Judge in one command:** `python judge.py` runs ten checks and prints the exact command that
