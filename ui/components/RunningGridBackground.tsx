@@ -549,7 +549,7 @@ export default function RunningGridBackground() {
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      <div className="absolute inset-0 opacity-[0.15]">
+      <div className="absolute inset-0 opacity-[0.08]">
         <Canvas
           dpr={[1, 1.5]}
           camera={{ position: [9.5, 7.5, 12.5], fov: 36, near: 0.1, far: 60 }}
