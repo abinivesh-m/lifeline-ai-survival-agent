@@ -49,10 +49,27 @@ const DATA = grid as unknown as {
 const RESERVES = [...DATA.axes.reserve_litres].sort((a, b) => a - b);
 const HOSPITAL_DEMAND = DATA.base.hospital_demand_litres;
 
+function initialState() {
+  if (typeof window === "undefined") {
+    return { reserve: DATA.base.reserve_litres, road: "open" as "open" | "blocked", operator: "none" as "none" | "pump_first" };
+  }
+  const params = new URLSearchParams(window.location.search);
+  const reserve = Number(params.get("reserve"));
+  const road = params.get("road");
+  const operator = params.get("operator");
+  return {
+    reserve: RESERVES.includes(reserve) ? reserve : DATA.base.reserve_litres,
+    road: road === "blocked" ? ("blocked" as const) : ("open" as const),
+    operator: operator === "pump_first" ? ("pump_first" as const) : ("none" as const),
+  };
+}
+
 export default function Counterfactual() {
-  const [reserve, setReserve] = useState(DATA.base.reserve_litres);
-  const [road, setRoad] = useState<"open" | "blocked">("open");
-  const [operator, setOperator] = useState<"none" | "pump_first">("none");
+  const initial = initialState();
+  const [reserve, setReserve] = useState(initial.reserve);
+  const [road, setRoad] = useState<"open" | "blocked">(initial.road);
+  const [operator, setOperator] = useState<"none" | "pump_first">(initial.operator);
+  const [copied, setCopied] = useState(false);
 
   const row = useMemo<Row | undefined>(
     () =>
@@ -82,6 +99,18 @@ export default function Counterfactual() {
   const maxLungs = Math.max(...strip.map((s) => s.litres), 1);
   const refused = row.operator === "pump_first" && row.override_refused;
 
+  const copyLink = () => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("reserve", String(reserve));
+    url.searchParams.set("road", road);
+    url.searchParams.set("operator", operator);
+    navigator.clipboard?.writeText(url.toString()).then(() => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   const card = "rounded border border-line/70 px-2.5 py-1.5";
   const kicker = "mono text-[8.5px] tracking-[0.14em] text-muted";
   const value = "mono text-[15px] leading-tight";
@@ -95,6 +124,12 @@ export default function Counterfactual() {
         <span className="mono text-[9px] text-muted">
           {DATA.rows.length} real solver runs · no model call · no network
         </span>
+        <button
+          onClick={copyLink}
+          className="mono rounded border border-line/70 px-2 py-0.5 text-[9px] text-muted transition hover:border-teal/60 hover:text-teal"
+        >
+          {copied ? "copied" : "copy link to this world"}
+        </button>
       </div>
 
       <div className="mt-3 grid gap-3 lg:grid-cols-[280px_1fr]">
