@@ -52,11 +52,14 @@ to fund the lungs is rejected with reasons. In the recorded replan, a human insi
 hospital. The agent refuses, states both violations, and applies 70/30 anyway. It accepts a changed world
 and refuses a changed priority.
 
-**What is proven, not claimed.** 100 acceptance tests, one command to reproduce. A\* is audited for
+**What is proven, not claimed.** 110 acceptance tests, one command to reproduce, and `python judge.py`
+prints the ten headline checks with the exact command beside each. A\* is audited for
 admissibility and checked against brute-force enumeration. Every evidence item resolves to a field in
-`town.json`, so a hallucinated justification fails CI. The approval gate needs a spoken token in seven
-languages, an agreeing model, and 0.80 confidence — a cough or a "maybe" is a no. The ledger prices every
-call and says how: $23.42 of $150. No messaging gateway is configured, so the repository states
+`town.json`, so a hallucinated justification fails CI. The page's counterfactual console is 60 of those
+solver runs precomputed: move the reserve or close the road and every number it shows is a row
+`test_counterfactual.py` rebuilds from the solver on every build. The approval gate needs a spoken token in
+seven languages, an agreeing model, and 0.80 confidence — a cough or a "maybe" is a no. The ledger prices
+every call and says how: $23.42 of $150. No messaging gateway is configured, so the repository states
 `PENDING_CREDENTIALS` rather than claiming a message was sent.
 
 **Why it scales.** Nothing in the code knows the word "Kottur". The organs, roads, reserve and demands are
@@ -83,15 +86,18 @@ library only for the core) · Next.js · React Three Fiber · Tailwind CSS · Ve
 ```bash
 git clone https://github.com/abinivesh-m/lifeline-ai-survival-agent
 cd lifeline-ai-survival-agent
-python -m pytest -q                     # 100 passed
+python judge.py                         # ten checks, 10/10, each with its command
 python agent.py --yes --mode policy     # eight steps, 70 L / 30 L, gate, ledger
 python agent.py --yes --mode policy --scenario pump-critical   # the agent refuses its operator
+python counterfactual.py --print        # 60 worlds through the same solver
 ```
 
-No API key is needed for any of the three. `LIFELINE_OFFLINE=1` runs the same path with the network down.
+No API key is needed for any of them. `LIFELINE_OFFLINE=1` runs the same path with the network down.
 
 On the live page: section **04** toggles OPEN WEIGHT ↔ OFFLINE POLICY, section **05** plays the tier-2 alert
-in Tamil, and section **08** replays the phone call that moved the plan.
+in Tamil, and section **08** replays the phone call that moved the plan — then hands you the controls: drag
+the diesel reserve, close the village road, or tell the agent to pump first. Every answer is a precomputed
+solver run, and the validator refuses the operator with its reasons on screen.
 
 ---
 

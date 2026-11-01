@@ -58,7 +58,7 @@ Section 04. Toggle **OPEN WEIGHT** ↔ **OFFLINE POLICY**.
 > "The model proposes. Code disposes: 70 litres to the hospital, 30 to the pump, 100 total, or the
 > validator rejects it and the deterministic solver takes over."
 
-## 1:10 — the phone call (22 s)
+## 1:10 — the phone call (20 s)
 
 Section 08, **FIELD REPORT → REPLAN**. Point at CALL 1, then CALL 2.
 
@@ -71,7 +71,15 @@ Section 08, **FIELD REPORT → REPLAN**. Point at CALL 1, then CALL 2.
 > detour burns 1.8 litres more, so the pump loses a five-litre block — six hours of water becomes five,
 > and it says four thousand litres out loud instead of rounding it away."
 
-## 1:32 — the ladder, out loud (22 s)
+## 1:30 — move the world yourself (16 s)
+
+Still section 08. Drag **USABLE DIESEL** from 100 to 70, then click **PUMP FIRST**.
+
+> "Now you drive it. Drag the reserve to seventy and the lungs get nothing, because the heart is fed
+> first. Tell it to pump first and it refuses, names both violations, and keeps the plan. Sixty worlds,
+> every number a real solver run — the same code, run over a lattice instead of once."
+
+## 1:46 — the ladder, out loud (20 s)
 
 Section 05.
 
@@ -85,7 +93,7 @@ Click **தமிழ்**, then **▶ ALERT**.
 
 Click **▶ 70/30 DECISION** in section 04.
 
-## 1:54 — Seri gate (22 s)
+## 2:06 — Seri gate (20 s)
 
 > "The paper QR still needs someone who can read. This needs one word."
 
@@ -96,26 +104,25 @@ Click through two chips (**Español**, **Kiswahili**), then **▶ HEAR · தம
 > question, a cough or a maybe is a no. Seven languages are gated and sealed separately; Mandarin has
 > no released voice checkpoint, so it is labelled text-only."
 
-## 2:16 — offline (18 s)
+## 2:26 — offline (16 s)
 
 Section 06, run the prepared clip: airplane mode, `nvidia-smi`, `LIFELINE_OFFLINE=1 python agent.py --yes`.
 
 > "Graph, route, validator, ledger, gate: all of it runs with the network off. The model is the fast path,
 > not the only path."
 
-## 2:34 — the world (12 s)
+## 2:42 — the world (10 s)
 
 Section 09.
 
 > "Twenty-six towns, nine regions. Only Kottur has a surveyed fuel scenario. Every other pin returns a
 > labelled generic template — never an invented litre count."
 
-## 2:46 — close (14 s)
+## 2:52 — close (10 s)
 
-> "One hundred tests, one command to reproduce, and a ledger that prices every call and says how: $23.42
-> of $150.
-> No gateway is configured, so nothing here claims a message was sent. That is the product: a decision
-> that survives the wire going down, and a town that can still say yes."
+> "One hundred and ten tests, one command to reproduce, and a ledger that prices every call and says how:
+> $23.42 of $150. No gateway is configured, so nothing here claims a message was sent. That is the
+> product: a decision that survives the wire going down, and a town that can still say yes."
 
 ---
 
@@ -129,6 +136,8 @@ Section 09.
 - Do not call either field-report clip a real recording. Both audio files are labelled **SYNTHETIC CLIP**
   on the panel; what is real is the Muse Voice Transcribe call that produced each transcript. Say it that
   way and the panel agrees with you.
+- Do not say the console computes in the browser. It looks up a row that `counterfactual.py` produced;
+  say "sixty real solver runs, looked up" - the panel says the same thing.
 - Do not say a model extracts the constraints. It is regex over the verbatim transcript, on purpose: a
   misheard number must not be able to move diesel.
 - The flood figure is **1.81 billion people directly exposed to 1-in-100-year floods** (Rentschler, Salhab

@@ -9,6 +9,7 @@ import AllocatorDashboard from "@/components/AllocatorDashboard";
 import OfflineProof3D from "@/components/OfflineProof3D";
 import AgenticTimeline3D from "@/components/AgenticTimeline3D";
 import FieldReport from "@/components/FieldReport";
+import Counterfactual from "@/components/Counterfactual";
 import WorldPanel from "@/components/WorldPanel";
 import TempleBell from "@/components/TempleBell";
 import VoiceAlerts from "@/components/VoiceAlerts";
@@ -144,7 +145,7 @@ export default function Page() {
                     .map((locale) => locale.code.toUpperCase())
                     .join(" ")}]`,
                   `ledger $${lifeline.credit.spent_usd.toFixed(4)}/$${lifeline.credit.budget_usd.toFixed(0)} live`,
-                  "100/100 pytest",
+                  "110/110 pytest",
                 ].map((chip) => (
                   <span
                     key={chip}
@@ -440,9 +441,10 @@ export default function Page() {
       {/* --------------------------------------------------------------- field */}
       <Section
         meta={SECTIONS[7]}
-        lede="Two calls, recorded and transcribed. The first confirms what the town already knows and changes nothing — an agent that rewrites its plan on every call is not trustworthy. The second takes the village road away, and the detour costs the pump a block of diesel. Both re-plan without a restart."
+        lede="Two calls, recorded and transcribed. The first confirms what the town already knows and changes nothing — an agent that rewrites its plan on every call is not trustworthy. The second takes the village road away, and the detour costs the pump a block of diesel. Both re-plan without a restart. Below them, move the reserve or close the road yourself: every answer is a real solver run, and the validator refuses you the same way it refuses a model."
       >
         <FieldReport />
+        <Counterfactual />
       </Section>
 
       {/* ---------------------------------------------------------------- world */}

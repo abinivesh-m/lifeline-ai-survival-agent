@@ -1,0 +1,2207 @@
+{
+  "generated_from": "counterfactual.py - field_reports.replan + allocator.policy_solve + allocator.validate_proposal",
+  "axes": {
+    "reserve_litres": [
+      100,
+      95,
+      90,
+      85,
+      80,
+      75,
+      70,
+      65,
+      60,
+      55,
+      50,
+      45,
+      40,
+      35,
+      30
+    ],
+    "village_road": [
+      "open",
+      "blocked"
+    ],
+    "operator": [
+      "none",
+      "pump_first"
+    ]
+  },
+  "base": {
+    "reserve_litres": 100,
+    "village_road": "Kottur village road",
+    "hospital_demand_litres": 70,
+    "pump_demand_litres": 30
+  },
+  "rows": [
+    {
+      "id": "r100-open-none",
+      "reserve_litres": 100,
+      "village_road": "open",
+      "operator": "none",
+      "status": "no_change",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 100,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "total_litres": 100,
+      "pump_hours": 6.0,
+      "water_litres_lost": 0,
+      "heart_protected": true,
+      "validator": [],
+      "changes": []
+    },
+    {
+      "id": "r100-open-pump_first",
+      "reserve_litres": 100,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "no_change",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 100,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "total_litres": 100,
+      "pump_hours": 6.0,
+      "water_litres_lost": 0,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [],
+      "instruction": {
+        "hospital": 60,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (60/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 30
+      }
+    },
+    {
+      "id": "r100-blocked-none",
+      "reserve_litres": 100,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 95,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 25
+      },
+      "total_litres": 95,
+      "pump_hours": 5.0,
+      "water_litres_lost": 4000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 100,
+          "after": 95
+        }
+      ]
+    },
+    {
+      "id": "r100-blocked-pump_first",
+      "reserve_litres": 100,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 95,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 25
+      },
+      "total_litres": 95,
+      "pump_hours": 5.0,
+      "water_litres_lost": 4000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 100,
+          "after": 95
+        }
+      ],
+      "instruction": {
+        "hospital": 55,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (55/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 25
+      }
+    },
+    {
+      "id": "r095-open-none",
+      "reserve_litres": 95,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 95,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 25
+      },
+      "total_litres": 95,
+      "pump_hours": 5.0,
+      "water_litres_lost": 4000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 95
+        }
+      ]
+    },
+    {
+      "id": "r095-open-pump_first",
+      "reserve_litres": 95,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 95,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 25
+      },
+      "total_litres": 95,
+      "pump_hours": 5.0,
+      "water_litres_lost": 4000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 95
+        }
+      ],
+      "instruction": {
+        "hospital": 55,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (55/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 25
+      }
+    },
+    {
+      "id": "r095-blocked-none",
+      "reserve_litres": 95,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 90,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 20
+      },
+      "total_litres": 90,
+      "pump_hours": 4.0,
+      "water_litres_lost": 8000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 95
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 95,
+          "after": 90
+        }
+      ]
+    },
+    {
+      "id": "r095-blocked-pump_first",
+      "reserve_litres": 95,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 90,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 20
+      },
+      "total_litres": 90,
+      "pump_hours": 4.0,
+      "water_litres_lost": 8000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 95
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 95,
+          "after": 90
+        }
+      ],
+      "instruction": {
+        "hospital": 50,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (50/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 20
+      }
+    },
+    {
+      "id": "r090-open-none",
+      "reserve_litres": 90,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 90,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 20
+      },
+      "total_litres": 90,
+      "pump_hours": 4.0,
+      "water_litres_lost": 8000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 90
+        }
+      ]
+    },
+    {
+      "id": "r090-open-pump_first",
+      "reserve_litres": 90,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 90,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 20
+      },
+      "total_litres": 90,
+      "pump_hours": 4.0,
+      "water_litres_lost": 8000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 90
+        }
+      ],
+      "instruction": {
+        "hospital": 50,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (50/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 20
+      }
+    },
+    {
+      "id": "r090-blocked-none",
+      "reserve_litres": 90,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 85,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 15
+      },
+      "total_litres": 85,
+      "pump_hours": 3.0,
+      "water_litres_lost": 12000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 90
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 90,
+          "after": 85
+        }
+      ]
+    },
+    {
+      "id": "r090-blocked-pump_first",
+      "reserve_litres": 90,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 85,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 15
+      },
+      "total_litres": 85,
+      "pump_hours": 3.0,
+      "water_litres_lost": 12000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 90
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 90,
+          "after": 85
+        }
+      ],
+      "instruction": {
+        "hospital": 45,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (45/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 15
+      }
+    },
+    {
+      "id": "r085-open-none",
+      "reserve_litres": 85,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 85,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 15
+      },
+      "total_litres": 85,
+      "pump_hours": 3.0,
+      "water_litres_lost": 12000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 85
+        }
+      ]
+    },
+    {
+      "id": "r085-open-pump_first",
+      "reserve_litres": 85,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 85,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 15
+      },
+      "total_litres": 85,
+      "pump_hours": 3.0,
+      "water_litres_lost": 12000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 85
+        }
+      ],
+      "instruction": {
+        "hospital": 45,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (45/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 15
+      }
+    },
+    {
+      "id": "r085-blocked-none",
+      "reserve_litres": 85,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 80,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 10
+      },
+      "total_litres": 80,
+      "pump_hours": 2.0,
+      "water_litres_lost": 16000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 85
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 85,
+          "after": 80
+        }
+      ]
+    },
+    {
+      "id": "r085-blocked-pump_first",
+      "reserve_litres": 85,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 80,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 10
+      },
+      "total_litres": 80,
+      "pump_hours": 2.0,
+      "water_litres_lost": 16000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 85
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 85,
+          "after": 80
+        }
+      ],
+      "instruction": {
+        "hospital": 40,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (40/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 10
+      }
+    },
+    {
+      "id": "r080-open-none",
+      "reserve_litres": 80,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 80,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 10
+      },
+      "total_litres": 80,
+      "pump_hours": 2.0,
+      "water_litres_lost": 16000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 80
+        }
+      ]
+    },
+    {
+      "id": "r080-open-pump_first",
+      "reserve_litres": 80,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 80,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 10
+      },
+      "total_litres": 80,
+      "pump_hours": 2.0,
+      "water_litres_lost": 16000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 80
+        }
+      ],
+      "instruction": {
+        "hospital": 40,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (40/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 10
+      }
+    },
+    {
+      "id": "r080-blocked-none",
+      "reserve_litres": 80,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 75,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 5
+      },
+      "total_litres": 75,
+      "pump_hours": 1.0,
+      "water_litres_lost": 20000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 80
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 80,
+          "after": 75
+        }
+      ]
+    },
+    {
+      "id": "r080-blocked-pump_first",
+      "reserve_litres": 80,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 75,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 5
+      },
+      "total_litres": 75,
+      "pump_hours": 1.0,
+      "water_litres_lost": 20000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 80
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 80,
+          "after": 75
+        }
+      ],
+      "instruction": {
+        "hospital": 35,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (35/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 5
+      }
+    },
+    {
+      "id": "r075-open-none",
+      "reserve_litres": 75,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 75,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 5
+      },
+      "total_litres": 75,
+      "pump_hours": 1.0,
+      "water_litres_lost": 20000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 75
+        }
+      ]
+    },
+    {
+      "id": "r075-open-pump_first",
+      "reserve_litres": 75,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 75,
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 5
+      },
+      "total_litres": 75,
+      "pump_hours": 1.0,
+      "water_litres_lost": 20000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 75
+        }
+      ],
+      "instruction": {
+        "hospital": 35,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (35/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70,
+        "water_pump": 5
+      }
+    },
+    {
+      "id": "r075-blocked-none",
+      "reserve_litres": 75,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 70,
+      "allocation": {
+        "hospital": 70
+      },
+      "total_litres": 70,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 75
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 75,
+          "after": 70
+        }
+      ]
+    },
+    {
+      "id": "r075-blocked-pump_first",
+      "reserve_litres": 75,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 70,
+      "allocation": {
+        "hospital": 70
+      },
+      "total_litres": 70,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 75
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 75,
+          "after": 70
+        }
+      ],
+      "instruction": {
+        "hospital": 30,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (30/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70
+      }
+    },
+    {
+      "id": "r070-open-none",
+      "reserve_litres": 70,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 70,
+      "allocation": {
+        "hospital": 70
+      },
+      "total_litres": 70,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 70
+        }
+      ]
+    },
+    {
+      "id": "r070-open-pump_first",
+      "reserve_litres": 70,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 70,
+      "allocation": {
+        "hospital": 70
+      },
+      "total_litres": 70,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": true,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 70
+        }
+      ],
+      "instruction": {
+        "hospital": 30,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (30/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 70
+      }
+    },
+    {
+      "id": "r070-blocked-none",
+      "reserve_litres": 70,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 65,
+      "allocation": {
+        "hospital": 65
+      },
+      "total_litres": 65,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 70
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 70,
+          "after": 65
+        }
+      ]
+    },
+    {
+      "id": "r070-blocked-pump_first",
+      "reserve_litres": 70,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 65,
+      "allocation": {
+        "hospital": 65
+      },
+      "total_litres": 65,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 70
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 70,
+          "after": 65
+        }
+      ],
+      "instruction": {
+        "hospital": 25,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (25/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 65
+      }
+    },
+    {
+      "id": "r065-open-none",
+      "reserve_litres": 65,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 65,
+      "allocation": {
+        "hospital": 65
+      },
+      "total_litres": 65,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 65
+        }
+      ]
+    },
+    {
+      "id": "r065-open-pump_first",
+      "reserve_litres": 65,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 65,
+      "allocation": {
+        "hospital": 65
+      },
+      "total_litres": 65,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 65
+        }
+      ],
+      "instruction": {
+        "hospital": 25,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (25/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 65
+      }
+    },
+    {
+      "id": "r065-blocked-none",
+      "reserve_litres": 65,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 60,
+      "allocation": {
+        "hospital": 60
+      },
+      "total_litres": 60,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 65
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 65,
+          "after": 60
+        }
+      ]
+    },
+    {
+      "id": "r065-blocked-pump_first",
+      "reserve_litres": 65,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 60,
+      "allocation": {
+        "hospital": 60
+      },
+      "total_litres": 60,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 65
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 65,
+          "after": 60
+        }
+      ],
+      "instruction": {
+        "hospital": 20,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (20/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 60
+      }
+    },
+    {
+      "id": "r060-open-none",
+      "reserve_litres": 60,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 60,
+      "allocation": {
+        "hospital": 60
+      },
+      "total_litres": 60,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 60
+        }
+      ]
+    },
+    {
+      "id": "r060-open-pump_first",
+      "reserve_litres": 60,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 60,
+      "allocation": {
+        "hospital": 60
+      },
+      "total_litres": 60,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 60
+        }
+      ],
+      "instruction": {
+        "hospital": 20,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (20/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 60
+      }
+    },
+    {
+      "id": "r060-blocked-none",
+      "reserve_litres": 60,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 55,
+      "allocation": {
+        "hospital": 55
+      },
+      "total_litres": 55,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 60
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 60,
+          "after": 55
+        }
+      ]
+    },
+    {
+      "id": "r060-blocked-pump_first",
+      "reserve_litres": 60,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 55,
+      "allocation": {
+        "hospital": 55
+      },
+      "total_litres": 55,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 60
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 60,
+          "after": 55
+        }
+      ],
+      "instruction": {
+        "hospital": 15,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (15/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 55
+      }
+    },
+    {
+      "id": "r055-open-none",
+      "reserve_litres": 55,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 55,
+      "allocation": {
+        "hospital": 55
+      },
+      "total_litres": 55,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 55
+        }
+      ]
+    },
+    {
+      "id": "r055-open-pump_first",
+      "reserve_litres": 55,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 55,
+      "allocation": {
+        "hospital": 55
+      },
+      "total_litres": 55,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 55
+        }
+      ],
+      "instruction": {
+        "hospital": 15,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (15/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 55
+      }
+    },
+    {
+      "id": "r055-blocked-none",
+      "reserve_litres": 55,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 50,
+      "allocation": {
+        "hospital": 50
+      },
+      "total_litres": 50,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 55
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 55,
+          "after": 50
+        }
+      ]
+    },
+    {
+      "id": "r055-blocked-pump_first",
+      "reserve_litres": 55,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 50,
+      "allocation": {
+        "hospital": 50
+      },
+      "total_litres": 50,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 55
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 55,
+          "after": 50
+        }
+      ],
+      "instruction": {
+        "hospital": 10,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (10/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 50
+      }
+    },
+    {
+      "id": "r050-open-none",
+      "reserve_litres": 50,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 50,
+      "allocation": {
+        "hospital": 50
+      },
+      "total_litres": 50,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 50
+        }
+      ]
+    },
+    {
+      "id": "r050-open-pump_first",
+      "reserve_litres": 50,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 50,
+      "allocation": {
+        "hospital": 50
+      },
+      "total_litres": 50,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 50
+        }
+      ],
+      "instruction": {
+        "hospital": 10,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (10/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 50
+      }
+    },
+    {
+      "id": "r050-blocked-none",
+      "reserve_litres": 50,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 45,
+      "allocation": {
+        "hospital": 45
+      },
+      "total_litres": 45,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 50
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 50,
+          "after": 45
+        }
+      ]
+    },
+    {
+      "id": "r050-blocked-pump_first",
+      "reserve_litres": 50,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 45,
+      "allocation": {
+        "hospital": 45
+      },
+      "total_litres": 45,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 50
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 50,
+          "after": 45
+        }
+      ],
+      "instruction": {
+        "hospital": 5,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (5/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 45
+      }
+    },
+    {
+      "id": "r045-open-none",
+      "reserve_litres": 45,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 45,
+      "allocation": {
+        "hospital": 45
+      },
+      "total_litres": 45,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 45
+        }
+      ]
+    },
+    {
+      "id": "r045-open-pump_first",
+      "reserve_litres": 45,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 45,
+      "allocation": {
+        "hospital": 45
+      },
+      "total_litres": 45,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 45
+        }
+      ],
+      "instruction": {
+        "hospital": 5,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (5/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 45
+      }
+    },
+    {
+      "id": "r045-blocked-none",
+      "reserve_litres": 45,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 40,
+      "allocation": {
+        "hospital": 40
+      },
+      "total_litres": 40,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 45
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 45,
+          "after": 40
+        }
+      ]
+    },
+    {
+      "id": "r045-blocked-pump_first",
+      "reserve_litres": 45,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 40,
+      "allocation": {
+        "hospital": 40
+      },
+      "total_litres": 40,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 45
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 45,
+          "after": 40
+        }
+      ],
+      "instruction": {
+        "hospital": 0,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (0/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 40
+      }
+    },
+    {
+      "id": "r040-open-none",
+      "reserve_litres": 40,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 40,
+      "allocation": {
+        "hospital": 40
+      },
+      "total_litres": 40,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 40
+        }
+      ]
+    },
+    {
+      "id": "r040-open-pump_first",
+      "reserve_litres": 40,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 40,
+      "allocation": {
+        "hospital": 40
+      },
+      "total_litres": 40,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 40
+        }
+      ],
+      "instruction": {
+        "hospital": 0,
+        "water_pump": 40
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 40 L exceeds stated demand 30 L",
+        "hospital is under-funded (0/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 40
+      }
+    },
+    {
+      "id": "r040-blocked-none",
+      "reserve_litres": 40,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 35,
+      "allocation": {
+        "hospital": 35
+      },
+      "total_litres": 35,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 40
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 40,
+          "after": 35
+        }
+      ]
+    },
+    {
+      "id": "r040-blocked-pump_first",
+      "reserve_litres": 40,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 35,
+      "allocation": {
+        "hospital": 35
+      },
+      "total_litres": 35,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 40
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 40,
+          "after": 35
+        }
+      ],
+      "instruction": {
+        "hospital": 0,
+        "water_pump": 35
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 35 L exceeds stated demand 30 L",
+        "hospital is under-funded (0/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 35
+      }
+    },
+    {
+      "id": "r035-open-none",
+      "reserve_litres": 35,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 35,
+      "allocation": {
+        "hospital": 35
+      },
+      "total_litres": 35,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 35
+        }
+      ]
+    },
+    {
+      "id": "r035-open-pump_first",
+      "reserve_litres": 35,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 35,
+      "allocation": {
+        "hospital": 35
+      },
+      "total_litres": 35,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 35
+        }
+      ],
+      "instruction": {
+        "hospital": 0,
+        "water_pump": 35
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "water_pump: 35 L exceeds stated demand 30 L",
+        "hospital is under-funded (0/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 35
+      }
+    },
+    {
+      "id": "r035-blocked-none",
+      "reserve_litres": 35,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 30,
+      "allocation": {
+        "hospital": 30
+      },
+      "total_litres": 30,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 35
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 35,
+          "after": 30
+        }
+      ]
+    },
+    {
+      "id": "r035-blocked-pump_first",
+      "reserve_litres": 35,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 30,
+      "allocation": {
+        "hospital": 30
+      },
+      "total_litres": 30,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 35
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 35,
+          "after": 30
+        }
+      ],
+      "instruction": {
+        "hospital": 0,
+        "water_pump": 30
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "hospital is under-funded (0/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 30
+      }
+    },
+    {
+      "id": "r030-open-none",
+      "reserve_litres": 30,
+      "village_road": "open",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 30,
+      "allocation": {
+        "hospital": 30
+      },
+      "total_litres": 30,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 30
+        }
+      ]
+    },
+    {
+      "id": "r030-open-pump_first",
+      "reserve_litres": 30,
+      "village_road": "open",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 7.8,
+      "route_fuel_litres": 2.73,
+      "reserve_in_force": 30,
+      "allocation": {
+        "hospital": 30
+      },
+      "total_litres": 30,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 30
+        }
+      ],
+      "instruction": {
+        "hospital": 0,
+        "water_pump": 30
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "hospital is under-funded (0/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 30
+      }
+    },
+    {
+      "id": "r030-blocked-none",
+      "reserve_litres": 30,
+      "village_road": "blocked",
+      "operator": "none",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 25,
+      "allocation": {
+        "hospital": 25
+      },
+      "total_litres": 25,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 30
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 30,
+          "after": 25
+        }
+      ]
+    },
+    {
+      "id": "r030-blocked-pump_first",
+      "reserve_litres": 30,
+      "village_road": "blocked",
+      "operator": "pump_first",
+      "status": "replanned",
+      "route_km": 13.0,
+      "route_fuel_litres": 4.55,
+      "reserve_in_force": 25,
+      "allocation": {
+        "hospital": 25
+      },
+      "total_litres": 25,
+      "pump_hours": 0.0,
+      "water_litres_lost": 24000,
+      "heart_protected": false,
+      "validator": [],
+      "changes": [
+        {
+          "kind": "depot_litres",
+          "before": 100,
+          "after": 30
+        },
+        {
+          "kind": "road_blocked",
+          "before": "open",
+          "after": "blocked"
+        },
+        {
+          "kind": "delivery_fuel",
+          "before": 30,
+          "after": 25
+        }
+      ],
+      "instruction": {
+        "hospital": 0,
+        "water_pump": 25
+      },
+      "override_refused": true,
+      "override_reasons": [
+        "hospital is under-funded (0/70 L) while water_pump receives diesel"
+      ],
+      "applied_instead": {
+        "hospital": 25
+      }
+    }
+  ],
+  "note": "Every row is the deterministic solver re-run against a different world, not a curve fitted to one. The validator verdict is the same code that rejects a model proposal."
+}

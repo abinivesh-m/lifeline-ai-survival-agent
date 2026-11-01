@@ -21,6 +21,9 @@ a different road number.
 > **Live:** https://lifeline-ai-meta.vercel.app
 > _Built in Kottur. Works anywhere._
 
+**Judge in one command:** `python judge.py` runs ten checks and prints the exact command that
+reproduces each line. No API key, no network, no install.
+
 ---
 
 ## The six demo frames
@@ -314,6 +317,33 @@ never be able to invent a number that moves a town's last diesel. The model tran
 what the words are allowed to change. Unknown phrasing produces no constraint - `test_field_reports.py`
 pins that, including the case where a caller says "the road is closed" without naming a road.
 
+### Move the world yourself
+
+The page section that shows those two calls also lets a judge move the world without opening a terminal:
+a slider for usable diesel (30-100 L in 5 L steps), a village-road switch, and an operator switch that
+insists the pump outranks the hospital. `python counterfactual.py` precomputes all 60 combinations by
+calling the same `field_reports.replan` and `allocator.validate_proposal` the agent uses, and writes
+`artifacts/counterfactuals.json` and `ui/public/data/counterfactuals.json` - identical bytes.
+
+The console computes nothing. It looks up a row. `test_counterfactual.py` rebuilds the whole grid from
+the solver and compares row for row, so a stale number fails the build instead of sitting on the page.
+
+Three rows are the story:
+
+```
+reserve  road     plan     pump     water lost   validator
+100      open     70/30    6.0 h         0 L      pass
+100      blocked  70/25    5.0 h      4000 L      pass
+ 70      open     70/0     0.0 h     24000 L      pass
+```
+
+Closing the road burns 1.82 L more, which at the 5 L minimum unit costs the lungs one block. With the road
+open, 75 L is the last reserve that leaves the lungs anything at all; below that the heart is fed first and
+the lungs get nothing. Below 70 L even the heart is short and the page says so. The operator switch is
+refused in every one of the 30 worlds it is tried, with the reason named - at 30 L the instruction becomes
+`{'hospital': 0, 'water_pump': 30}` and the validator still refuses it, because a human cannot redirect the
+last diesel away from the heart.
+
 ### It constrains itself
 
 `CreditTracker.log()` raises `BudgetError` **before** it writes if a call would break a per-model bucket
@@ -511,7 +541,8 @@ Core has **zero third-party dependencies** - Python 3.11+ standard library only.
 git clone https://github.com/abinivesh-m/lifeline-ai-survival-agent
 cd lifeline-ai-survival-agent
 
-python -m pytest -q                   # 100 acceptance tests
+python -m pytest -q                   # 110 acceptance tests
+python judge.py                       # the ten checks, with the command for each
 python dependency_graph.py            # LIFEGRID + topological order + cascade
 python a_star.py                      # 4.2 blocked -> 7.8 km -> 40% fuel saved
 python a_star.py --audit              # prove the heuristic is admissible
@@ -524,6 +555,7 @@ python seri_gate.py                   # one spoken word -> gated approval -> led
 python benchmark.py                   # local medians + recorded model latencies
 python agent.py --yes --mode policy   # the eight steps, start to finish
 python agent.py --yes --scenario reserve-loss
+python counterfactual.py              # 60 solver runs: reserve x road x operator
 ```
 
 Live Meta calls (optional):
@@ -576,13 +608,17 @@ protocols.py            snake-boat mode switch + seeded ant-pheromone learner
 allocator.py            70/30 solver, evidence vs inference, Wonder client, validator
 credit_tracker.py       $150 ledger, 80%/95% alerts, verify()
 field_reports.py        transcript -> typed constraints -> route + allocation replan
+counterfactual.py       60 worlds through the same solver: reserve x road x operator
 agent.py                the eight-step workflow, approval gate, replanning
+judge.py                one-command scorecard: ten checks, each with its reproduce command
 test_phase1.py          acceptance tests pinning every claim in this README
+test_blood.py           thermal envelope, DNA lot ledger, death clock, inverse
 test_field_reports.py   the loop: what it extracts, what it refuses to extract
 test_claims.py          the README as a fixture: every quoted number re-derived
+test_counterfactual.py  the console's grid rebuilt from the solver, row for row
 test_protocols.py       proof the relay refuses to invent a river, and the colony learns
 runs/latest.json        last agent run, as evidence
-artifacts/              captured model output (SAM frames, voice reports, proof)
+artifacts/              captured model output (SAM frames, voice reports, proof, the grid)
 ```
 
 ## Build log and provenance
@@ -592,7 +628,7 @@ solo entrant. No pre-existing product, no borrowed codebase.
 
 | Phase | Status | What exists |
 | --- | --- | --- |
-| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 100 tests |
+| Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 110 tests |
 | Phase 2 - model capture | **done** | SAM flood frames, Tamil transcripts, Wonder live calls, Baseten Spark Open runs and the 8-locale payloads - all committed under `artifacts/` |
 | Phase 3 - demo | **in progress** | the LIFEGRID page and all nine sections are live; the 3-minute video is the last item |
 
