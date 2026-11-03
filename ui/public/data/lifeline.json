@@ -882,8 +882,8 @@
     "available": true,
     "provider": "Baseten",
     "model": "meta-models/muse-spark-open-1026",
-    "runs": 4,
-    "valid_runs": 3,
+    "runs": 10,
+    "valid_runs": 7,
     "allocation": {
       "hospital": 70,
       "water_pump": 30

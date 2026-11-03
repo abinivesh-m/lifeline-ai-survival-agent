@@ -395,7 +395,7 @@ Seven Meta surfaces, each doing work a different surface cannot do:
 | **SAM 3.1** `sam-3.1` | flood extent per frame, boxes + masks | $30 | stored: 9 frames, 35.3% featured |
 | **Muse Voice Transcribe** `muse-voice-transcribe-1.0` | Tamil field reports, code-switched; Seri Gate ears | $30 | 31 calls, $0.005036 - two field reports (one retried) + 28 approval passes |
 | **Muse Spark** `muse-spark-1.3` | 8-locale SMS + spoken payload drafting; coding helper | $20 | 13 calls, $6.500000 spent |
-| **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 3/4 valid, 5.41 / 6.73 / 6.05 s stored, in-agent run 4.44 s, 70/30 |
+| **Muse Spark Open** `meta-models/muse-spark-open-1026` | allocation brain, Baseten partner inference | $0 credits | 7/10 valid, 5.41 / 6.73 / 6.05 / 7.26 / 9.68 / 8.51 / 7.28 s stored, in-agent run 4.44 s, 70/30 |
 | **MMS-TTS** `facebook/mms-tts-*` | speaks the approved payloads, 7 locales, local CPU | $0 credits | 14 clips, 0 network at playback |
 | **Muse Glimmer 30B** | open-weight reasoner, Modal GPU | $0 credits | not deployed (18 GB does not fit) |
 | **Muse Code 1.4.13** | primary coding agent for this repo | $0 | used |
@@ -459,8 +459,12 @@ inference**. This submission claims exactly one path:
 
 | Claim | Model | Where | Evidence |
 | --- | --- | --- | --- |
-| **Qualifying** | **Muse Spark Open** (`meta-models/muse-spark-open-1026`) | Baseten, 2M TPM | `artifacts/openweight_proof.json` - verbatim responses, latency, token usage, locally re-validated |
+| **Qualifying** | **Muse Spark Open** (`meta-models/muse-spark-open-1026`) | Baseten, 2M TPM | `artifacts/openweight_proof.json` - 10 runs from 7 distinct prompts, verbatim responses, latency, token usage, locally re-validated |
 | **Not claimed** | Muse Glimmer 30B | Modal | 18 GB of weights vs 6 GB VRAM; not deployed in this build |
+
+The proof covers six scarcity shapes, not one prompt repeated: 100 L base, 60 L scarce, a 40/60 pump-heavy split, 80/20 hospital-heavy, a 30 L tight reserve, and a 120 L reserve that no split can satisfy. `python tools/openweight_battery.py` re-runs them against the live endpoint.
+
+Of the 10 runs on record, **7 were accepted and 3 refused** - one answer came back empty at a low token cap, one inverted priority by funding the pump above the heart, and one answered an impossible reserve. Every refusal is the validator's; none was passed through, and the raw model text is stored unedited beside it.
 
 No local model is claimed for the prize. This laptop has **6 GB VRAM and 15.7 GB RAM**, and Muse
 Glimmer's smallest published build is **18 GB**. It does not fit, so it is never presented as a

@@ -118,11 +118,25 @@ def test_the_numbers_the_solver_and_the_models_produced_still_hold() -> None:
     runs = proof.get("runs", [])
     valid = [run for run in runs if run.get("valid")]
 
-    # every stored valid run still passes the local validator on the same town
-    for run in valid:
+    # the base-town runs still carry the headline 70/30 figure; the battery runs
+    # (scenario field set) are different reserves/demands and are checked below
+    base_runs = [run for run in valid if "scenario" not in run]
+    for run in base_runs:
         assert run["allocation"] == {"hospital": 70, "water_pump": 30}
         problems = allocator.validate_proposal(run["allocation"], town)
         assert problems == [], f"a stored open-weight run no longer validates: {problems}"
+
+    # every stored run, whatever its town, still validates against its own town
+    for run in valid:
+        if "scenario" not in run:
+            continue
+        scenario_town = allocator.load_town()
+        scenario_town["reserve"]["total_litres"] = run["reserve_litres"]
+        scenario_town["organs"]["hospital"]["fuel_demand_litres"] = run["demands"]["hospital"]
+        scenario_town["organs"]["water_pump"]["fuel_demand_litres"] = run["demands"]["water_pump"]
+        if run.get("valid"):
+            problems = allocator.validate_proposal(run["allocation"], scenario_town)
+            assert problems == [], f"scenario run no longer validates: {problems}"
 
     latencies = " / ".join(f"{run['latency_s']}" for run in valid)
     assert f"{len(valid)}/{len(runs)} valid, {latencies}" in README, (

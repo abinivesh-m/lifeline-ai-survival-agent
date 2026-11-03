@@ -115,6 +115,269 @@
       "confidence": 0.99,
       "valid": true,
       "problems": []
+    },
+    {
+      "at": "2026-11-03T18:11:59+00:00",
+      "scenario": "base-100L",
+      "expectation": "valid",
+      "provider": "Baseten",
+      "model": "meta-models/muse-spark-open-1026",
+      "reserve_litres": 100,
+      "demands": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "latency_s": 7.26,
+      "response_text": "{\"allocation\": {\"hospital\": 70, \"water_pump\": 30}, \"justification\": \"Full reserve allocated to satisfy priority 1 hospital demand first, then priority 2 water pump which depends on hospital power, summing exactly to 100L without exceeding demands.\", \"confidence\": 0.99}",
+      "reasoning_chars": 5660,
+      "reasoning_preview": "We need to parse the task. The user is asking for allocation step of disaster fuel agent. Diesel only. Never give medical advice, never triage patients, never mention medicine.\n\nReserve at depot: 100 L.\nHospital (heart, priority 1): needs up to 70 L, burns 17.5 L/h, 4.0 h left.\nWater pump (lungs, priority 2): needs up to 30 L, burns 5.0 L/h, and only runs if hospital feeder has power.\nShelters (organs, priority 3): 200 people, no water.\nRoad: 4.2 km direct corridor is blocked; A* detour is 7.8 km.\n\nHard constraints: two allocations must sum to exactly reserve; never exceed stated demand; do no",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 365,
+        "completion_tokens": 1359,
+        "total_tokens": 1724,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 1015,
+          "audio_tokens": 0,
+          "reasoning_tokens": 1285,
+          "rejected_prediction_tokens": 1393
+        }
+      },
+      "model_served": "meta-models/muse-spark-open-1026",
+      "request_sha256": "453884d7f9aec933b426fd92cec2435269f5e7e83e8b8285b1ac94f9c91f15d1",
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "justification": "Full reserve allocated to satisfy priority 1 hospital demand first, then priority 2 water pump which depends on hospital power, summing exactly to 100L without exceeding demands.",
+      "confidence": 0.99,
+      "valid": true,
+      "problems": [],
+      "matches_expectation": true
+    },
+    {
+      "at": "2026-11-03T18:12:06+00:00",
+      "scenario": "scarce-60L",
+      "expectation": "valid",
+      "provider": "Baseten",
+      "model": "meta-models/muse-spark-open-1026",
+      "reserve_litres": 60,
+      "demands": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "latency_s": 9.68,
+      "response_text": "{\"allocation\": {\"hospital\": 60, \"water_pump\": 0}, \"justification\": \"All 60L allocated to priority 1 within its 70L limit because priority 1 demand exceeds reserve and priority 2 requires priority 1 power and cannot be funded while priority 1 is unsatisfied.\", \"confidence\": 1.0}",
+      "reasoning_chars": 12520,
+      "reasoning_preview": "We need to parse the task. We are allocation step of disaster fuel agent. Diesel only. Never give medical advice, never triage patients, never mention medicine.\n\nReserve at depot: 60 L.\nHospital needs up to 70 L, burns 17.5 L/h, 4.0 h left.\nWater pump needs up to 30 L, burns 5.0 L/h, and only runs if hospital feeder has power.\nShelters: 200 people, no water.\nRoad: 4.2 km direct corridor blocked; A* detour 7.8 km.\n\nHard constraints: two allocations must sum to exactly reserve; never exceed stated demand; do not fund lower priority while higher one starves.\n\nWe need to output JSON only: {\"alloca",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 365,
+        "completion_tokens": 2984,
+        "total_tokens": 3349,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 2176,
+          "audio_tokens": 0,
+          "reasoning_tokens": 2902,
+          "rejected_prediction_tokens": 3480
+        }
+      },
+      "model_served": "meta-models/muse-spark-open-1026",
+      "request_sha256": "8fd92f65a2456a9db82b06b738fb372b1517c7e1e73a3d7ae7a0758637bfa4e6",
+      "allocation": {
+        "hospital": 60,
+        "water_pump": 0
+      },
+      "justification": "All 60L allocated to priority 1 within its 70L limit because priority 1 demand exceeds reserve and priority 2 requires priority 1 power and cannot be funded while priority 1 is unsatisfied.",
+      "confidence": 1.0,
+      "valid": true,
+      "problems": [],
+      "matches_expectation": true
+    },
+    {
+      "at": "2026-11-03T18:12:16+00:00",
+      "scenario": "pump-heavy-100L",
+      "expectation": "rejected",
+      "provider": "Baseten",
+      "model": "meta-models/muse-spark-open-1026",
+      "reserve_litres": 100,
+      "demands": {
+        "hospital": 40,
+        "water_pump": 60
+      },
+      "latency_s": 7.01,
+      "response_text": "{\"allocation\": {\"hospital\": 40, \"water_pump\": 60}, \"justification\": \"Hospital allocation fully meets its stated 40L demand first due to priority and power dependency, allowing remaining 60L to water pump without exceeding limits and exactly using the 100L reserve.\", \"confidence\": 0.96}",
+      "reasoning_chars": 7892,
+      "reasoning_preview": "We need to parse the task. The user is asking for allocation step of disaster fuel agent. Diesel only. Never give medical advice, never triage patients, never mention medicine.\n\nReserve at depot: 100 L.\nHospital (heart, priority 1): needs up to 40 L, burns 17.5 L/h, 4.0 h left.\nWater pump (lungs, priority 2): needs up to 60 L, burns 5.0 L/h, and only runs if the hospital feeder has power.\nShelters (organs, priority 3): 200 people, no water.\nRoad: 4.2 km direct corridor is blocked; A* detour is 7.8 km.\n\nHard constraints: two allocations must sum to exactly reserve; never exceed stated demand; d",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 365,
+        "completion_tokens": 1897,
+        "total_tokens": 2262,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 1372,
+          "audio_tokens": 0,
+          "reasoning_tokens": 1819,
+          "rejected_prediction_tokens": 2303
+        }
+      },
+      "model_served": "meta-models/muse-spark-open-1026",
+      "request_sha256": "554b892798193f77a1d594ba4050fac8b661e0e16b8021837677c8b9df17c4c6",
+      "allocation": {
+        "hospital": 40,
+        "water_pump": 60
+      },
+      "justification": "Hospital allocation fully meets its stated 40L demand first due to priority and power dependency, allowing remaining 60L to water pump without exceeding limits and exactly using the 100L reserve.",
+      "confidence": 0.96,
+      "valid": false,
+      "problems": [
+        "lower priority funded above the heart"
+      ],
+      "matches_expectation": true,
+      "note": "Model met both demand caps and summed to the reserve, but gave the lower priority (60 L) more than the heart (40 L). validate() refuses that split by design, so the run is recorded as rejected: the safety net, not the model, decides. Raw response and allocation are untouched."
+    },
+    {
+      "at": "2026-11-03T18:12:23+00:00",
+      "scenario": "hospital-heavy-90L",
+      "expectation": "valid",
+      "provider": "Baseten",
+      "model": "meta-models/muse-spark-open-1026",
+      "reserve_litres": 90,
+      "demands": {
+        "hospital": 80,
+        "water_pump": 20
+      },
+      "latency_s": 8.51,
+      "response_text": "{\"allocation\": {\"hospital\": 80, \"water_pump\": 10}, \"justification\": \"Hospital as priority 1 is fully funded to its 80L demand first, with the remaining 10L to the water pump to exactly sum to the 90L reserve.\", \"confidence\": 0.98}",
+      "reasoning_chars": 6567,
+      "reasoning_preview": "We need to parse the task. This is a disaster fuel agent. Diesel only. Never give medical advice, never triage patients, never mention medicine.\n\nReserve at depot: 90 L.\nHospital (heart, priority 1): needs up to 80 L, burns 17.5 L/h, 4.0 h left.\nWater pump (lungs, priority 2): needs up to 20 L, burns 5.0 L/h, and only runs if the hospital feeder has power.\nShelters (organs, priority 3): 200 people, no water.\nRoad: the 4.2 km direct corridor is blocked; the A* detour is 7.8 km.\n\nHard constraints: the two allocations must sum to exactly the reserve; never exceed a stated demand; do not fund a lo",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 365,
+        "completion_tokens": 1632,
+        "total_tokens": 1997,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 1227,
+          "audio_tokens": 0,
+          "reasoning_tokens": 1556,
+          "rejected_prediction_tokens": 1608
+        }
+      },
+      "model_served": "meta-models/muse-spark-open-1026",
+      "request_sha256": "bc18d1314749b1a334db765653e48ed92ac339105ae34ad57261038a777ba5b3",
+      "allocation": {
+        "hospital": 80,
+        "water_pump": 10
+      },
+      "justification": "Hospital as priority 1 is fully funded to its 80L demand first, with the remaining 10L to the water pump to exactly sum to the 90L reserve.",
+      "confidence": 0.98,
+      "valid": true,
+      "problems": [],
+      "matches_expectation": true
+    },
+    {
+      "at": "2026-11-03T18:12:31+00:00",
+      "scenario": "tight-30L",
+      "expectation": "valid",
+      "provider": "Baseten",
+      "model": "meta-models/muse-spark-open-1026",
+      "reserve_litres": 30,
+      "demands": {
+        "hospital": 20,
+        "water_pump": 15
+      },
+      "latency_s": 7.28,
+      "response_text": "{\"allocation\": {\"hospital\": 20, \"water_pump\": 10}, \"justification\": \"Hospital priority 1 fully funded to its 20L demand before allocating the remaining 10L to water pump to exactly exhaust the 30L reserve.\", \"confidence\": 0.99}",
+      "reasoning_chars": 5619,
+      "reasoning_preview": "We need to parse the task. We are allocation step of disaster fuel agent. Diesel only. Never give medical advice, never triage patients, never mention medicine.\n\nReserve at depot: 30 L.\nHospital (heart, priority 1): needs up to 20 L, burns 17.5 L/h, 4.0 h left.\nWater pump (lungs, priority 2): needs up to 15 L, burns 5.0 L/h, and only runs if hospital feeder has power.\nShelters (organs, priority 3): 200 people, no water.\nRoad: 4.2 km direct corridor blocked; A* detour 7.8 km.\n\nHard constraints: two allocations must sum to exactly reserve; never exceed stated demand; do not fund lower priority w",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 365,
+        "completion_tokens": 1417,
+        "total_tokens": 1782,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 1075,
+          "audio_tokens": 0,
+          "reasoning_tokens": 1346,
+          "rejected_prediction_tokens": 1319
+        }
+      },
+      "model_served": "meta-models/muse-spark-open-1026",
+      "request_sha256": "d4bc7026d27265298d830d6a2be93d15a1d841ecf8ef16673a2798c02df83591",
+      "allocation": {
+        "hospital": 20,
+        "water_pump": 10
+      },
+      "justification": "Hospital priority 1 fully funded to its 20L demand before allocating the remaining 10L to water pump to exactly exhaust the 30L reserve.",
+      "confidence": 0.99,
+      "valid": true,
+      "problems": [],
+      "matches_expectation": true
+    },
+    {
+      "at": "2026-11-03T18:12:39+00:00",
+      "scenario": "impossible-120L",
+      "expectation": "rejected",
+      "provider": "Baseten",
+      "model": "meta-models/muse-spark-open-1026",
+      "reserve_litres": 120,
+      "demands": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "latency_s": 9.42,
+      "response_text": "{\"allocation\": {\"hospital\": 70, \"water_pump\": 30}, \"justification\": \"Allocated full 70L to priority 1 then full 30L to priority 2 per priority order, leaving 20L surplus unallocated because summing to 120L would exceed stated demands.\", \"confidence\": 0.92}",
+      "reasoning_chars": 11351,
+      "reasoning_preview": "We need to parse the task. The user is asking to be allocation step of disaster fuel agent. Diesel only. Never give medical advice, never triage patients, never mention medicine.\n\nReserve at depot: 120 L.\nHospital (heart, priority 1): needs up to 70 L, burns 17.5 L/h, 4.0 h left.\nWater pump (lungs, priority 2): needs up to 30 L, burns 5.0 L/h, and only runs if hospital feeder has power.\nShelters (organs, priority 3): 200 people, no water.\nRoad: 4.2 km direct corridor blocked; A* detour 7.8 km.\n\nHard constraints: two allocations must sum to exactly reserve; never exceed stated demand; do not fu",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 365,
+        "completion_tokens": 2575,
+        "total_tokens": 2940,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 1849,
+          "audio_tokens": 0,
+          "reasoning_tokens": 2496,
+          "rejected_prediction_tokens": 3268
+        }
+      },
+      "model_served": "meta-models/muse-spark-open-1026",
+      "request_sha256": "07c92fcfad28a71afc709b0a28205f286d6e3b367cefb91d9a99cfffed66e8c8",
+      "allocation": {
+        "hospital": 70,
+        "water_pump": 30
+      },
+      "justification": "Allocated full 70L to priority 1 then full 30L to priority 2 per priority order, leaving 20L surplus unallocated because summing to 120L would exceed stated demands.",
+      "confidence": 0.92,
+      "valid": false,
+      "problems": [
+        "total 100 L != reserve 120 L"
+      ],
+      "matches_expectation": true
     }
   ]
 }
