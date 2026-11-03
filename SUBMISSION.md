@@ -9,7 +9,7 @@ Paste-ready text for the submission form. Every number here is also in `README.m
 | **Theme** | Build for Your World |
 | **Live demo** | https://lifeline-ai-meta.vercel.app |
 | **Repository** | https://github.com/abinivesh-m/lifeline-ai-survival-agent |
-| **Demo video** | *to be added — 3:00, script in `DEMO_SCRIPT.md`* |
+| **Demo video** | https://youtu.be/NJagN5lCxuU — 2:59, 1920x1080, 30 fps |
 
 ---
 
