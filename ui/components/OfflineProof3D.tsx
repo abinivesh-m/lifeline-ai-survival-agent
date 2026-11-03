@@ -27,7 +27,7 @@ const LINES: Record<Mode, [string, string][]> = {
         : "no valid run on file - run openweight.py",
     ],
     ["$ python allocator.py --mode auto", "wonder-high returned 70 L / 30 L in 2.1 s"],
-    ["$ python capture_sam.py", "9 frames, masks decoded, $0.02"],
+    ["$ python tools/capture_sam.py", "9 frames, masks decoded, $0.02"],
     ["$ python capture_voice.py", "Tamil transcript, $0.000539"],
     ["note", "Glimmer is 18 GB. This 6 GB card cannot hold it: partner inference only."],
     ["status", "one partner-hosted open model, no fabricated local weights"],

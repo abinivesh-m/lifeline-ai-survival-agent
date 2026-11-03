@@ -113,7 +113,7 @@ def _check() -> list[str]:
     """No locale may ship with a key missing - that is a safety bug, not a typo."""
     problems: list[str] = []
     if not LOCALES.exists():
-        return ["locales/ does not exist - run python make_locales.py"]
+        return ["locales/ does not exist - run python tools/make_locales.py"]
     entries = available()
     if not entries:
         return ["locales/ has no locale files"]

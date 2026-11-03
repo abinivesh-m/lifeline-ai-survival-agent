@@ -569,7 +569,7 @@ def _copy_media() -> dict[str, int]:
             shutil.copy2(src_video, VIDEOS / name)
             counts["videos"] += 1
         else:
-            print(f"  missing {src_video} - run python make_video.py", file=sys.stderr)
+            print(f"  missing {src_video} - run python tools/make_video.py", file=sys.stderr)
 
     src = ROOT / "figma"
     if src.exists():

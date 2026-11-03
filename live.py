@@ -74,7 +74,7 @@ def pipeline(fresh: bool):
             "cost_usd": sam.get("cost_usd"),
         }
     else:
-        yield {"step": 1, "name": "PERCEIVE", "status": "pending", "detail": "run capture_sam.py"}
+        yield {"step": 1, "name": "PERCEIVE", "status": "pending", "detail": "run tools/capture_sam.py"}
 
     time.sleep(STEP_DELAY)
 

@@ -7,9 +7,9 @@ Kottur-Malayandipattinam (KM Pattinam), the largest panchayat town in the Pollac
 15 km west of Pollachi at the foot of the Western Ghats, on the Kerala border beside the Parambikulam
 and Anamalai Tiger Reserve corridor.
 
-Monsoon flood, landslide on NH-544 at km 42 (the Pollachi-Valparai road), closed for six hours. The
+Monsoon flood, landslide on NH-544 at km 42 (the Pollachi-Valparai road), closed for 15 hours. The
 fuel depot is cut off, the hospital generator has four hours left, the water pump is dead and 200 people
-in three shelters have no water. I lived through the December 2023 flood here.
+in three shelters have no water. I lived through it here, on 22 October 2026.
 
 This is not a hypothetical for me. What happened in Kottur is a pattern: **fuel is blood, the hospital is
 the heart, the pump is the lungs, the shelters are the organs.** When the heart stops, the lungs and then
@@ -34,7 +34,7 @@ reproduces each line. No API key, no network, no install.
 | ![A* routing](figma/astar.png) | ![Evidence and allocation](figma/allocator.png) |
 | ![Offline first](figma/offline.png) | ![Eight steps](figma/agentic.png) |
 
-Rendered at 1920x1080 by `python make_frames.py`, which reads the same `town.json` and the same
+Rendered at 1920x1080 by `python tools/make_frames.py`, which reads the same `town.json` and the same
 `a_star.py` the agent runs, so the slides cannot drift from the code. Drag the PNGs into Figma to
 rebuild them as editable frames.
 
@@ -69,6 +69,10 @@ A town under disaster is a dependency graph with a fuel budget. LIFELINE AI take
 | Tamil phone reports | Muse Voice Transcribe | "NH-544 km 42 blocked for six hours", verbatim |
 | The town record | `town.json` | organs, fuel reserves, roads, demands |
 | The $150 budget | `credit_tracker.py` | spend proof, 80% / 95% alerts |
+
+The field call is a labelled synthetic clip and it reports a six-hour closure, which is the number the
+solver plans against; the real closure on 22 October 2026 ran 15 hours. Both figures are stated here so
+neither has to be inferred.
 
 and produces one thing a human can act on:
 
@@ -617,9 +621,17 @@ test_field_reports.py   the loop: what it extracts, what it refuses to extract
 test_claims.py          the README as a fixture: every quoted number re-derived
 test_counterfactual.py  the console's grid rebuilt from the solver, row for row
 test_protocols.py       proof the relay refuses to invent a river, and the colony learns
-runs/latest.json        last agent run, as evidence
+ui/                     the Next.js dashboard: nine sections, React Three Fiber
+locales/                the eight locale payloads the agent ships
+figma/                  six 1920x1080 frames, rendered from the same solver
 artifacts/              captured model output (SAM frames, voice reports, proof, the grid)
+runs/latest.json        last agent run, as evidence
+docs/                   the hackathon grant, and the screenshot index
+tools/                  one-off capture and build scripts, kept for provenance only
 ```
+
+Everything a judge needs is in the list above. `tools/` holds the scripts that produced the committed
+artefacts, so the provenance is auditable, but nothing in the judged path imports it.
 
 ## Build log and provenance
 
@@ -630,7 +642,7 @@ solo entrant. No pre-existing product, no borrowed codebase.
 | --- | --- | --- |
 | Phase 1 - deterministic core | **done** | town model, graph, A*, allocator, ledger, 8-step agent, 110 tests |
 | Phase 2 - model capture | **done** | SAM flood frames, Tamil transcripts, Wonder live calls, Baseten Spark Open runs and the 8-locale payloads - all committed under `artifacts/` |
-| Phase 3 - demo | **in progress** | the LIFEGRID page and all nine sections are live; the 3-minute video is the last item |
+| Phase 3 - demo | **done** | the LIFEGRID page and all nine sections are live; the 2:59 demo is published at https://youtu.be/NJagN5lCxuU |
 
 Phase 2 is not a promise in this revision: every file it names is in the repository and `test_claims.py`
 re-derives the numbers the prose quotes from them. Phase 3 is the only open item, and the two screen
@@ -641,7 +653,7 @@ generated video would be the one artefact a judge could disprove in a minute.
 
 | Time | Beat |
 | --- | --- |
-| 0:00 | Kottur, 11.0168 N 76.9558 E. NH-544 km 42, six hours closed. Personal, not hypothetical. |
+| 0:00 | Kottur, 11.0168 N 76.9558 E. NH-544 km 42, 15 hours closed. Personal, not hypothetical. |
 | 0:30 | LIFEGRID: fuel is blood, hospital is the heart, pump is the lungs, shelters are the organs. |
 | 1:00 | SAM 3.1 flood extent, Voice Transcribe Tamil report, Kahn order, A* 4.2 blocked -> 7.8 km -> 40%. |
 | 1:30 | Wonder proposes, code validates: 70 L / 30 L, exactly 100 L, evidence vs inference side by side. |

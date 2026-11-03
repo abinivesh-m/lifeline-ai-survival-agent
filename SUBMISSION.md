@@ -27,9 +27,10 @@ refuses its own operator.
 ## Description
 
 **The problem I know firsthand.** Kottur is a panchayat town at the foot of the Western Ghats, on the
-Kerala border. In December 2023 the monsoon closed NH-544 at km 42 for six hours. The fuel depot was cut
-off, the hospital generator had four hours left, the water pump was dead, and 200 people in three shelters
-had no water. Nobody was short of information. They were short of a decision.
+Kerala border. On 22 October 2026 a monsoon landslide severed the Pollachi-Valparai corridor on NH-544
+and kept it shut for 15 hours. The fuel depot was cut off, the hospital generator had four hours left, the
+water pump was dead, and 200 people in three shelters had no water. Nobody was short of information. They
+were short of a decision.
 
 **What LIFELINE AI does.** It treats the town as a body. Fuel is blood, the hospital is the heart, the
 pump is the lungs, the shelters are the organs. That is not a metaphor — it is a dependency graph, and the
