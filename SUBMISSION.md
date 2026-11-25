@@ -1,4 +1,4 @@
-# Submission copy — Meta Global AI Developer Hackathon 2026
+# Submission copy — LIFELINE AI
 
 Paste-ready text for the submission form. Every number here is also in `README.md` and is re-derived by
 `test_claims.py`; if the two ever disagree, the test fails and this file is wrong.

@@ -16,10 +16,7 @@ the heart, the pump is the lungs, the shelters are the organs.** When the heart 
 the organs stop with it. The pattern repeats in every low-infrastructure town on earth - the same cascade,
 a different road number.
 
-> Meta Global AI Developer Hackathon 2026 - Theme: **Build for Your World**
-> Solo indie entry by [@abinivesh-m](https://github.com/abinivesh-m)
-> **Live:** https://lifeline-ai-meta.vercel.app
-> _Built in Kottur. Works anywhere._
+> Built in Kottur. Works anywhere.
 
 **Judge in one command:** `python judge.py` runs ten checks and prints the exact command that
 reproduces each line. No API key, no network, no install.
